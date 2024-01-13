@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
+use App\Http\Requests\AddQuizToChapterRequest;
 use App\Http\Requests\StoreNewQuestionInQuizRequest;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
+use App\Http\Resources\ChapterResource;
 use App\Http\Resources\QuizResource;
 use App\HttpResponse\HTTPResponse;
+use App\Models\ChapterQuiz;
 use App\Models\Question;
 use App\Models\QuestionQuiz;
 use App\Models\Quiz;
@@ -134,6 +137,33 @@ class QuizController extends Controller
                 'is_visible' => !$questionQuiz->is_visible
             ]);
             return $this->success(QuizResource::make($questionQuiz->quiz) , trans('messages.switch_visibility_question_quiz'));
+        }catch(\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
+    public function addQuizToChapter(AddQuizToChapterRequest $request){
+        try {
+            $quizID = intval($request->quiz_id);
+            $chapterID = intval($request->chapter_id);
+            $quiz = Quiz::where('id' , $quizID)->first();
+            $chapter  = HelperFunction::getChapterByID($chapterID);
+            if (!$quiz){
+                return $this->error(trans('messages.quiz_not_found') , 404);
+            }
+            if (!$chapter){
+                return $this->error(trans('messages.chapter_not_found') , 404);
+            }
+            $isAddedBefore = ChapterQuiz::where('quiz_id' , $quizID)->where('chapter_id' , $chapterID)->exists();
+            if (!$isAddedBefore){
+                return $this->error(trans('messages.quiz_added_before_to_chapter') , 422);
+            }
+            ChapterQuiz::create([
+               'chapter_id' => $chapterID,
+               'quiz_id' => $quizID,
+               'is_visible' => $request->is_visible
+            ]);
+            return $this->success(ChapterResource::make($chapter) , trans('messages.quiz_added_to_chapter_successfully'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }

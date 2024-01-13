@@ -21,4 +21,8 @@ class Chapter extends Model
     public function visibleLesions(){
         return $this->lesions()->where('is_visible' , true);
     }
+
+    public function quizzes(){
+        return $this->belongsToMany(Quiz::class);
+    }
 }

@@ -18,7 +18,8 @@ class ChapterInforamtionResource extends JsonResource
             'id' => intval($this->id),
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
-            'lesions' => $this->visibleLesions
+            'lesions' => $this->visibleLesions,
+            'quizzes' => $this->quizzes()->wherePivot('is_visible' , true)->get()
         ];
     }
 }

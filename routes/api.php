@@ -112,6 +112,7 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/create' , [QuizController::class , 'store']);
                     Route::patch('/update/{quiz}' , [QuizController::class , 'update']);
                     Route::delete('/delete/{quiz}' , [QuizController::class , 'destroy']);
+                    Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']);
                     Route::prefix('/questions')->group(function (){
                        Route::post('/add/{quiz}' , [QuizController::class , 'addQuestionToQuiz']);
                        Route::delete('/delete/{quizQuestion}' , [QuizController::class , 'deleteQuestionFromQuiz']);

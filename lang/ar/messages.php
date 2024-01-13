@@ -32,6 +32,8 @@ return [
     'question_add_to_quiz' => 'تم اضافة السؤال الى المذاكرة بنجاح',
     'question_quiz_not_found' => 'لم يتم العثور على هذا السؤال في هذه المذاكرة',
     'switch_visibility_question_quiz' => 'تم تبديل حالة ظهور السؤال ضمن المذاكرة بنجاح',
+    'quiz_added_to_chapter_successfully' => 'تم اضافة المذاكرة الى الوحدة المطلوبة بنجاح',
+    'quiz_added_before_to_chapter' => 'هذه المذاكرة موجودة مسبقا في هذه الوحدة',
 
 
 
