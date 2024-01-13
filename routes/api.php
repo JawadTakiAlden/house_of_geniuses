@@ -20,6 +20,7 @@ Route::middleware(['language'])->group(function (){
     Route::prefix('/v1/auth/')->group(function (){
         Route::post('/register' , [AuthController::class , 'signup']);
         Route::post('/login' , [AuthController::class , 'login']);
+        Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
     });
     /* @commented code for routes if the mobile can discover content without auth */
 //    Route::prefix('/news')->group(function (){

@@ -34,6 +34,7 @@ return [
     'switch_visibility_question_quiz' => 'تم تبديل حالة ظهور السؤال ضمن المذاكرة بنجاح',
     'quiz_added_to_chapter_successfully' => 'تم اضافة المذاكرة الى الوحدة المطلوبة بنجاح',
     'quiz_added_before_to_chapter' => 'هذه المذاكرة موجودة مسبقا في هذه الوحدة',
+    'admin_permission' => 'عذرا لا يمكنك الدخول لانك لا تملك الصلاحيات الكافية',
 
 
 

@@ -29,5 +29,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update_profile' , [UserPolicy::class , 'update_profile']);
         Gate::define('get_courses_of_user' , [UserPolicy::class , 'course_of_user']);
         Gate::define('get_profile_of_user' , [UserPolicy::class , 'get_profile_of_user']);
+        Gate::define('login_admin' , [UserPolicy::class , 'login_admin']);
     }
 }

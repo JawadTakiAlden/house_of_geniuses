@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             'full_name' => 'jawad taki aldeen',
             'phone' => '0948966979',
             'password' => 'jawad',
-            'device_id' => '0948966979jawad',
             'is_blocked' => false,
             'type' => UserType::ADMIN,
         ]);
