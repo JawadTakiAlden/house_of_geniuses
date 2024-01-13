@@ -34,7 +34,7 @@ class UserPolicy
             || strval($authUser->type) === UserType::ADMIN ;
     }
 
-    public function login_admin(User $authUser){
-        return strval($authUser->type) === UserType::ADMIN;
+    public function login_admin(User $authuser , User $user){
+        return strval($user->type) === UserType::ADMIN;
     }
 }

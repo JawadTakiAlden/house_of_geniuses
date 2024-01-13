@@ -43,7 +43,7 @@ class AuthController extends Controller
                     trans('messages.login_password_email_error')
                     , 401);
             }
-            if (Gate::denies('login_admin')){
+            if (strval($user->type) !== UserType::ADMIN){
                 return $this->error(
                     trans('messages.admin_permission')
                     , 403);
