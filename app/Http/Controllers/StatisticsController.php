@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RecentEnrolledResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\AccountInrolment;
 use App\Models\ActivationCode;
@@ -20,6 +21,15 @@ class StatisticsController extends Controller
     use HTTPResponse;
     private function catchError ($th) {
         return $this->error($th->getMessage() , 500);
+    }
+
+    public function getLastEnrolled(){
+        try {
+            $last = AccountInrolment::orderBy('created_at')->limit(20);
+            return  $this->success(RecentEnrolledResource::collection($last));
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
     }
 
     public function basicStatistics(){

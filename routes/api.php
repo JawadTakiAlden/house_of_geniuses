@@ -92,6 +92,7 @@ Route::middleware(['language'])->group(function (){
                 Route::prefix('/statistics')->group(function (){
                     Route::get('/get' , [StatisticsController::class , 'statistics']);
                     Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']);
+                    Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']);
                     Route::post('/reset' , [StatisticsController::class , 'reset']);
                 });
                 Route::prefix('/questions')->group(function () {
