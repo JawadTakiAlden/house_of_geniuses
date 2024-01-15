@@ -32,6 +32,8 @@ class StatisticsController extends Controller
             $courses_number = Course::count();
             $blocked_accounts_number = User::where('is_blocked' , true)->count();
             $categories_number = Category::count();
+            $instructor = User::where('type' , UserType::TEACHER)->count();
+            $enrolled_number = AccountInrolment::count();
             return $this->success([
                 'students_number' => $students_number,
                 'codes_number'=> $codes_number,
@@ -39,6 +41,8 @@ class StatisticsController extends Controller
                 'courses_number'=> $courses_number,
                 'blocked_accounts_number'=> $blocked_accounts_number,
                 'categories_number'=> $categories_number,
+                'instructors_number' => $instructor,
+                'enrolled_number' => $enrolled_number
             ]);
         }catch (\Throwable $th){
             return $this->catchError($th);
