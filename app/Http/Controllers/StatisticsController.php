@@ -21,6 +21,30 @@ class StatisticsController extends Controller
     private function catchError ($th) {
         return $this->error($th->getMessage() , 500);
     }
+
+    public function basicStatistics(){
+        try {
+            $students_number = User::where('type' , UserType::STUDENT)->count();
+            $codes_number = ActivationCode::count();
+            $active_code_number = ActivationCode::whereHas('courseCanActivated' , fn($query) =>
+            $query->where('is_used' , true)
+            )->count();
+            $courses_number = Course::count();
+            $blocked_accounts_number = User::where('is_blocked' , true)->count();
+            $categories_number = Category::count();
+            return $this->success([
+                'students_number' => $students_number,
+                'codes_number'=> $codes_number,
+                'active_code_number'=> $active_code_number,
+                'courses_number'=> $courses_number,
+                'blocked_accounts_number'=> $blocked_accounts_number,
+                'categories_number'=> $categories_number,
+            ]);
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
     public function statistics(){
         try {
             $students_number = User::where('type' , UserType::STUDENT)->count();
