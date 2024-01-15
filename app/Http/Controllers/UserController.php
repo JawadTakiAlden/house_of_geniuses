@@ -132,7 +132,7 @@ class UserController extends Controller
             ]);
 
             return $this->success(UserResource::make($user), trans('messages.user_blocked' , [
-                'block_state' => boolval($user->is_blocked) ? trans('messages.block_word') : trans('unblock_word')
+                'block_state' => boolval($user->is_blocked) ? trans('messages.block_word') : trans('messages.unblock_word')
             ]));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
