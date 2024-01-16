@@ -25,7 +25,7 @@ class StatisticsController extends Controller
 
     public function getLastEnrolled(){
         try {
-            $last = AccountInrolment::orderBy('created_at')->limit(20)->get();
+            $last = AccountInrolment::orderByDesc('created_at')->limit(20)->get();
             return  $this->success(RecentEnrolledResource::collection($last));
         }catch (\Throwable $th){
             return $this->catchError($th);
