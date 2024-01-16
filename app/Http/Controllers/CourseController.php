@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
 use App\Http\Requests\SignInCourseRequest;
+use App\Http\Resources\AllInrolledResource;
 use App\Http\Resources\CourseInformationResource;
 use App\Http\Resources\CourseResource;
 use App\HttpResponse\HTTPResponse;
@@ -40,7 +41,7 @@ class CourseController extends Controller
     public function getAllIneolments(){
         try {
             $inrolments = AccountInrolment::with(['course', 'user', 'activationCode'])->orderByDesc('created_at')->get();
-            return $this->success($inrolments);
+            return $this->success(AllInrolledResource::collection($inrolments));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
