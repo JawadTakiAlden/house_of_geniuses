@@ -16,6 +16,7 @@ class AllInrolledResource extends JsonResource
     {
         return [
             'name' => $this->user->full_name,
+            'phone' => $this->user->phone,
             'course_title' => $this->course->name,
             'enrole_date' => $this->created_at->diffForHumans(),
             'code' => $this->activationCode
