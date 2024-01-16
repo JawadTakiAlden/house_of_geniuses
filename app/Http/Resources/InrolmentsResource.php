@@ -19,7 +19,7 @@ class InrolmentsResource extends JsonResource
             'name' => $this->name,
             'image' => asset($this->image),
             'telegram_channel_link' => $this->telegram_channel_link,
-            'pivot' => $this->pivot
+            'created_at' => $this->pivot->created_at->diffForHumans()
         ];
     }
 }
