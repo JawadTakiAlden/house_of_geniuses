@@ -18,8 +18,8 @@ class AllInrolledResource extends JsonResource
             'name' => $this->user->full_name,
             'phone' => $this->user->phone,
             'course_title' => $this->course->name,
-            'enrole_date' => $this->created_at->diffForHumans(),
-            'code' => $this->activationCode
+            'enrole_date' => $this->created_at->format('YYYY-MMMM-DDDD'),
+            'code' => $this->activationCode,
         ];
     }
 }
