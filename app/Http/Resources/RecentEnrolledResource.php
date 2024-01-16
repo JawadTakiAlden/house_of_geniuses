@@ -14,10 +14,12 @@ class RecentEnrolledResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $this->user;
         return [
             'course_title' => $this->course->name,
-            'student_name' => $this->user->full_name,
-            'phone' => $this->user->phone
+            'student_name' => $user->full_name,
+            'phone' => $user->phone,
+            'created_at' => $this->created_at->diffForHumans()
         ];
     }
 }
