@@ -50,6 +50,6 @@ class User extends Authenticatable
     }
 
     public function inroledCorurses(){
-        return $this->belongsToMany(Course::class , 'account_inrolments');
+        return $this->belongsToMany(Course::class , 'account_inrolments')->withPivot(['created_at']);
     }
 }
