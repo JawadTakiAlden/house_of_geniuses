@@ -131,7 +131,7 @@ class CourseController extends Controller
             }
             $preInrolled = AccountInrolment::where('user_id' , $userID)->where('course_id' , $courseID)->first();
             if ($preInrolled){
-                return $this->error( $user->full_name . ' already sign in ' . $course->name , 404);
+                return $this->error( $user->full_name . ' already sign in ' . $course->name , 422);
             }
             AccountInrolment::create([
                 'user_id' => $user->id,
