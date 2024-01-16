@@ -37,6 +37,15 @@ class CourseController extends Controller
         }
     }
 
+    public function getAllIneolments(){
+        try {
+            $inrolments = AccountInrolment::with(['course', 'user', 'activationCode'])->orderByDesc('created_at')->get();
+            return $this->success($inrolments);
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
     public function visibleCourses(){
         try {
             $courses = Course::where('is_visible' , true)->get();
