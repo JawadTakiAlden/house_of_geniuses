@@ -166,10 +166,10 @@ class UserController extends Controller
             return $this->error(trans('messages.user_not_found') , 404);
         }
         try {
-            $courses = Course::whereHas('accountInrolments' , fn($query) =>
-            $query->where('user_id' , $user->id)
-            )->get();
-            return $this->success(CourseResource::collection($courses));
+//            $courses = Course::whereHas('accountInrolments' , fn($query) =>
+//            $query->where('user_id' , $user->id)
+//            )->get();
+            return $this->success(CourseResource::collection($user->inroledCorurses));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
