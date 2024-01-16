@@ -6,6 +6,7 @@ use App\Http\HelperFunction;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\CourseResource;
+use App\Http\Resources\InrolmentsResource;
 use App\Http\Resources\UserResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Course;
@@ -169,7 +170,7 @@ class UserController extends Controller
 //            $courses = Course::whereHas('accountInrolments' , fn($query) =>
 //            $query->where('user_id' , $user->id)
 //            )->get();
-            return $this->success(CourseResource::collection($user->inroledCorurses));
+            return $this->success(InrolmentsResource::collection($user->inroledCorurses));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }

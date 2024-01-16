@@ -36,6 +36,7 @@ class CourseResource extends JsonResource
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
             'is_paid' => $is_paid,
+
         ];
     }
 }
