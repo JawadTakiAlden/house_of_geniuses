@@ -37,6 +37,15 @@ class CourseController extends Controller
         }
     }
 
+    public function visibleCourses(){
+        try {
+            $courses = Course::where('is_visible' , true)->get();
+            return $this->success(CourseResource::collection($courses));
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
     public function getVisibleCourses($categoryID){
         try {
             $category = HelperFunction::getCategoryByID($categoryID , ['courses']);
