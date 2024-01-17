@@ -90,7 +90,7 @@ class CourseController extends Controller
                 return $this->error(trans('messages.inrolment_not_found') , 404);
             }
             $inrolment->delete();
-            return $this->success(InrolmentsResource::make($inrolment) , trans('messages.inrolment_canceled'));
+            return $this->success(null , trans('messages.inrolment_canceled'));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
