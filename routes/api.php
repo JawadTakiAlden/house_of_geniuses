@@ -67,6 +67,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/all' , [CourseController::class , 'getAllCourses']);
                     Route::get('/visible' , [CourseController::class , 'visibleCourses']);
                     Route::post('/update/{course}' , [CourseController::class , 'update']);
+                    Route::patch('/switchOpenStatus/{course}' , [CourseController::class  , 'switchOpenStatus']);
                     Route::patch('/switchVisibility/{course}' , [CourseController::class , 'switchVisibility']);
                     Route::post('/addUser/{user}/toCourse/{course}' , [CourseController::class , 'manualInrolStudentInCourse']);
                     Route::get('/allInrolments' , [CourseController::class , 'getAllIneolments']);

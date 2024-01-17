@@ -84,7 +84,6 @@ class CourseController extends Controller
 
     public function cancelInfolement($inrolmentID){
         try {
-
             $inrolment = AccountInrolment::where('id' ,$inrolmentID )->first();
             if (!$inrolment){
                 return $this->error(trans('messages.inrolment_not_found') , 404);
@@ -134,6 +133,22 @@ class CourseController extends Controller
             }
             $course->update([
                 'is_visible' => !$course->is_visible
+            ]);
+            return $this->success(CourseResource::make($course));
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
+
+    public function switchOpenStatus($courseID){
+        try {
+            $course = HelperFunction::getCourseByID($courseID);
+            if (!$course){
+                return $this->error('course dose\'nt found in our system' , 404);
+            }
+            $course->update([
+                'is_open' => !$course->is_open
             ]);
             return $this->success(CourseResource::make($course));
         }catch (\Throwable $th){
