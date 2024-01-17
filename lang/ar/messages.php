@@ -35,6 +35,8 @@ return [
     'quiz_added_to_chapter_successfully' => 'تم اضافة المذاكرة الى الوحدة المطلوبة بنجاح',
     'quiz_added_before_to_chapter' => 'هذه المذاكرة موجودة مسبقا في هذه الوحدة',
     'admin_permission' => 'عذرا لا يمكنك الدخول لانك لا تملك الصلاحيات الكافية',
+    'inrolment_not_found' => 'لم نستطيع ايجاد اي سطر التحاق لهذا المعرف تأكد وحاول مجددا',
+    'inrolment_canceled' => 'تم الفاء هذا الاشتراك ينجاح',
 
 
 

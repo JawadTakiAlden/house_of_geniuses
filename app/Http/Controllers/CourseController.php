@@ -7,6 +7,7 @@ use App\Http\Requests\SignInCourseRequest;
 use App\Http\Resources\AllInrolledResource;
 use App\Http\Resources\CourseInformationResource;
 use App\Http\Resources\CourseResource;
+use App\Http\Resources\InrolmentsResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\AccountInrolment;
 use App\Models\ActivationCode;
@@ -76,6 +77,20 @@ class CourseController extends Controller
             }
             $course->delete();
             return $this->success(CourseResource::make($course) , 'course deleted successfully');
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
+    public function cancelInfolement($inrolmentID){
+        try {
+
+            $inrolment = AccountInrolment::where('id' ,$inrolmentID )->first();
+            if (!$inrolment){
+                return $this->error(trans('messages.inrolment_not_found') , 404);
+            }
+            $inrolment->delete();
+            return $this->success(InrolmentsResource::make($inrolment) , trans('messages.inrolment_canceled'));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
