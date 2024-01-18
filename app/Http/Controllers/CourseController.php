@@ -8,6 +8,7 @@ use App\Http\Resources\AllInrolledResource;
 use App\Http\Resources\CourseInformationResource;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\InrolmentsResource;
+use App\Http\Resources\ShowCourseInformationForAdmin;
 use App\HttpResponse\HTTPResponse;
 use App\Models\AccountInrolment;
 use App\Models\ActivationCode;
@@ -19,6 +20,7 @@ use App\Models\CourseCategory;
 use App\Models\CourseTeacher;
 use App\Models\CourseValue;
 use App\Types\CodeType;
+use App\Types\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -231,6 +233,9 @@ class CourseController extends Controller
             $course = HelperFunction::getCourseByID($courseID);
             if (!$course){
                 return $this->error(trans('messages.course_not_found') , 404);
+            }
+            if (Auth::user()->type === UserType::ADMIN){
+                return $this->success(ShowCourseInformationForAdmin::make($course));
             }
             return $this->success(CourseInformationResource::make($course));
         }catch (\Throwable $th){
