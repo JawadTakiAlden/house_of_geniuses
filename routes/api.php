@@ -135,7 +135,7 @@ Route::middleware(['language'])->group(function (){
                         Route::post('/logout' , [AuthController::class , 'logout']);
                     });
                     Route::prefix('/users')->group(function (){
-                        Route::patch('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
+                        Route::post('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
                         Route::get('/myProfile' , [UserController::class , 'profile']);
                         Route::get('/{user}/courses' , [UserController::class , 'inrollnmentCourseOfUser']);
                     });

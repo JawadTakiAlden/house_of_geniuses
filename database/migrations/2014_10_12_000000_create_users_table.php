@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('full_name');
             $table->string('phone')->unique();
+            $table->string('image')->nullable();
             $table->string('password');
             $table->string('device_id')->nullable()->unique();
             $table->boolean('is_blocked')->default(false);

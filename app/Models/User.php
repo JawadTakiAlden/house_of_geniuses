@@ -45,6 +45,12 @@ class User extends Authenticatable
         return $this->hasMany(AccountInrolment::class);
     }
 
+    public function setImageAttribute ($image){
+        $newImageName = uniqid() . '_' . 'image' . '.' . $image->extension();
+        $image->move(public_path('users_images') , $newImageName);
+        return $this->attributes['image'] =  '/'.'users_images'.'/' . $newImageName;
+    }
+
     public function teacherCourse(){
         return $this->hasMany(CourseTeacher::class , 'teacher_id');
     }

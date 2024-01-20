@@ -22,7 +22,7 @@ class AuthController extends Controller
     public function signup (SignUpRequest $request) {
         try {
             DB::beginTransaction();
-            $user = User::create($request->only(['full_name' , 'phone' , 'password' , 'device_id']));
+            $user = User::create($request->only(['full_name' , 'image' , 'phone' , 'password' , 'device_id']));
             DB::commit();
             return $this->success([
                 "token" =>  $user->createToken("API TOKEN")->plainTextToken,

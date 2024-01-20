@@ -20,6 +20,7 @@ class Course extends Model
 
 
     public function setImageAttribute ($image){
+        //TODO remove in production without seeders
         if (!$image){
             return $this->attributes['image'] = fake()->imageUrl;
         }

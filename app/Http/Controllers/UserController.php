@@ -58,9 +58,9 @@ class UserController extends Controller
     }
 
     public function create(CreateUserRequest $request){
-        $request->validated($request->only(['email', 'full_name', 'phone', 'password', 'type']));
+        $request->validated($request->only(['email', 'full_name', 'image' , 'phone', 'password', 'type']));
         try {
-            $user = User::create($request->only(['email', 'full_name', 'phone', 'password', 'type']));
+            $user = User::create($request->only(['email', 'full_name', 'image' , 'phone', 'password', 'type']));
             return $this->success(UserResource::make($user));
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
@@ -75,9 +75,8 @@ class UserController extends Controller
         if (!Gate::allows('update_profile' , $user)){
             return $this->permissionDenide();
         }
-        $request->validated($request->only('full_name' , 'phone' , 'email'));
         try {
-            $user->update($request->only('full_name', 'phone' , 'email'));
+            $user->update($request->only('full_name' , 'image'  , 'phone' , 'email'));
             return $this->success(UserResource::make($user));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
