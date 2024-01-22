@@ -57,10 +57,19 @@ class UserController extends Controller
         }
     }
 
-    public function create(CreateUserRequest $request){
-        $request->validated($request->only(['email', 'full_name', 'image' , 'phone', 'password', 'type']));
+    public function spicialAccounts(){
         try {
-            $user = User::create($request->only(['email', 'full_name', 'image' , 'phone', 'password', 'type']));
+            $accounts = User::whereNot('type' , UserType::STUDENT)->get();
+            return $this->success(UserResource::collection($accounts));
+        }catch (\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
+    }
+
+    public function create(CreateUserRequest $request){
+        $request->validated($request->only(['full_name', 'image' , 'phone', 'password', 'type']));
+        try {
+            $user = User::create($request->only(['full_name', 'image' , 'phone', 'password', 'type']));
             return $this->success(UserResource::make($user));
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);

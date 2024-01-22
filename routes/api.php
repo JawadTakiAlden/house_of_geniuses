@@ -42,6 +42,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);
                     Route::post('/create' , [UserController::class , 'create']);
                     Route::get('/all' , [UserController::class , 'getAllUser']);
+                    Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']);
                     Route::get('/blocked' , [UserController::class , 'getAllBlockedUser']);
                     Route::get('/teachers' , [UserController::class , 'getTeacher']);
                     Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);
