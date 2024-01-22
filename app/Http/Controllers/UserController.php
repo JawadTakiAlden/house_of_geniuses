@@ -57,7 +57,7 @@ class UserController extends Controller
         }
     }
 
-    public function spicialAccounts(){
+    public function getSpicialAccounts(){
         try {
             $accounts = User::whereNot('type' , UserType::STUDENT)->get();
             return $this->success(UserResource::collection($accounts));
