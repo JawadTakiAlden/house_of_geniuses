@@ -26,7 +26,7 @@ class CreateUserRequest extends FormRequest
             'full_name' => 'required|string|min:4',
             'phone' => 'required|min:10|max:10|unique:users,phone',
             'password' => 'required|min:7|max:26',
-            'image' => 'image|mimes:png,jpg,jpeg|max:5120',
+            'image' => 'sometimes|image|mimes:png,jpg,jpeg|max:5120',
             'type' => 'required|in:teacher,admin,student,employee'
         ];
     }

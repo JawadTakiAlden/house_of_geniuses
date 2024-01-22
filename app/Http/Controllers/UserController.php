@@ -213,4 +213,17 @@ class UserController extends Controller
             return $this->error($th->getMessage() , 500);
         }
     }
+
+    public function destroy($userID){
+        try {
+            $user = HelperFunction::getUserById($userID);
+            if (!$user){
+                return $this->error(trans(trans('messages.user_not_found')) , 404);
+            }
+            $user->delete();
+            return $this->success(UserResource::make($user) , trans('messages.delete_user'));
+        }catch(\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
+    }
 }

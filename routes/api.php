@@ -47,6 +47,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/teachers' , [UserController::class , 'getTeacher']);
                     Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);
                     Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']);
+                    Route::delete('/delete/{user}' , [UserController::class , 'destroy']);
                 });
                 Route::prefix('/news')->group(function (){
                     Route::get('/all' , [NewsController::class , 'index']);
