@@ -32,8 +32,6 @@ class UpdateCourseRequest extends FormRequest
             'categories.*' => ['numeric' , Rule::exists('categories' , 'id')],
             'teachers' => 'array',
             'teachers.*' => ['numeric' , Rule::exists('users' , 'id')],
-            'courseValues' => 'array',
-            'courseValues.*' => 'string'
         ];
     }
 }

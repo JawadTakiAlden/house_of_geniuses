@@ -38,16 +38,16 @@ Route::middleware(['language'])->group(function (){
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::prefix('/users')->group(function (){
-                    Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']);
+                    Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']); //done
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);
-                    Route::post('/create' , [UserController::class , 'create']);
-                    Route::get('/all' , [UserController::class , 'getAllUser']);
-                    Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']);
+                    Route::post('/create' , [UserController::class , 'create']); // done
+                    Route::get('/all' , [UserController::class , 'getAllUser']); // done
+                    Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']); //done
                     Route::get('/blocked' , [UserController::class , 'getAllBlockedUser']);
                     Route::get('/teachers' , [UserController::class , 'getTeacher']);
                     Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);
-                    Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']);
-                    Route::delete('/delete/{user}' , [UserController::class , 'destroy']);
+                    Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']); //done
+                    Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
                 });
                 Route::prefix('/news')->group(function (){
                     Route::get('/all' , [NewsController::class , 'index']);
@@ -66,21 +66,22 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/add-value/{course}' , [CourseValueController::class , 'store']);
                     Route::delete('/delete-value/{value}' , [CourseValueController::class , 'destroy']);
                     Route::patch('/update-value/{value}' , [CourseValueController::class , 'update']);
-                    Route::get('/all' , [CourseController::class , 'getAllCourses']);
-                    Route::get('/visible' , [CourseController::class , 'visibleCourses']);
+                    Route::get('/all' , [CourseController::class , 'getAllCourses']); //done
+                    Route::get('/visible' , [CourseController::class , 'visibleCourses']); //used in api | done
                     Route::post('/update/{course}' , [CourseController::class , 'update']);
-                    Route::patch('/switchOpenStatus/{course}' , [CourseController::class  , 'switchOpenStatus']);
-                    Route::patch('/switchVisibility/{course}' , [CourseController::class , 'switchVisibility']);
-                    Route::post('/addUser/{user}/toCourse/{course}' , [CourseController::class , 'manualInrolStudentInCourse']);
+                    Route::patch('/switchOpenStatus/{course}' , [CourseController::class  , 'switchOpenStatus']); //done
+                    Route::patch('/switchVisibility/{course}' , [CourseController::class , 'switchVisibility']); //done
+                    Route::post('/addUser/{user}/toCourse/{course}' , [CourseController::class , 'manualInrolStudentInCourse']); //done
                     Route::get('/allInrolments' , [CourseController::class , 'getAllIneolments']);
-                    Route::delete('/cancelInrolment/{inrollment}' , [CourseController::class , 'cancelInfolement']);
+                    Route::delete('/cancelInrolment/{inrollment}' , [CourseController::class , 'cancelInfolement']); //done
+                    Route::delete('/delete/{course}' , [CourseController::class , 'destroy']);
                 });
                 Route::prefix('/chapters')->group(function (){
-                    Route::get('/all/{course}' , [ChapterController::class , 'getAll']);
+                    Route::get('/all/{course}' , [ChapterController::class , 'getAll']); //unused
                     Route::patch('/switchVisibility/{chapter}' , [ChapterController::class , 'switchVisibility']);
-                    Route::post('/create' , [ChapterController::class , 'store']);
+                    Route::post('/create' , [ChapterController::class , 'store']); //done
                     Route::patch('/update/{chapter}' , [ChapterController::class , 'update']);
-                    Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']);
+                    Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']); //done
                 });
                 Route::prefix('/lesions')->group(function (){
                     Route::get('/all/{chapter}' , [LesionController::class , 'getAll']);
@@ -97,9 +98,9 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/push' , [NotificationController::class , 'sendNotificationForAllUser']);
                 });
                 Route::prefix('/statistics')->group(function (){
-                    Route::get('/get' , [StatisticsController::class , 'statistics']);
-                    Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']);
-                    Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']);
+                    Route::get('/get' , [StatisticsController::class , 'statistics']); //done
+                    Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
+                    Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']); //done
                     Route::post('/reset' , [StatisticsController::class , 'reset']);
                 });
                 Route::prefix('/questions')->group(function () {
