@@ -59,7 +59,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/all' , [CategoryController::class , 'gelAllCategories']);
                     Route::post('/create' , [CategoryController::class , 'store']);
                     Route::patch('/update/{category}' , [CategoryController::class , 'updateCategory']);
-                    Route::patch('/switch-visibility' , [CategoryController::class , 'switchVisibility']);
+                    Route::patch('/switch-visibility/{category}' , [CategoryController::class , 'switchVisibility']);
                     Route::delete('/delete/{category}' , [CategoryController::class , 'destroy']);
                 });
                 Route::prefix('/courses')->group(function (){
