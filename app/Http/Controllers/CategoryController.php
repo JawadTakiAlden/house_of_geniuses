@@ -54,6 +54,18 @@ class CategoryController extends Controller
         }
     }
 
+    public function show($categoryID){
+        try {
+            $category = HelperFunction::getCategoryByID($categoryID);
+            if (!$category) {
+                return $this->error('category does\'nt found in our system' , 404);
+            }
+            return $this->success(CategoryResource::make($category));
+        }catch(\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
+    }
+
     public function updateCategory(UpdateCategoryRequest $request , $categoryID){
         try {
             $category = HelperFunction::getCategoryByID($categoryID);

@@ -57,6 +57,7 @@ Route::middleware(['language'])->group(function (){
                 });
                 Route::prefix('/categories')->group(function (){
                     Route::get('/all' , [CategoryController::class , 'gelAllCategories']);
+                    Route::get('/show/{category}' , [CategoryController::class , 'show']);
                     Route::post('/create' , [CategoryController::class , 'store']);
                     Route::patch('/update/{category}' , [CategoryController::class , 'updateCategory']);
                     Route::patch('/switch-visibility/{category}' , [CategoryController::class , 'switchVisibility']);
