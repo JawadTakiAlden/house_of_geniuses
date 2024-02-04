@@ -28,6 +28,22 @@ class CategoryController extends Controller
             return $this->error($th->getMessage() , 500);
         }
     }
+
+    public function switchVisibility($categoryID){
+        try {
+            $category = HelperFunction::getCategoryByID($categoryID);
+            if (!$category) {
+                return $this->error('category does\'nt found in our system' , 404);
+            }
+            $category->update([
+                'is_visible' => !$category->is_visible
+            ]);
+            return $this->success(CategoryResource::make($category) , $category->name . ' updated successfully');
+        }catch(\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
+    }
+
     public function store(StoreCategoryRequest $request){
         $request->validated($request->only(['name','is_visible']));
         try {
