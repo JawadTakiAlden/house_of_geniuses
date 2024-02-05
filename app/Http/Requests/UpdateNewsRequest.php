@@ -24,7 +24,6 @@ class UpdateNewsRequest extends FormRequest
         return [
             'title' => 'string|max:255',
             'image' => 'mimes:jpg,png,jpeg|max:4096',
-            'is_visible' => 'boolean',
             'position' => 'numeric|min:0'
         ];
     }
