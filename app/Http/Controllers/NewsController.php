@@ -31,9 +31,8 @@ class NewsController extends Controller
     }
     public function store(StoreNewsRequest $request)
     {
-        $request->validated($request->only(['is_visible' , 'image' , 'position']));
         try {
-            $news = News::create($request->only(['is_visible' , 'image' , 'position']));
+            $news = News::create($request->only(['is_visible' , 'image' , 'title']));
             return NewsResource::make($news);
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
@@ -49,6 +48,18 @@ class NewsController extends Controller
         try {
             $news->delete();
             return $this->success(NewsResource::make($news) , trans('messages.delete_news'));
+        }catch(\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
+    }
+
+    public function show($newsID){
+        try {
+            $news = HelperFunction::getNewsByID($newsID);
+            if (!$news){
+                return $this->error(trans('messages.news_not_found') ,404);
+            }
+            return $this->success(NewsResource::make($news));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }

@@ -44,7 +44,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/all' , [UserController::class , 'getAllUser']); // done
                     Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']); //done
                     Route::get('/blocked' , [UserController::class , 'getAllBlockedUser']);
-                    Route::get('/teachers' , [UserController::class , 'getTeacher']);
+                    Route::get('/teachers' , [UserController::class , 'getTeacher']); //done
                     Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);
                     Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']); //done
                     Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
@@ -52,10 +52,11 @@ Route::middleware(['language'])->group(function (){
                 Route::prefix('/news')->group(function (){
                     Route::get('/all' , [NewsController::class , 'index']);
                     Route::post('/create' , [NewsController::class , 'store']);
+                    Route::get('/show/{news}' , [NewsController::class , 'show']);
                     Route::delete('/delete/{news}' , [NewsController::class , 'destroy']);
                     Route::patch('/switchVisibility/{news}' , [NewsController::class , 'switchVisibility']);
                 });
-                Route::prefix('/categories')->group(function (){
+                Route::prefix('/categories')->group(function (){ //done
                     Route::get('/all' , [CategoryController::class , 'gelAllCategories']);
                     Route::get('/show/{category}' , [CategoryController::class , 'show']);
                     Route::post('/create' , [CategoryController::class , 'store']);

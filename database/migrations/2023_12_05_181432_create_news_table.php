@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->integer('position')->default(1);
+            $table->string('title')->nullable();
             $table->boolean('is_visible');
             $table->index(['is_visible', 'position']);
             $table->timestamps();

@@ -17,6 +17,7 @@ class NewsResource extends JsonResource
         return [
             'id' => intval($this->id),
             'image' => asset($this->image),
+            'title' => $this->title,
             'position' => $this->position,
             'is_visible' => boolval($this->is_visible)
         ];
