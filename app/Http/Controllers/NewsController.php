@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
+use App\Http\Requests\UpdateNewsRequest;
 use App\Http\Resources\NewsResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\News;
@@ -36,6 +37,21 @@ class NewsController extends Controller
             return NewsResource::make($news);
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
+        }
+    }
+
+    public function update(UpdateNewsRequest $request , $newsID){
+        {
+            $news = HelperFunction::getNewsByID($newsID);
+            if (!$news){
+                return $this->error(trans('messages.news_not_found') ,404);
+            }
+            try {
+                $news->update($request->only(['title' , 'image' , 'position' , 'is_visible']));
+                return $this->success(NewsResource::make($news));
+            }catch(\Throwable $th){
+                return $this->error($th->getMessage() , 500);
+            }
         }
     }
 

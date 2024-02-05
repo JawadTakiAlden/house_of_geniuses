@@ -53,6 +53,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/all' , [NewsController::class , 'index']);
                     Route::post('/create' , [NewsController::class , 'store']);
                     Route::get('/show/{news}' , [NewsController::class , 'show']);
+                    Route::post('/update/{news}' , [NewsController::class , 'update']);
                     Route::delete('/delete/{news}' , [NewsController::class , 'destroy']);
                     Route::patch('/switchVisibility/{news}' , [NewsController::class , 'switchVisibility']);
                 });
