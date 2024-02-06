@@ -33,6 +33,7 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
         try {
+            $request->validated($request->only(['is_visible' , 'image' , 'title']));
             $news = News::create($request->only(['is_visible' , 'image' , 'title']));
             return NewsResource::make($news);
         }catch(\Throwable $th){
