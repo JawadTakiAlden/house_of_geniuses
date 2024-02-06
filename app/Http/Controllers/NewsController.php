@@ -8,6 +8,7 @@ use App\Http\Resources\NewsResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\News;
 use App\Http\Requests\StoreNewsRequest;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
@@ -49,7 +50,7 @@ class NewsController extends Controller
                 }
                 if ($request->position){
                     if (intval($request->position) !== intval($news->position)){
-                        $news->update(array_merge($request->only(['title' , 'position' , 'is_visible' , 'image']) , ['position_update' => now()]));
+                        $news->update(array_merge($request->only(['title' , 'position' , 'is_visible' , 'image']) , ['position_update' => DB::raw('CURRENT_TIMESTAMP')]));
                         return $this->success(NewsResource::make($news));
                     }else{
                         $news->update($request->only(['title' , 'is_visible' , 'image']));
