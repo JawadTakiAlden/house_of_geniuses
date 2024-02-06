@@ -9,6 +9,7 @@ use App\HttpResponse\HTTPResponse;
 use App\Models\News;
 use App\Http\Requests\StoreNewsRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class NewsController extends Controller
 {
@@ -72,6 +73,9 @@ class NewsController extends Controller
             $news = HelperFunction::getNewsByID($newsID);
             if (!$news){
                 return $this->error(trans('messages.news_not_found') ,404);
+            }
+            if (File::exists(public_path($news->image))) {
+                File::delete(public_path($news->image));
             }
             $news->delete();
             return $this->success(NewsResource::make($news) , trans('messages.delete_news'));
