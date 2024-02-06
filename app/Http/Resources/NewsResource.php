@@ -19,6 +19,7 @@ class NewsResource extends JsonResource
             'image' => asset($this->image),
             'title' => $this->title,
             'position' => $this->position,
+            'position_update' => $this->position_update,
             'is_visible' => boolval($this->is_visible)
         ];
     }
