@@ -22,7 +22,7 @@ class StoreNewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_visible' => 'required|string|in:true,false',
+            'is_visible' => 'required|boolean',
             'image' => 'required_without:title|image|mimes:png,jpg,jpeg|max:4096',
             'title' => 'required_without:image|max:255|string'
         ];
