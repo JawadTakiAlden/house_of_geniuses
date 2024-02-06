@@ -34,7 +34,7 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
         try {
-            $news = News::create($request->only(['is_visible' , 'image' , 'title']));
+            $news = News::create($request->only(['is_visible' , 'image' , 'position' , 'title']));
             return $this->success(NewsResource::make($news));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);

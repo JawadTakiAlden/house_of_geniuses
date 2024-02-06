@@ -24,7 +24,8 @@ class StoreNewsRequest extends FormRequest
         return [
             'is_visible' => 'required|boolean',
             'image' => 'required_without:title|image|mimes:png,jpg,jpeg|max:4096',
-            'title' => 'required_without:image|max:255|string'
+            'title' => 'required_without:image|max:255|string',
+            'position' => 'required|numeric|min:0'
         ];
     }
 }
