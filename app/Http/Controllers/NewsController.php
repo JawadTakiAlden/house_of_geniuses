@@ -47,7 +47,7 @@ class NewsController extends Controller
                 if (!$news){
                     return $this->error(trans('messages.news_not_found') ,404);
                 }
-                $news->update($request->only(['title' , 'position' , 'is_visible']));
+                $news->update($request->only(['title' , 'position' , 'is_visible' , 'image']));
                 return $this->success(NewsResource::make($news));
             }catch(\Throwable $th){
                 return $this->error($th->getMessage() , 500);
