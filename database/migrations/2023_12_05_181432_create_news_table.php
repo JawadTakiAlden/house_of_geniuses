@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->integer('position')->default(1);
             $table->string('title')->nullable();
+            $table->date('position_update')->default(now());
             $table->boolean('is_visible');
             $table->index(['is_visible', 'position']);
             $table->timestamps();
