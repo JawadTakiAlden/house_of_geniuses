@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ActivationCodesExport;
 use App\HttpResponse\HTTPResponse;
 use App\Models\ActivationCode;
 use App\Http\Requests\StoreActivationCodeRequest;
@@ -10,6 +11,7 @@ use App\Models\CourseCanActivated;
 use App\Types\CodeType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ActivationCodeController extends Controller
 {
@@ -25,6 +27,7 @@ class ActivationCodeController extends Controller
             $type = $request->get('type');
             $courses = $request->get('courses');
             $quantity = intval($request->get('quantity'));
+            $exportData = collect();
             DB::beginTransaction();
             if ($type === CodeType::SINGLE){
 //                handle single code type
@@ -41,6 +44,7 @@ class ActivationCodeController extends Controller
                         'times_of_usage' => count($courses),
                         'type' => $type
                     ]);
+                    $exportData->push($newActivationCode);
                     CourseCanActivated::create([
                         'activation_code_id' => $newActivationCode->id,
                         'course_id' => $courses[0],
@@ -60,6 +64,7 @@ class ActivationCodeController extends Controller
                         'times_of_usage' => count($courses),
                         'type' => $type
                     ]);
+                    $exportData->push($newActivationCode);
                     foreach ($courses as $course){
                         CourseCanActivated::create([
                             'activation_code_id' => $newActivationCode->id,
@@ -73,13 +78,16 @@ class ActivationCodeController extends Controller
                     while (ActivationCode::where('code', $code)->exists()) {
                         $code = Str::random(15);
                     }
-                    ActivationCode::create([
+                    $newActivationCode = ActivationCode::create([
                         'code' => $code,
                         'times_of_usage' => $request->number_of_courses,
                         'type' => $type
                     ]);
+                    $exportData->push($newActivationCode);
                 }
             }
+            $fileName = 'activation_codes_' . time() . '.xlsx';
+            Excel::store(new ActivationCodesExport($exportData), public_path('excel_files').$fileName);
             DB::commit();
             return $this->success(null , 'created successfully');
         }catch (\Throwable $th){
