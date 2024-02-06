@@ -116,6 +116,7 @@ class StatisticsController extends Controller
         DB::beginTransaction();
             DB::table('course_can_activateds')->delete();
             DB::table('activation_codes')->delete();
+            DB::table('account_inrolments')->delete();
         DB::commit();
         return $this->success(null , 'statistics reset successfully and all activation codes deleted');
         }catch (\Throwable $th){
