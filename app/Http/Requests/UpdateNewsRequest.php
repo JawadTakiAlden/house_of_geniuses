@@ -24,7 +24,8 @@ class UpdateNewsRequest extends FormRequest
         return [
             'title' => 'string|max:255',
             'is_visible' => 'boolean',
-            'position' => 'numeric|min:0'
+            'position' => 'numeric|min:0',
+            'image' => 'image|mimes:jpg,png,jpeg|max:4096'
         ];
     }
 }
