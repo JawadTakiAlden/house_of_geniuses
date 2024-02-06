@@ -33,9 +33,8 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
         try {
-            $request->validated($request->only(['is_visible' , 'image' , 'title']));
             $news = News::create($request->only(['is_visible' , 'image' , 'title']));
-            return NewsResource::make($news);
+            return $this->success(NewsResource::make($news));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
@@ -43,11 +42,11 @@ class NewsController extends Controller
 
     public function update(UpdateNewsRequest $request , $newsID){
         {
-            $news = HelperFunction::getNewsByID($newsID);
-            if (!$news){
-                return $this->error(trans('messages.news_not_found') ,404);
-            }
             try {
+                $news = HelperFunction::getNewsByID($newsID);
+                if (!$news){
+                    return $this->error(trans('messages.news_not_found') ,404);
+                }
                 $news->update($request->only(['title' , 'position' , 'is_visible']));
                 return $this->success(NewsResource::make($news));
             }catch(\Throwable $th){
@@ -58,11 +57,12 @@ class NewsController extends Controller
 
     public function destroy($newsID)
     {
-        $news = HelperFunction::getNewsByID($newsID);
-        if (!$news){
-            return $this->error(trans('messages.news_not_found') ,404);
-        }
+
         try {
+            $news = HelperFunction::getNewsByID($newsID);
+            if (!$news){
+                return $this->error(trans('messages.news_not_found') ,404);
+            }
             $news->delete();
             return $this->success(NewsResource::make($news) , trans('messages.delete_news'));
         }catch(\Throwable $th){
@@ -83,11 +83,11 @@ class NewsController extends Controller
     }
 
     public function switchVisibility($newsID){
-        $news = HelperFunction::getNewsByID($newsID);
-        if (!$news){
-            return $this->error(trans('messages.news_not_found') ,404);
-        }
         try {
+            $news = HelperFunction::getNewsByID($newsID);
+            if (!$news){
+                return $this->error(trans('messages.news_not_found') ,404);
+            }
             $news->update([
                 'is_visible' => !$news->is_visible
             ]);
