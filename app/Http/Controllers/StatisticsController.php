@@ -115,8 +115,8 @@ class StatisticsController extends Controller
         try {
         DB::beginTransaction();
         CourseCanActivated::truncate();
-        ActivationCode::truncate();
-//        AccountInrolment::truncate();
+        AccountInrolment::truncate();
+            ActivationCode::truncate();
         DB::commit();
         return $this->success(null , 'statistics reset successfully and all activation codes deleted');
         }catch (\Throwable $th){
