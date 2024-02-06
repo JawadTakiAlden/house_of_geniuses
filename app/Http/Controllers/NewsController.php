@@ -15,7 +15,7 @@ class NewsController extends Controller
     public function index()
     {
         try {
-            $news = News::orderBy('position')->get();
+            $news = News::orderBy('position')->orderBy('position_update')->get();
             return $this->success(NewsResource::collection($news));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
@@ -24,7 +24,7 @@ class NewsController extends Controller
 
     public function visibleNews(){
         try {
-            $news = News::where('is_visible' , true)->orderBy('position')->get();
+            $news = News::where('is_visible' , true)->orderBy('position')->orderBy('position_update')->get();
             return $this->success(NewsResource::collection($news));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
