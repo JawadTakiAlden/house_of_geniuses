@@ -57,6 +57,7 @@ Route::middleware(['language'])->group(function (){
                     Route::delete('/delete/{news}' , [NewsController::class , 'destroy']);
                     Route::patch('/switchVisibility/{news}' , [NewsController::class , 'switchVisibility']);
                 });
+
                 Route::prefix('/categories')->group(function (){ //done
                     Route::get('/all' , [CategoryController::class , 'gelAllCategories']);
                     Route::get('/show/{category}' , [CategoryController::class , 'show']);
@@ -65,6 +66,7 @@ Route::middleware(['language'])->group(function (){
                     Route::patch('/switch-visibility/{category}' , [CategoryController::class , 'switchVisibility']);
                     Route::delete('/delete/{category}' , [CategoryController::class , 'destroy']);
                 });
+
                 Route::prefix('/courses')->group(function (){
                     Route::post('/create' , [CourseController::class , 'store']);
                     Route::post('/add-value/{course}' , [CourseValueController::class , 'store']);
