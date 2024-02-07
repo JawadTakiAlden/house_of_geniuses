@@ -15,6 +15,7 @@ use App\Types\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class StatisticsController extends Controller
 {
@@ -117,6 +118,7 @@ class StatisticsController extends Controller
             DB::table('course_can_activateds')->delete();
             DB::table('activation_codes')->delete();
             DB::table('account_inrolments')->delete();
+            Storage::deleteDirectory('excel_files');
         DB::commit();
         return $this->success(null , 'statistics reset successfully and all activation codes deleted');
         }catch (\Throwable $th){
