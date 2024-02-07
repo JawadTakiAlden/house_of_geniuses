@@ -38,7 +38,7 @@ class ActivationCodesExport implements FromCollection, WithHeadings, WithStyles
     public function styles(Worksheet $sheet)
     {
         // Apply styles to the header row
-        $sheet->getStyle('A1:B1')->applyFromArray([
+        $sheet->getStyle('A1:D1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'], // White font color
@@ -52,6 +52,9 @@ class ActivationCodesExport implements FromCollection, WithHeadings, WithStyles
         ]);
 
         // Merge cells for the Code column
-        $sheet->mergeCells('A1:A2');
+        $sheet->mergeCells('A1:B1');
+        $sheet->mergeCells('A2:B2');
+        $sheet->mergeCells('C1:D1');
+        $sheet->mergeCells('C2:D2');
     }
 }
