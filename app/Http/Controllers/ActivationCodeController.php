@@ -7,6 +7,7 @@ use App\HttpResponse\HTTPResponse;
 use App\Models\ActivationCode;
 use App\Http\Requests\StoreActivationCodeRequest;
 use App\Http\Requests\UpdateActivationCodeRequest;
+use App\Models\Course;
 use App\Models\CourseCanActivated;
 use App\Models\ExportableFile;
 use App\Types\CodeType;
@@ -29,6 +30,7 @@ class ActivationCodeController extends Controller
             $type = $request->get('type');
             $courses = $request->get('courses');
             $quantity = intval($request->get('quantity'));
+
             $exportData = collect();
             DB::beginTransaction();
             if ($type === CodeType::SINGLE){
@@ -92,8 +94,13 @@ class ActivationCodeController extends Controller
             $fileName = 'activation_codes_' . time() . '.xlsx';
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
+            $coursesNameSpreatedByComma = collect($courses)->map(fn($course) =>
+                Course::where('id' , $course)->pluck('name')
+            )->implode('| ');
              ExportableFile::create([
                'path' => $fileName,
+               'type_of_code' => $type,
+               'courses_name' => $coursesNameSpreatedByComma
             ]);
             Excel::store(new ActivationCodesExport($exportData->toArray()), $filePath);
             DB::commit();

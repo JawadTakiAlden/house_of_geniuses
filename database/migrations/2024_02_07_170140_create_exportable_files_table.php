@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('path');
             $table->integer('times_of_download')->default(0);
+            $table->string('type_of_code');
+            $table->string('courses_name')->nullable();
             $table->timestamps();
         });
     }
