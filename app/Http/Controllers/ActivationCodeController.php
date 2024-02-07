@@ -92,7 +92,7 @@ class ActivationCodeController extends Controller
             if (!File::exists($directory)) {
                 File::makeDirectory($directory, 0777, true, true);
             }
-            Excel::store(new ActivationCodesExport($exportData->toArray()), $path);
+            Excel::download(new ActivationCodesExport($exportData->toArray()), $fileName);
             DB::commit();
             return $this->success(null , 'created successfully');
         }catch (\Throwable $th){
