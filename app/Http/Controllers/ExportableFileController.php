@@ -30,10 +30,13 @@ class ExportableFileController extends Controller
     public function deleteFile($fileName)
     {
         $file = ExportableFile::where('path', $fileName)->first();
-        if (!$file) {
+//        if (!$file && !Storage::exists('excel_files/'.$fileName)) {
+//            return $this->error('the requested file doesnt found in our system' , 404);
+//        }
+        if (!Storage::exists('excel_files/'.$fileName)) {
             return $this->error('the requested file doesnt found in our system' , 404);
         }
-
+//        ExportableFile::where('path' , $fileName)->delete();
         $filePath = 'excel_files/' . $fileName;
         Storage::delete($filePath);
         $file->delete();
