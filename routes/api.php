@@ -106,6 +106,7 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/generate' , [ActivationCodeController::class , 'store']);
                     Route::get('/unexpired' , [ActivationCodeController::class , 'getUnExpiredCodes']);
                 });
+
                 Route::prefix('/notifications')->group(function (){
                     Route::post('/push' , [NotificationController::class , 'sendNotificationForAllUser']);
                 });
@@ -115,6 +116,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']); //done
                     Route::post('/reset' , [StatisticsController::class , 'reset']);
                 });
+
                 Route::prefix('/questions')->group(function () {
                     Route::get('/all' , [QuestionController::class , 'getAll']);
                     Route::get('/show/{question}' , [QuestionController::class , 'show']);
