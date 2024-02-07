@@ -92,7 +92,7 @@ class ActivationCodeController extends Controller
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
             $exportableFile = ExportableFile::create([
-               'path' => storage_path($filePath),
+               'path' => $filePath,
             ]);
             Excel::store(new ActivationCodesExport($exportData->toArray()), $filePath);
             DB::commit();
