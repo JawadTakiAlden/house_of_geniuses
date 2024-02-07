@@ -50,11 +50,5 @@ class ActivationCodesExport implements FromCollection, WithHeadings, WithStyles
                 ],
             ],
         ]);
-
-        // Merge cells for the Code column
-        $sheet->mergeCells('A1:B1');
-        $sheet->mergeCells('A2:B2');
-        $sheet->mergeCells('C1:D1');
-        $sheet->mergeCells('C2:D2');
     }
 }
