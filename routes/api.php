@@ -7,6 +7,7 @@ use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseValueController;
+use App\Http\Controllers\ExportableFileController;
 use App\Http\Controllers\LesionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotificationController;
@@ -37,6 +38,11 @@ Route::middleware(['language'])->group(function (){
 //    Admin Routes
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
+                Route::prefix('/files')->group(function (){
+                    Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
+                    Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
+                    Route::delete('/delete/{fileName}', [ExportableFileController::class, 'deleteFile']);
+                });
                 Route::prefix('/users')->group(function (){
                     Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']); //done
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);

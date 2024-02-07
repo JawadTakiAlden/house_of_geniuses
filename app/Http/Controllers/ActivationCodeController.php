@@ -11,6 +11,7 @@ use App\Models\CourseCanActivated;
 use App\Models\ExportableFile;
 use App\Types\CodeType;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
@@ -96,7 +97,7 @@ class ActivationCodeController extends Controller
             ]);
             Excel::store(new ActivationCodesExport($exportData->toArray()), $filePath);
             DB::commit();
-            return $this->success($exportableFile , 'created successfully');
+            return $this->success(Storage::download($filePath) , 'created successfully');
         }catch (\Throwable $th){
             DB::rollBack();
             return $this->catchError($th);
