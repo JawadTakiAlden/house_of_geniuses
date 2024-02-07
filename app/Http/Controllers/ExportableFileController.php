@@ -29,7 +29,7 @@ class ExportableFileController extends Controller
 
     public function deleteFile($fileName)
     {
-        $file = ExportableFile::where('path', $fileName)->first();
+        $file = ExportableFile::where('path', $fileName)->orderBy('created_at' , 'desc')->first();
         if (!$file) {
             return $this->error('the requested file doesnt found in our system' , 404);
         }
