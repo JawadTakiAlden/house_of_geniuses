@@ -12,6 +12,7 @@ use App\Types\CodeType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 
 class ActivationCodeController extends Controller
 {
@@ -87,6 +88,10 @@ class ActivationCodeController extends Controller
             }
             $fileName = 'activation_codes_' . time() . '.xlsx';
             $path = public_path('excel_files') . DIRECTORY_SEPARATOR . $fileName;
+            $directory = public_path('excel_files');
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0777, true, true);
+            }
             Excel::store(new ActivationCodesExport($exportData->toArray()), $path);
             DB::commit();
             return $this->success(null , 'created successfully');
