@@ -8,6 +8,7 @@ use App\Models\ActivationCode;
 use App\Http\Requests\StoreActivationCodeRequest;
 use App\Http\Requests\UpdateActivationCodeRequest;
 use App\Models\CourseCanActivated;
+use App\Models\ExportableFile;
 use App\Types\CodeType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -90,9 +91,12 @@ class ActivationCodeController extends Controller
             $fileName = 'activation_codes_' . time() . '.xlsx';
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
+            $exportableFile = ExportableFile::create([
+               'path' => storage_path($filePath),
+            ]);
             Excel::store(new ActivationCodesExport($exportData->toArray()), $filePath);
             DB::commit();
-            return $this->success(null , 'created successfully');
+            return $this->success($exportableFile , 'created successfully');
         }catch (\Throwable $th){
             DB::rollBack();
             return $this->catchError($th);
