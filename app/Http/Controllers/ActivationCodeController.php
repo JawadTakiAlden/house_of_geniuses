@@ -23,7 +23,6 @@ class ActivationCodeController extends Controller
 
     public function store(StoreActivationCodeRequest $request){
         try {
-//            $request->validated($request->only(['type' , 'courses' , 'courses.*' , 'quantity']));
             $type = $request->get('type');
             $courses = $request->get('courses');
             $quantity = intval($request->get('quantity'));
@@ -87,7 +86,8 @@ class ActivationCodeController extends Controller
                 }
             }
             $fileName = 'activation_codes_' . time() . '.xlsx';
-            Excel::store(new ActivationCodesExport($exportData->toArray()), public_path('excel_files').$fileName);
+            $path = public_path('excel_files') . DIRECTORY_SEPARATOR . $fileName;
+            Excel::store(new ActivationCodesExport($exportData->toArray()), $path);
             DB::commit();
             return $this->success(null , 'created successfully');
         }catch (\Throwable $th){
