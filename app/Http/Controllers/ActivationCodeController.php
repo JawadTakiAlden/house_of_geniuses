@@ -87,7 +87,7 @@ class ActivationCodeController extends Controller
                 }
             }
             $fileName = 'activation_codes_' . time() . '.xlsx';
-            Excel::store(new ActivationCodesExport($exportData), public_path('excel_files').$fileName);
+            Excel::store(new ActivationCodesExport($exportData->toArray()), public_path('excel_files').$fileName);
             DB::commit();
             return $this->success(null , 'created successfully');
         }catch (\Throwable $th){

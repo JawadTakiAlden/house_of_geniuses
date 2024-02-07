@@ -11,7 +11,7 @@ class ActivationCodesExport implements FromCollection
 
     public function __construct(array $activationCodes)
     {
-        $this->activationCodes = $activationCodes;
+        $this->activationCodes = collect($activationCodes);
     }
 
     public function collection()
