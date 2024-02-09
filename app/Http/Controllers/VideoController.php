@@ -14,6 +14,6 @@ class VideoController extends Controller
 
         $response = $client->request('/categories', array(), 'GET');
 //
-        return $response->data;
+        return $response;
     }
 }
