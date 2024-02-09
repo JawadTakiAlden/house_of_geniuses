@@ -50,7 +50,7 @@ class Course extends Model
     }
 
     public function students(){
-        return $this->belongsToMany(User::class , 'account_inrolments');
+        return $this->belongsToMany(User::class , 'account_inrolments')->withPivot(['created_at' , 'id']);
     }
 
     public function visibleChapters(){
