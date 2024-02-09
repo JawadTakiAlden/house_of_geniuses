@@ -88,12 +88,11 @@ class LesionController extends Controller
 
     public function update(UpdateLesionRequest $request , $lesionID){
         try {
-            $request->validated($request->only(['title' , 'link' , 'is_open' , 'is_visible' , 'chapter_id']));
             $lesion = HelperFunction::getLesionByID($lesionID);
             if (!$lesion){
                 return $this->error('lesion dose\'nt found in our system' , 404);
             }
-            $lesion->update($request->only(['title' , 'link' , 'is_open' , 'is_visible' , 'chapter_id']));
+            $lesion->update($request->only(['title' , 'link' , 'is_open' , 'is_visible' , 'type']));
             return $this->success(LesionResource::make($lesion) , $lesion->title . ' updated successfully');
         }catch (\Throwable $th){
             return $this->catchError($th);

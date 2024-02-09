@@ -27,8 +27,8 @@ class UpdateLesionRequest extends FormRequest
             'link' => 'required|string|max:255',
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
-            'type' => 'required|in:video,vimo',
-            'chapter_id' => ['required' , Rule::exists('chapters' , 'id')],
+            'type' => 'required|in:video,pdf',
+//            'chapter_id' => ['required' , Rule::exists('chapters' , 'id')],
         ];
     }
 }

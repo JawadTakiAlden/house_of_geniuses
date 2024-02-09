@@ -90,17 +90,18 @@ Route::middleware(['language'])->group(function (){
                 });
                 Route::prefix('/chapters')->group(function (){
                     Route::get('/all/{course}' , [ChapterController::class , 'getAll']); //unused
-                    Route::patch('/switchVisibility/{chapter}' , [ChapterController::class , 'switchVisibility']);
+                    Route::patch('/switchVisibility/{chapter}' , [ChapterController::class , 'switchVisibility']); // unused
                     Route::post('/create' , [ChapterController::class , 'store']); //done
-                    Route::patch('/update/{chapter}' , [ChapterController::class , 'update']);
+                    Route::patch('/update/{chapter}' , [ChapterController::class , 'update']); //done
                     Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']); //done
                 });
+
                 Route::prefix('/lesions')->group(function (){
                     Route::get('/all/{chapter}' , [LesionController::class , 'getAll']); //not used any more
                     Route::patch('/switchVisibility/{lesion}' , [LesionController::class , 'switchVisibility']);
-                    Route::post('/create' , [LesionController::class , 'store']);
-                    Route::patch('/update/{lesion}' , [LesionController::class , 'update']);
-                    Route::delete('/delete/{lesion}' , [LesionController::class , 'delete']);
+                    Route::post('/create' , [LesionController::class , 'store']); // done
+                    Route::patch('/update/{lesion}' , [LesionController::class , 'update']); //done
+                    Route::delete('/delete/{lesion}' , [LesionController::class , 'delete']); //done
                 });
                 Route::prefix('/activationCodes')->group(function (){
                     Route::post('/generate' , [ActivationCodeController::class , 'store']);
