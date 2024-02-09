@@ -186,7 +186,6 @@ class CourseController extends Controller
     }
 
     public function store(StoreCourseRequest $request){
-        $request->validated($request->only(['name', 'image', 'is_visible', 'is_open', 'categories', 'categories.*', 'teachers', 'teachers.*', 'values', 'values.*', 'telegram_channel_link']));
         try {
             DB::beginTransaction();
             $course = Course::create($request->only(['name', 'image', 'is_visible', 'is_open' , 'telegram_channel_link']));
@@ -210,14 +209,14 @@ class CourseController extends Controller
             } else {
                 return $this->error('you must provide one teacher teach this course at least', 422);
             }
-            if ($request->values) {
-                foreach ($request->values as $value) {
-                    CourseValue::create([
-                        'course_id' => $course->id,
-                        'value' => $value
-                    ]);
-                }
-            }
+//            if ($request->values) {
+//                foreach ($request->values as $value) {
+//                    CourseValue::create([
+//                        'course_id' => $course->id,
+//                        'value' => $value
+//                    ]);
+//                }
+//            }
             DB::commit();
             $notification = new NotificationController();
             $notification->addNewCourseNotification($course);

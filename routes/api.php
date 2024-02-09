@@ -43,6 +43,47 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
                     Route::delete('/delete/{fileName}', [ExportableFileController::class, 'deleteFile']);
                 });
+                Route::prefix('/news')->group(function (){
+                    Route::get('/all' , [NewsController::class , 'index']);
+                    Route::post('/create' , [NewsController::class , 'store']);
+                    Route::get('/show/{news}' , [NewsController::class , 'show']);
+                    Route::post('/update/{news}' , [NewsController::class , 'update']);
+                    Route::delete('/delete/{news}' , [NewsController::class , 'destroy']);
+                    Route::patch('/switchVisibility/{news}' , [NewsController::class , 'switchVisibility']);
+                });
+                Route::prefix('/categories')->group(function (){ //done
+                    Route::get('/all' , [CategoryController::class , 'gelAllCategories']);
+                    Route::get('/show/{category}' , [CategoryController::class , 'show']);
+                    Route::post('/create' , [CategoryController::class , 'store']);
+                    Route::patch('/update/{category}' , [CategoryController::class , 'updateCategory']);
+                    Route::patch('/switch-visibility/{category}' , [CategoryController::class , 'switchVisibility']);
+                    Route::delete('/delete/{category}' , [CategoryController::class , 'destroy']);
+                });
+                Route::prefix('/chapters')->group(function (){
+                    Route::get('/all/{course}' , [ChapterController::class , 'getAll']); //unused
+                    Route::patch('/switchVisibility/{chapter}' , [ChapterController::class , 'switchVisibility']); // unused
+                    Route::post('/create' , [ChapterController::class , 'store']); //done
+                    Route::patch('/update/{chapter}' , [ChapterController::class , 'update']); //done
+                    Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']); //done
+                });
+                Route::prefix('/lesions')->group(function (){
+                    Route::get('/all/{chapter}' , [LesionController::class , 'getAll']); //not used any more
+                    Route::patch('/switchVisibility/{lesion}' , [LesionController::class , 'switchVisibility']); //not used
+                    Route::post('/create' , [LesionController::class , 'store']); // done
+                    Route::patch('/update/{lesion}' , [LesionController::class , 'update']); //done
+                    Route::delete('/delete/{lesion}' , [LesionController::class , 'delete']); //done
+                });
+                Route::prefix('/statistics')->group(function (){
+                    Route::get('/get' , [StatisticsController::class , 'statistics']); //done
+                    Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
+                    Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']); //done
+                    Route::post('/reset' , [StatisticsController::class , 'reset']);
+                });
+                Route::prefix('/activationCodes')->group(function (){
+                    Route::post('/generate' , [ActivationCodeController::class , 'store']);
+                    Route::get('/unexpired' , [ActivationCodeController::class , 'getUnExpiredCodes']);
+                });
+
                 Route::prefix('/users')->group(function (){
                     Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']); //done
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);
@@ -55,68 +96,30 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']); //done
                     Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
                 });
-                Route::prefix('/news')->group(function (){
-                    Route::get('/all' , [NewsController::class , 'index']);
-                    Route::post('/create' , [NewsController::class , 'store']);
-                    Route::get('/show/{news}' , [NewsController::class , 'show']);
-                    Route::post('/update/{news}' , [NewsController::class , 'update']);
-                    Route::delete('/delete/{news}' , [NewsController::class , 'destroy']);
-                    Route::patch('/switchVisibility/{news}' , [NewsController::class , 'switchVisibility']);
-                });
 
-                Route::prefix('/categories')->group(function (){ //done
-                    Route::get('/all' , [CategoryController::class , 'gelAllCategories']);
-                    Route::get('/show/{category}' , [CategoryController::class , 'show']);
-                    Route::post('/create' , [CategoryController::class , 'store']);
-                    Route::patch('/update/{category}' , [CategoryController::class , 'updateCategory']);
-                    Route::patch('/switch-visibility/{category}' , [CategoryController::class , 'switchVisibility']);
-                    Route::delete('/delete/{category}' , [CategoryController::class , 'destroy']);
-                });
+
+
 
                 Route::prefix('/courses')->group(function (){
-                    Route::post('/create' , [CourseController::class , 'store']);
-                    Route::post('/add-value/{course}' , [CourseValueController::class , 'store']);
-                    Route::delete('/delete-value/{value}' , [CourseValueController::class , 'destroy']);
-                    Route::patch('/update-value/{value}' , [CourseValueController::class , 'update']);
+                    Route::post('/create' , [CourseController::class , 'store']); //done
                     Route::get('/all' , [CourseController::class , 'getAllCourses']); //done
                     Route::get('/visible' , [CourseController::class , 'visibleCourses']); //used in api | done
-                    Route::post('/update/{course}' , [CourseController::class , 'update']);
+                    Route::post('/update/{course}' , [CourseController::class , 'update']); //done
                     Route::patch('/switchOpenStatus/{course}' , [CourseController::class  , 'switchOpenStatus']); //done
                     Route::patch('/switchVisibility/{course}' , [CourseController::class , 'switchVisibility']); //done
                     Route::post('/addUser/{user}/toCourse/{course}' , [CourseController::class , 'manualInrolStudentInCourse']); //done
-                    Route::get('/allInrolments' , [CourseController::class , 'getAllIneolments']);
                     Route::delete('/cancelInrolment/{inrollment}' , [CourseController::class , 'cancelInfolement']); //done
-                    Route::delete('/delete/{course}' , [CourseController::class , 'destroy']);
-                });
-                Route::prefix('/chapters')->group(function (){
-                    Route::get('/all/{course}' , [ChapterController::class , 'getAll']); //unused
-                    Route::patch('/switchVisibility/{chapter}' , [ChapterController::class , 'switchVisibility']); // unused
-                    Route::post('/create' , [ChapterController::class , 'store']); //done
-                    Route::patch('/update/{chapter}' , [ChapterController::class , 'update']); //done
-                    Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']); //done
-                });
-
-                Route::prefix('/lesions')->group(function (){
-                    Route::get('/all/{chapter}' , [LesionController::class , 'getAll']); //not used any more
-                    Route::patch('/switchVisibility/{lesion}' , [LesionController::class , 'switchVisibility']);
-                    Route::post('/create' , [LesionController::class , 'store']); // done
-                    Route::patch('/update/{lesion}' , [LesionController::class , 'update']); //done
-                    Route::delete('/delete/{lesion}' , [LesionController::class , 'delete']); //done
-                });
-                Route::prefix('/activationCodes')->group(function (){
-                    Route::post('/generate' , [ActivationCodeController::class , 'store']);
-                    Route::get('/unexpired' , [ActivationCodeController::class , 'getUnExpiredCodes']);
+                    Route::delete('/delete/{course}' , [CourseController::class , 'destroy']); //done
+                    Route::get('/allInrolments' , [CourseController::class , 'getAllIneolments']);
+                    Route::post('/add-value/{course}' , [CourseValueController::class , 'store']);
+                    Route::delete('/delete-value/{value}' , [CourseValueController::class , 'destroy']);
+                    Route::patch('/update-value/{value}' , [CourseValueController::class , 'update']);
                 });
 
                 Route::prefix('/notifications')->group(function (){
                     Route::post('/push' , [NotificationController::class , 'sendNotificationForAllUser']);
                 });
-                Route::prefix('/statistics')->group(function (){
-                    Route::get('/get' , [StatisticsController::class , 'statistics']); //done
-                    Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
-                    Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']); //done
-                    Route::post('/reset' , [StatisticsController::class , 'reset']);
-                });
+
 
                 Route::prefix('/questions')->group(function () {
                     Route::get('/all' , [QuestionController::class , 'getAll']);

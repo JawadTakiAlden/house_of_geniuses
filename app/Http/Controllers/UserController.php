@@ -185,15 +185,12 @@ class UserController extends Controller
     }
 
     public function getAllUserThatSignInToThis($courseID){
-        $course = HelperFunction::getCourseByID($courseID);
+        $course = HelperFunction::getCourseByID($courseID , ['students']);
         if (!$course){
             return $this->error(trans('messages.course_not_found') , 404);
         }
         try {
-            $users = User::whereHas('accountInrolments' , fn($query) =>
-            $query->where('course_id' , $course->id)
-            )->get();
-            return $this->success(UserResource::collection($users));
+            return $this->success(UserResource::collection($course->students));
         }catch(\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
