@@ -15,6 +15,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['language'])->group(function (){
@@ -38,6 +39,9 @@ Route::middleware(['language'])->group(function (){
 //    Admin Routes
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
+
+                Route::get('/videos/get' , [VideoController::class , 'getVideos']);
+
                 Route::prefix('/files')->group(function (){
                     Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
                     Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
@@ -83,7 +87,7 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/generate' , [ActivationCodeController::class , 'store']);
                     Route::get('/unexpired' , [ActivationCodeController::class , 'getUnExpiredCodes']);
                 });
-
+//                vide
                 Route::prefix('/users')->group(function (){
                     Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']); //done
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);
