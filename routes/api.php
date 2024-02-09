@@ -96,7 +96,7 @@ Route::middleware(['language'])->group(function (){
                     Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']); //done
                 });
                 Route::prefix('/lesions')->group(function (){
-                    Route::get('/all/{chapter}' , [LesionController::class , 'getAll']);
+                    Route::get('/all/{chapter}' , [LesionController::class , 'getAll']); //not used any more
                     Route::patch('/switchVisibility/{lesion}' , [LesionController::class , 'switchVisibility']);
                     Route::post('/create' , [LesionController::class , 'store']);
                     Route::patch('/update/{lesion}' , [LesionController::class , 'update']);

@@ -78,8 +78,8 @@ class LesionController extends Controller
 
     public function store(StoreLesionRequest $request){
         try {
-            $request->validated($request->only(['title' , 'link' , 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
-            $lesion = Lesion::create($request->only(['title' , 'link' , 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
+            $request->validated($request->only(['title' , 'link' , 'type', 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
+            $lesion = Lesion::create($request->only(['title' , 'link' , 'type' , 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
             return $this->success(LesionResource::make($lesion) , $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name .' course');
         }catch (\Throwable $th){
             return $this->catchError($th);

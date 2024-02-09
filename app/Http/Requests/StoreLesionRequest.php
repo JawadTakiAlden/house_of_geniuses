@@ -27,7 +27,7 @@ class StoreLesionRequest extends FormRequest
             'link' => 'required|string|max:255',
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
-            'type' => 'required|in:video,vimo',
+            'type' => 'required|in:pdf,video',
             'time' => 'required|numeric',
             'chapter_id' => ['required' , Rule::exists('chapters' , 'id')],
         ];
