@@ -14,6 +14,12 @@ class VideoController extends Controller
 
         $response = $client->request('/categories', array(), 'GET');
 //
-        return $response;
+
+        $responseData = json_decode($response['body'], true);
+
+        // Extract data from the response
+        $categories = $responseData['data'];
+
+        return $categories;
     }
 }
