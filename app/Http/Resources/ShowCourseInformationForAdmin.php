@@ -23,7 +23,8 @@ class ShowCourseInformationForAdmin extends JsonResource
             'is_visible' => boolval($this->is_visible),
             'chapters' => ChapterInformationForAdmin::collection($this->chapters),
             'teachers' => $this->teachers,
-            'categories' => $this->categories
+            'categories' => $this->categories,
+            'values' => $this->courseValues
         ];
     }
 }

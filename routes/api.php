@@ -41,8 +41,6 @@ Route::middleware(['language'])->group(function (){
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
-
-
                 Route::prefix('/files')->group(function (){
                     Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
                     Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
@@ -82,7 +80,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/get' , [StatisticsController::class , 'statistics']); //done
                     Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
                     Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']); //done
-                    Route::post('/reset' , [StatisticsController::class , 'reset']);
+                    Route::post('/reset' , [StatisticsController::class , 'reset']); //done
                 });
                 Route::prefix('/activationCodes')->group(function (){
                     Route::post('/generate' , [ActivationCodeController::class , 'store']);
@@ -124,7 +122,6 @@ Route::middleware(['language'])->group(function (){
                 Route::prefix('/notifications')->group(function (){
                     Route::post('/push' , [NotificationController::class , 'sendNotificationForAllUser']);
                 });
-
 
                 Route::prefix('/questions')->group(function () {
                     Route::get('/all' , [QuestionController::class , 'getAll']);

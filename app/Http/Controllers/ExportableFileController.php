@@ -37,7 +37,6 @@ class ExportableFileController extends Controller
         $filePath = 'excel_files/' . $fileName;
         Storage::delete($filePath);
         $file->delete();
-
-        return response()->json(['message' => 'File deleted successfully']);
+        return $this->success( null, 'file deleted successfully');
     }
 }
