@@ -15,6 +15,9 @@ class VideoController extends Controller
         $response = $client->request('/me/videos', array(), 'GET');
         $responseData = $response['body'];
         $categories = $responseData['data'];
-        return $categories;
+        $videos = collect($categories)->map(fn($category) =>
+            $client->request($category['uri'] , array() , 'GET')
+        );
+        return $videos;
     }
 }
