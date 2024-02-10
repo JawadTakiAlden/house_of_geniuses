@@ -32,8 +32,8 @@ class StoreCourseRequest extends FormRequest
             'categories.*' => ['numeric' , Rule::exists('categories' , 'id')],
             'teachers' =>  'required|array',
             'teachers.*' => ['numeric' , Rule::exists('users' , 'id')],
-//            'values' => 'array',
-//            'values.*' => 'string|max:255',
+            'values' => 'array',
+            'values.*' => 'string|max:255',
             'telegram_channel_link' => 'string'
         ];
     }

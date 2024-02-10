@@ -209,14 +209,14 @@ class CourseController extends Controller
             } else {
                 return $this->error('you must provide one teacher teach this course at least', 422);
             }
-//            if ($request->values) {
-//                foreach ($request->values as $value) {
-//                    CourseValue::create([
-//                        'course_id' => $course->id,
-//                        'value' => $value
-//                    ]);
-//                }
-//            }
+            if ($request->values) {
+                foreach ($request->values as $value) {
+                    CourseValue::create([
+                        'course_id' => $course->id,
+                        'value' => $value
+                    ]);
+                }
+            }
             DB::commit();
             $notification = new NotificationController();
             $notification->addNewCourseNotification($course);
