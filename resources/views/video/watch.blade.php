@@ -38,6 +38,13 @@
             height: 100%;
             border: none;
         }
+        .button-container{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         #downloadButton{
             color: #fff;
             background-color: dodgerblue;
@@ -48,7 +55,12 @@
             border: none;
             outline: none;
             text-align: center;
+            cursor: pointer;
             text-transform: capitalize;
+            transition: 0.3s;
+        }
+        #downloadButton:hover{
+            background-color: blueviolet;
         }
     </style>
 </head>
@@ -58,7 +70,9 @@
     <div class="video-container">
         <iframe src="{{ $data['player_embed_url'] }}" allowfullscreen></iframe>
     </div>
-    <button id="downloadButton">Download</button>
+    <div class="button-container">
+        <button id="downloadButton">Download</button>
+    </div>
 </div>
 
 <script src="{{$data['player_embed_url']}}"></script>
