@@ -41,7 +41,7 @@ Route::middleware(['language'])->group(function (){
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
-                Route::get('/watch/{video}' , [VideoController::class , 'watch']);
+                Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
                 Route::prefix('/files')->group(function (){
                     Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
                     Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
