@@ -5,7 +5,7 @@
 </head>
 <body>
 <h2>{{ $data['name'] }}</h2>
-    <iframe src="{{ $data['player_embed_url'] }}" width="{{$data['width']}}" height="{{$data['height']}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe src="{{ $data['player_embed_url'] }}" width="100%" height="500px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
     <script src="{{$data['player_embed_url']}}"></script>
     <script>
