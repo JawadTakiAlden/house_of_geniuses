@@ -12,12 +12,8 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 800px;
-            margin: 20px auto;
+            width: 100%;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
             text-align: center;
@@ -26,7 +22,6 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
             overflow: hidden;
         }
         .video-container iframe {
