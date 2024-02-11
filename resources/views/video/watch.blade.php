@@ -9,11 +9,12 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             background-color: #f5f5f5;
         }
         .container {
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
