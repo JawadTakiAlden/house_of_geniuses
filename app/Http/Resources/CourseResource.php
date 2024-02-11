@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseResource extends JsonResource
 {
-
+    protected static $accountInrollemnt;
     /**
      * Transform the resource into an array.
      *
@@ -18,16 +18,22 @@ class CourseResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $is_paid = false;
-        $authenticatedUser = $request->user();
-        if ($authenticatedUser){
-            $inrole = AccountInrolment::where('user_id' , $authenticatedUser->id)
-                ->where('course_id' , $this->id)->exists();
-
-            if ($inrole){
-                $is_paid = true;
-            }
+        if (!isset(self::$accountInrollemnt)) {
+            $authenticatedUser = $request->user();
+            self::$accountInrollemnt = $authenticatedUser->accountInrolments()->pluck('course_id');
         }
+        $is_paid = self::$accountInrollemnt->contains($this->id);
+//        $authenticatedUser = $request->user();
+//        $accountInrollemnt = $authenticatedUser->accountInrolments()->pluck('course_id');
+//        $is_paid = $accountInrollemnt->contains($this->id);
+//        if ($authenticatedUser){
+//            $inrole = AccountInrolment::where('user_id' , $authenticatedUser->id)
+//                ->where('course_id' , $this->id)->exists();
+//
+//            if ($inrole){
+//                $is_paid = true;
+//            }
+//        }
         $array = [
             'id' => intval($this->id),
             'name' => $this->name,
