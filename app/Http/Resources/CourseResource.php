@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\AccountInrolment;
+use App\Types\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,7 @@ class CourseResource extends JsonResource
                 $is_paid = true;
             }
         }
-
-        return [
+        $array = [
             'id' => intval($this->id),
             'name' => $this->name,
             'image' => asset($this->image),
@@ -37,5 +37,10 @@ class CourseResource extends JsonResource
             'is_visible' => boolval($this->is_visible),
             'is_paid' => $is_paid,
         ];
+        if (Auth::user()->role === UserType::STUDENT || Auth::user()->role === UserType::TEACHER){
+            $array = array_merge($array , ['teachers' => $this->teachers]);
+        }
+
+        return  $array;
     }
 }
