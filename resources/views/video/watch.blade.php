@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ $videoTitle }}</title>
+    <title>{{ $data['name'] }}</title>
 </head>
 <body>
-<h2>{{ $videoTitle }}</h2>
-    <iframe src="{{ $videoUrl }}" width="200px" height="200px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<h2>{{ $data['name'] }}</h2>
+    <iframe src="{{ $data['player_embed_url'] }}" width="{{$data['width']}}" height="{{$data['height']}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-    <script src="{{$videoUrl}}"></script>
+    <script src="{{$data['player_embed_url']}}"></script>
     <script>
         var iframe = document.querySelector('iframe');
         var player = new Vimeo.Player(iframe);
