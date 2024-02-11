@@ -31,8 +31,7 @@ class VideoController extends Controller
         $body = $video['body'];
         $videoUrl = $body['player_embed_url'];
         $videoTitle = $body['name'];
-        return $video;
         // Return HTML page with video player
-//        return view('video.watch', compact('videoUrl', 'videoTitle'));
+        return view('video.watch', compact('videoUrl', 'videoTitle'));
     }
 }
