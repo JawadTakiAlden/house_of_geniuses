@@ -30,8 +30,8 @@ class VideoController extends Controller
         // Extract necessary data from the video response
         $videoUrl = 'test';
         $videoTitle = 'test';
-
+        return $video;
         // Return HTML page with video player
-        return view('video.watch', compact('videoUrl', 'videoTitle'));
+//        return view('video.watch', compact('videoUrl', 'videoTitle'));
     }
 }
