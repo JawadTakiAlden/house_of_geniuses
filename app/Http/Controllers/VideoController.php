@@ -24,14 +24,8 @@ class VideoController extends Controller
         $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
             , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
             "0090c4cf290951714e846847fe8b2fe5");
-        // Make a request to Vimeo API to get video details
         $video = $client->request($videoID);
-
-        // Extract necessary data from the video response
         $data = $video['body'];
-//        $videoUrl = $body['player_embed_url'];
-//        $videoTitle = $body['name'];
-        // Return HTML page with video player
         return view('video.watch', compact('data'));
     }
 }

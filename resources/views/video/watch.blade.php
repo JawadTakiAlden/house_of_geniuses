@@ -38,6 +38,18 @@
             height: 100%;
             border: none;
         }
+        #downloadButton{
+            color: #fff;
+            background-color: dodgerblue;
+            padding: 10px 25px;
+            margin: 10px auto;
+            width: fit-content;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            text-align: center;
+            text-transform: capitalize;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +58,7 @@
     <div class="video-container">
         <iframe src="{{ $data['player_embed_url'] }}" allowfullscreen></iframe>
     </div>
+    <button id="downloadButton">Download</button>
 </div>
 
 <script src="{{$data['player_embed_url']}}"></script>
