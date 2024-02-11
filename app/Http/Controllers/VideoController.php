@@ -28,8 +28,9 @@ class VideoController extends Controller
         $video = $client->request($videoID);
 
         // Extract necessary data from the video response
-        $videoUrl = 'test';
-        $videoTitle = 'test';
+        $body = $video['body'];
+        $videoUrl = $body['player_embed_url'];
+        $videoTitle = $body['name'];
         return $video;
         // Return HTML page with video player
 //        return view('video.watch', compact('videoUrl', 'videoTitle'));
