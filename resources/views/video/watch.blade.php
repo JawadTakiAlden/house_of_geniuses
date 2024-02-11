@@ -12,8 +12,12 @@
             background-color: #f5f5f5;
         }
         .container {
-            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
             background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
             text-align: center;
@@ -22,7 +26,7 @@
         .video-container {
             position: relative;
             width: 100%;
-            height: 600px;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
             overflow: hidden;
         }
         .video-container iframe {
@@ -41,6 +45,17 @@
     <div class="video-container">
         <iframe src="{{ $data['player_embed_url'] }}" allowfullscreen></iframe>
     </div>
+    <div>
+        <label for="speed">Playback Speed:</label>
+        <select id="speed">
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>Normal</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+        </select>
+    </div>
 </div>
 
 <script src="{{$data['player_embed_url']}}"></script>
@@ -54,6 +69,17 @@
 
     player.getVideoTitle().then(function(title) {
         console.log('title:', title);
+    });
+    function changeSpeed(speed) {
+        player.setPlaybackRate(speed).then(function () {
+            console.log('Playback speed changed to ' + speed);
+        }).catch(function (error) {
+            console.error('Error changing playback speed:', error);
+        });
+    }
+    document.getElementById('speed').addEventListener('change', function() {
+        var speed = parseFloat(this.value);
+        changeSpeed(speed);
     });
 </script>
 </body>
