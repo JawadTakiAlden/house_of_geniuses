@@ -127,7 +127,7 @@ Route::middleware(['language'])->group(function (){
                 Route::prefix('/questions')->group(function () {
                     Route::get('/all' , [QuestionController::class , 'getAll']);
                     Route::get('/show/{question}' , [QuestionController::class , 'show']);
-                    Route::post('/store' ,[QuestionController::class , 'store']);
+                    Route::post('/create' ,[QuestionController::class , 'store']);
                     Route::post('/update/{question}' , [QuestionController::class , 'update']);
                     Route::post('/newChoice/{question}' , [ChoiceController::class , 'store']);
                     Route::prefix('/choices')->group(function (){

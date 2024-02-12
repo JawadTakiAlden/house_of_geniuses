@@ -29,23 +29,24 @@ class QuestionController extends Controller
     }
 
     public function store(StoreQuestionRequest $request){
-//        Commented code here is just to create choices while through create question process
         try {
-//            DB::beginTransaction();
+            DB::beginTransaction();
             $question = Question::create($request->only(['title' ,'image' , 'clarification_text','clarification_image']));
-//            foreach (collect($request->choices) as $choice){
-//                $image = isset($choice['image']) ? $choice['image'] : null;
-//                Choice::create([
-//                   'question_id' =>  $question->id,
-//                    'title' => $choice['title'],
-//                    'image' => $image,
-//                    'is_true' => $choice['is_true']
-//                ]);
-//            }
-//            DB::commit();
+            if ($request->choices){
+                foreach ($request->choices as $choice){
+                    $image = isset($choice['image']) ? $choice['image'] : null;
+                    Choice::create([
+                        'question_id' =>  $question->id,
+                        'title' => $choice['title'],
+                        'image' => $image,
+                        'is_true' => $choice['is_true']
+                    ]);
+                }
+            }
+            DB::commit();
             return $this->success(QuestionResource::make($question) , trans('messages.create_question'));
         }catch(\Throwable $th){
-//            DB::rollBack();
+            DB::rollBack();
             return $this->catchError($th);
         }
     }

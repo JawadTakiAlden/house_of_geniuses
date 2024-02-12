@@ -26,10 +26,10 @@ class StoreQuestionRequest extends FormRequest
             'image' => 'required_without:title|image|mimes:jpg,png,jpeg',
             'clarification_text' => 'required_without:clarification_image|string',
             'clarification_image' => 'required_without:clarification_text|image|mimes:jpg,png,jpeg',
-//            'choices' => 'required|array',
-//            'choices.*.title' => 'required_without:choices.*.image|string',
-//            'choices.*.image' => 'required_without:choices.*.title|image|mimes:jpg,png,jpeg',
-//            'choices.*.is_true' => 'required|boolean',
+            'choices' => 'required|array',
+            'choices.*.title' => 'required_without:choices.*.image|string',
+            'choices.*.image' => 'required_without:choices.*.title|image|mimes:jpg,png,jpeg',
+            'choices.*.is_true' => 'required|boolean',
         ];
     }
 }
