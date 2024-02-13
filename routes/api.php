@@ -125,18 +125,17 @@ Route::middleware(['language'])->group(function (){
                 });
 
                 Route::prefix('/questions')->group(function () {
-                    Route::get('/all' , [QuestionController::class , 'getAll']);
-                    Route::get('/show/{question}' , [QuestionController::class , 'show']);
-                    Route::post('/create' ,[QuestionController::class , 'store']);
+                    Route::get('/all' , [QuestionController::class , 'getAll']); //done
+                    Route::get('/show/{question}' , [QuestionController::class , 'show']); //done
+                    Route::post('/create' ,[QuestionController::class , 'store']); // done
                     Route::post('/update/{question}' , [QuestionController::class , 'update']);
-                    Route::post('/newChoice/{question}' , [ChoiceController::class , 'store']);
+                    Route::post('/newChoice/{question}' , [ChoiceController::class , 'store']);//done
                     Route::prefix('/choices')->group(function (){
                        Route::post('/update/{choice}' , [ChoiceController::class , 'updateChoice']);
-                       Route::delete('/delete/{choice}' , [ChoiceController::class , 'destroy']);
+                       Route::delete('/delete/{choice}' , [ChoiceController::class , 'destroy']);//done
                        Route::patch('/switch-to-true/{choice}' , [ChoiceController::class , 'makeChoiceTrue']);
                        Route::patch('/switch-visibility/{choice}' , [ChoiceController::class , 'switchVisibility']);
                     });
-                    Route::post('/update/{question}' , [QuestionController::class , 'update']);
                     Route::delete('/delete/{question}' , [QuestionController::class , 'destroy']);
                 });
                 Route::prefix('/quizzes')->group(function (){
