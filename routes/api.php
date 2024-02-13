@@ -133,8 +133,8 @@ Route::middleware(['language'])->group(function (){
                     Route::prefix('/choices')->group(function (){
                        Route::post('/update/{choice}' , [ChoiceController::class , 'updateChoice']);
                        Route::delete('/delete/{choice}' , [ChoiceController::class , 'destroy']);//done
-                       Route::patch('/switch-to-true/{choice}' , [ChoiceController::class , 'makeChoiceTrue']);
-                       Route::patch('/switch-visibility/{choice}' , [ChoiceController::class , 'switchVisibility']);
+                       Route::patch('/switch-to-true/{choice}' , [ChoiceController::class , 'makeChoiceTrue']);//done
+                       Route::patch('/switch-visibility/{choice}' , [ChoiceController::class , 'switchVisibility']);//done
                     });
                     Route::delete('/delete/{question}' , [QuestionController::class , 'destroy']);
                 });

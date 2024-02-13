@@ -109,7 +109,7 @@ class QuestionController extends Controller
                 return $this->error( trans('messages.question_not_found'), 404);
             }
             $question->delete();
-            return $this->success(QuestionResource::make($question) , trans('messages.question_not_found'));
+            return $this->success(QuestionResource::make($question) , trans('messages.delete_question'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
