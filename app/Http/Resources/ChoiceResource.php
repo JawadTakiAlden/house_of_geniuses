@@ -20,6 +20,7 @@ class ChoiceResource extends JsonResource
             'image' => asset($this->image),
             'question_id' => $this->question_id,
             'is_true' => $this->is_true,
+            'is_visible' => $this->is_visible,
         ];
     }
 }
