@@ -89,8 +89,7 @@ class LesionController extends Controller
 
                 $response = $client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
-                $video = $responseData['data'];
-                return $video;
+                return $responseData['uri'];
             }else{
 
             }
