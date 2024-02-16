@@ -17,7 +17,7 @@ class ShowCourseInformationForAdmin extends JsonResource
         return [
             'id' => intval($this->id),
             'name' => $this->name,
-            'image' => asset($this->image),
+            'image' => $this->image ? asset($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),

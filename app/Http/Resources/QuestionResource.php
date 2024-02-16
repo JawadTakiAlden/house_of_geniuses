@@ -18,7 +18,7 @@ class QuestionResource extends JsonResource
         $baseData = [
             'id' => $this->id,
             'title' => $this->title,
-            'image' => asset($this->image),
+            'image' => $this->image ? asset($this->image) : null,
             'clarification_image' => asset($this->clarification_image),
             'clarification_text' => $this->clarification_text,
             'choices' => ChoiceResource::collection($this->choices),

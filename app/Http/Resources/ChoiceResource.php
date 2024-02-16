@@ -17,7 +17,7 @@ class ChoiceResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'image' => asset($this->image),
+            'image' => $this->image ? asset($this->image) : null,
             'question_id' => $this->question_id,
             'is_true' => boolval($this->is_true),
             'is_visible' => boolval($this->is_visible),

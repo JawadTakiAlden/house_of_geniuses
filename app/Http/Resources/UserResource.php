@@ -18,7 +18,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'full_name' => $this->full_name,
             'phone' => $this->phone,
-            'image' => $this->image,
+            'image' => $this->image ? asset($this->image) : null,
             'is_blocked' => boolval($this->is_blocked),
             'type' => $this->type,
         ];

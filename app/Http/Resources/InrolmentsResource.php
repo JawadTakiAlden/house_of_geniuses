@@ -17,7 +17,7 @@ class InrolmentsResource extends JsonResource
         return [
             'id' => intval($this->id),
             'name' => $this->name,
-            'image' => asset($this->image),
+            'image' => $this->image ? asset($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
             'created_at' => $this->pivot->created_at->diffForHumans()
         ];
