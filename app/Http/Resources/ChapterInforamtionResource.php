@@ -18,7 +18,7 @@ class ChapterInforamtionResource extends JsonResource
             'id' => intval($this->id),
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
-            'lesions' => $this->visibleLesions,
+            'lesions' => LesionResource::collection($this->visibleLesions),
             'quizzes' => QuizResource::collection($this->quizzes)
         ];
     }

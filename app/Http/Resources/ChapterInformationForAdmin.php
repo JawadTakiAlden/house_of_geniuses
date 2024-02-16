@@ -18,7 +18,7 @@ class ChapterInformationForAdmin extends JsonResource
             'id' => intval($this->id),
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
-            'lesions' => $this->lesions,
+            'lesions' => LesionResource::collection($this->lesions),
             'quizzes' => SimpleQuizResource::collection($this->quizzes)
         ];
     }
