@@ -24,7 +24,7 @@ class StoreLesionRequest extends FormRequest
     {
         return [
             'videoURI' => 'required_without:pdfFile|string|max:255',
-            'pdfFile' => 'required_without:videoURI|file|max:255',
+            'pdfFile' => 'required_without:videoURI|file|max:10240',
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
             'type' => 'required|in:pdf,video',
