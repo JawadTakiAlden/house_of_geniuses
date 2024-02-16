@@ -14,7 +14,7 @@ class SimpleQuizResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $baseData = [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
@@ -22,5 +22,12 @@ class SimpleQuizResource extends JsonResource
             'number_of_visible_question' => $this->forUserQuestions->count(),
             'number_of_invisible_question' => $this->invisibleQuestion->count(),
         ];
+        $pivot = $this->pivot;
+        if ($pivot){
+            $baseData = array_merge($baseData , [
+                'id_from_pivot' => $pivot->id
+            ]);
+        }
+        return  $baseData;
     }
 }
