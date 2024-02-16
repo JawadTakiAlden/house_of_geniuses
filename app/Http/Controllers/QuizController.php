@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
 use App\Http\Requests\AddQuizToChapterRequest;
+use App\Http\Requests\DeleteQuestionFromQuiz;
+use App\Http\Requests\DeleteQuestionFromQuizRequest;
 use App\Http\Requests\StoreNewQuestionInQuizRequest;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
@@ -114,15 +116,18 @@ class QuizController extends Controller
         }
     }
 
-    public function deleteQuestionFromQuiz($quizQuestionID){
+    public function deleteQuestionFromQuiz(DeleteQuestionFromQuizRequest $request){
         try {
-            $questionQuiz = QuestionQuiz::where('id' , $quizQuestionID)->first();
-            if (!$questionQuiz){
-                return $this->error(trans('messages.question_quiz_not_found') , 404);
+            DB::beginTransaction();
+            if ($request->questionQuizzes){
+                foreach ($request->questionQuizzes as $questionQuizz){
+                    QuestionQuiz::where('id' , $questionQuizz)->delete();
+                }
             }
-            $questionQuiz->delete();
+            DB::commit();
             return $this->success(null , trans('messages.delete_question_quiz'));
         }catch(\Throwable $th){
+            DB::rollBack();
             return $this->catchError($th);
         }
     }

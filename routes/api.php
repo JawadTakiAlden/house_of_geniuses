@@ -147,7 +147,7 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']);
                     Route::prefix('/questions')->group(function (){
                        Route::post('/add/{quiz}' , [QuizController::class , 'addQuestionToQuiz']);
-                       Route::delete('/delete/{quizQuestion}' , [QuizController::class , 'deleteQuestionFromQuiz']); //should updated
+                       Route::delete('/delete' , [QuizController::class , 'deleteQuestionFromQuiz']); //should updated
                        Route::patch('/switch-visibility/{quizQuestion}' , [QuizController::class , 'switchVisibility']);
                     });
                 });
