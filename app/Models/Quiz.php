@@ -13,7 +13,7 @@ class Quiz extends Model
 
 
     public function forUserQuestions(){
-        return $this->belongsToMany(Question::class , 'question_quizzes')->wherePivot('is_visible' , 1);
+        return $this->belongsToMany(Question::class , 'question_quizzes')->wherePivot('is_visible' , 1)->withPivot('is_visible');
     }
     public function forAdminQuestions(){
         return $this->belongsToMany(Question::class , 'question_quizzes');
