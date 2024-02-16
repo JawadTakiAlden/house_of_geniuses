@@ -19,7 +19,7 @@ class VideoController extends Controller
         $response = $client->request('/me/videos', array(), 'GET');
         $responseData = $response['body'];
         $videos = $responseData['data'];
-        return $videos;
+        return collect($videos);
     }
 
     public function watch($videoID){
