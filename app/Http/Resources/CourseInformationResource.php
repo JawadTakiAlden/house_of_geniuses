@@ -56,7 +56,7 @@ class CourseInformationResource extends JsonResource
             'telegram_channel_link' => $this->telegram_channel_link,
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
-            'is_paid' => $is_paid,
+            'is_paid' => boolval($is_paid),
             'total_time' => intval($totalTimeOfCourse),
             'teachers' => User::whereHas('teacherCourse' , fn($query) =>
             $query->where('course_id' , $this->id)
@@ -66,7 +66,7 @@ class CourseInformationResource extends JsonResource
         ];
         if ($user){
             if ($user->type === UserType::TEACHER){
-                $response = array_merge($response , ['is_teach_this_course' => $teachOnIt]);
+                $response = array_merge($response , ['is_teach_this_course' => boolval($teachOnIt)]);
             }
         }
         return $response;
