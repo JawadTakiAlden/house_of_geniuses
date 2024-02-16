@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\VideoResource;
+use App\HttpResponse\HTTPResponse;
 use Illuminate\Http\Request;
 use Vimeo\Vimeo;
 
 class VideoController extends Controller
 {
-
+    use HTTPResponse;
 
     public function getVideos () {
         $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
@@ -16,8 +18,8 @@ class VideoController extends Controller
 
         $response = $client->request('/me/videos', array(), 'GET');
         $responseData = $response['body'];
-        $categories = $responseData['data'];
-        return $categories;
+        $videos = $responseData['data'];
+        return $this->success(VideoResource::collection($videos));
     }
 
     public function watch($videoID){
