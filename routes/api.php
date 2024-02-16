@@ -35,13 +35,14 @@ Route::middleware(['language'])->group(function (){
 //        Route::get('/visible/{category}', [CourseController::class, 'getVisibleCourses']);
 //        Route::get('/show/{course}' , [CourseController::class , 'showCourseWithInfo']);
 //    });
-    Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
+
 
     Route::middleware(['auth:sanctum'])->group(function () {
 //    Admin Routes
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
+                Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
                 Route::prefix('/files')->group(function (){
                     Route::get('/pdf_lesion/{path}' , [LesionController::class , 'getPdfLesion'])->where('path', '.*');
                     Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
