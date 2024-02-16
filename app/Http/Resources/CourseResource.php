@@ -43,7 +43,7 @@ class CourseResource extends JsonResource
             'is_visible' => boolval($this->is_visible),
             'is_paid' => $is_paid,
         ];
-        if (strval(Auth::user()->role) === UserType::STUDENT || strval(Auth::user()->role) === UserType::TEACHER){
+        if (strval(Auth::user()->type) === UserType::STUDENT || strval(Auth::user()->type) === UserType::TEACHER){
             $array = array_merge($array , ['teachers' => $this->teachers]);
         }
 
