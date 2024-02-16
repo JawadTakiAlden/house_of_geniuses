@@ -8,6 +8,7 @@ use App\HttpResponse\HTTPResponse;
 use App\Models\Lesion;
 use App\Http\Requests\StoreLesionRequest;
 use App\Http\Requests\UpdateLesionRequest;
+use Vimeo\Vimeo;
 
 class LesionController extends Controller
 {
@@ -78,9 +79,23 @@ class LesionController extends Controller
 
     public function store(StoreLesionRequest $request){
         try {
-            $request->validated($request->only(['title' , 'link' , 'type', 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
-            $lesion = Lesion::create($request->only(['title' , 'link' , 'type' , 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
-            return $this->success(LesionResource::make($lesion) , $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name .' course');
+            $type = $request->type;
+            if ($type === 'pdf'){
+
+            }else if ($type === 'video'){
+                $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
+                    , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
+                    "0090c4cf290951714e846847fe8b2fe5");
+
+                $response = $client->request('/videos/'.$request->videoURI, array(), 'GET');
+                $responseData = $response['body'];
+                return $responseData;
+            }else{
+
+            }
+
+//            $lesion = Lesion::create($request->only(['title' , 'link' , 'type' , 'is_open' , 'is_visible' , 'chapter_id' , 'time']));
+//            return $this->success(LesionResource::make($lesion) , $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name .' course');
         }catch (\Throwable $th){
             return $this->catchError($th);
         }

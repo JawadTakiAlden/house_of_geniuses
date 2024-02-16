@@ -23,12 +23,11 @@ class StoreLesionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'link' => 'required|string|max:255',
+            'videoURI' => 'required_without:pdfFile|string|max:255',
+            'pdfFile' => 'required_without:videoURI|file|max:255',
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
             'type' => 'required|in:pdf,video',
-            'time' => 'required|numeric',
             'chapter_id' => ['required' , Rule::exists('chapters' , 'id')],
         ];
     }
