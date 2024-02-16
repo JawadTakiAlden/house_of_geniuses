@@ -42,7 +42,6 @@ Route::middleware(['language'])->group(function (){
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
-                Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
                 Route::prefix('/files')->group(function (){
                     Route::get('/pdf_lesion/{path}' , [LesionController::class , 'getPdfLesion'])->where('path', '.*');
                     Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
@@ -162,6 +161,7 @@ Route::middleware(['language'])->group(function (){
                     Route::prefix('/auth')->group(function (){
                         Route::post('/logout' , [AuthController::class , 'logout']);
                     });
+                    Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
                     Route::prefix('/users')->group(function (){
                         Route::post('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
                         Route::get('/myProfile' , [UserController::class , 'profile']);
