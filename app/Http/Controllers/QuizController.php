@@ -9,6 +9,7 @@ use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\QuizResource;
+use App\Http\Resources\SimpleQuizResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\ChapterQuiz;
 use App\Models\Question;
@@ -26,7 +27,7 @@ class QuizController extends Controller
     public function getAll(){
         try {
             $quizzes = Quiz::orderBy('created_at')->get();
-            return $this->success(QuizResource::collection($quizzes));
+            return $this->success(SimpleQuizResource::collection($quizzes));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
