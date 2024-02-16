@@ -43,7 +43,7 @@ Route::middleware(['language'])->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
                 Route::prefix('/files')->group(function (){
-                    Route::get('/pdf_lesion/{path}' , [LesionController::class , 'getPdfLesion']);
+                    Route::get('/pdf_lesion/{path}' , [LesionController::class , 'getPdfLesion'])->where('path', '.*');
                     Route::get('/all', [ExportableFileController::class, 'getAllFiles']);
                     Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
                     Route::delete('/delete/{fileName}', [ExportableFileController::class, 'deleteFile']);
