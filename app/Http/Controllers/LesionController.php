@@ -136,4 +136,16 @@ class LesionController extends Controller
             return $this->catchError($th);
         }
     }
+
+    public function getPdfLesion($path){
+        try {
+            $file = Storage::exists($path);
+            if (!$file){
+                return $this->error('file requested not found' , 404);
+            }
+            return $file;
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
 }
