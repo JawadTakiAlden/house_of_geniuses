@@ -8,6 +8,7 @@ use App\HttpResponse\HTTPResponse;
 use App\Models\Lesion;
 use App\Http\Requests\StoreLesionRequest;
 use App\Http\Requests\UpdateLesionRequest;
+use Illuminate\Support\Facades\Storage;
 use Vimeo\Vimeo;
 
 class LesionController extends Controller
@@ -81,8 +82,23 @@ class LesionController extends Controller
         try {
             $type = $request->type;
             if ($type === 'pdf'){
-                $file = $request->file('pdfFile');
-                return $file;
+                $pdfFile = $request->file('pdfFile');
+
+                $filePath = Storage::putFile('pdf_lesions', $pdfFile);
+                $lesion = Lesion::create([
+                    'title' => $request->title ?? $pdfFile->getClientOriginalName(),
+                    'link' => $filePath,
+                    'time' => $request->time ?? 0,
+                    'is_open' => $request->is_open,
+                    'is_visible' => $request->is_visible,
+                    'type' => $type,
+                    'chapter_id' => $request->chapter_id
+                ]);
+
+                return $this->success(
+                    LesionResource::make($lesion),
+                    $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name . ' course'
+                );
             }else if ($type === 'video'){
                 $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
                     , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
