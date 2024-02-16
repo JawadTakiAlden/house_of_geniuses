@@ -91,27 +91,27 @@ class QuizController extends Controller
         }
     }
 
-    public function addQuestionToQuiz(StoreNewQuestionInQuizRequest $request , $quizID){
+    public function addQuestionToQuiz(QuestionFromQuizRequest $request , $quizID){
         try {
-            $quiz = HelperFunction::getQuizByID($quizID);
+            DB::beginTransaction();
+            $quiz = HelperFunction::getQuizByID($request->quiz_id);
             if (!$quiz){
                 return $this->error(trans('messages.quiz_not_found') , 404);
             }
-            $question = Question::where('id' , $request->question_id)->exists();
-            if (!$question){
-                return $this->error(trans('messages.question_not_found') ,404);
+            foreach ($request->questions as $question){
+                if (QuestionQuiz::where('question_id' , $question)->where('quiz_id' , $quiz->id)->exists()){
+                    continue;
+                }
+                QuestionQuiz::create([
+                    'question_id' => $question,
+                    'quiz_id' => $quiz->id,
+                    'is_visible' => $request->is_visible
+                ]);
             }
-            $isAddBefore = QuestionQuiz::where('quiz_id' , $quizID)->where('question_id' , $request->question_id)->exsits();
-            if ($isAddBefore){
-                return $this->error(trans('messages.question_pre_add_to_quiz') , 422);
-            }
-            QuestionQuiz::create([
-               'quiz_id' => $quizID,
-               'question_id' => $request->question_id,
-               'is_visible' => $request->is_visible
-            ]);
+            DB::commit();
             return $this->success(null, trans('messages.question_add_to_quiz'));
         }catch(\Throwable $th){
+            DB::rollBack();
             return $this->catchError($th);
         }
     }
