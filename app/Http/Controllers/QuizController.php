@@ -70,7 +70,7 @@ class QuizController extends Controller
                 return $this->error(trans('messages.quiz_not_found') , 404);
             }
             $quiz->update($request->only(['title' , 'description']));
-            return $this->success(QuizResource::make($quiz) , trans('messages.delete_update'));
+            return $this->success(null, trans('messages.delete_update'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
@@ -83,7 +83,7 @@ class QuizController extends Controller
                 return $this->error(trans('messages.quiz_not_found') , 404);
             }
             $quiz->delete();
-            return $this->success(QuizResource::make($quiz) , trans('messages.delete_quiz'));
+            return $this->success(null, trans('messages.delete_quiz'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
@@ -108,7 +108,7 @@ class QuizController extends Controller
                'question_id' => $request->question_id,
                'is_visible' => $request->is_visible
             ]);
-            return $this->success(QuizResource::make($quiz) , trans('messages.question_add_to_quiz'));
+            return $this->success(null, trans('messages.question_add_to_quiz'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
@@ -121,7 +121,7 @@ class QuizController extends Controller
                 return $this->error(trans('messages.question_quiz_not_found') , 404);
             }
             $questionQuiz->delete();
-            return $this->success(QuizResource::make($questionQuiz->quiz) , trans('messages.delete_question_quiz'));
+            return $this->success(null , trans('messages.delete_question_quiz'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
@@ -137,7 +137,7 @@ class QuizController extends Controller
             $questionQuiz->update([
                 'is_visible' => !$questionQuiz->is_visible
             ]);
-            return $this->success(QuizResource::make($questionQuiz->quiz) , trans('messages.switch_visibility_question_quiz'));
+            return $this->success(null, trans('messages.switch_visibility_question_quiz'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
@@ -164,7 +164,7 @@ class QuizController extends Controller
                'quiz_id' => $quizID,
                'is_visible' => $request->is_visible
             ]);
-            return $this->success(ChapterResource::make($chapter) , trans('messages.quiz_added_to_chapter_successfully'));
+            return $this->success(null, trans('messages.quiz_added_to_chapter_successfully'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }

@@ -139,8 +139,9 @@ Route::middleware(['language'])->group(function (){
                     Route::delete('/delete/{question}' , [QuestionController::class , 'destroy']); //done
                 });
                 Route::prefix('/quizzes')->group(function (){
-                    Route::get('/getAll' , [QuizController::class , 'getAll']);
+                    Route::get('/getAll' , [QuizController::class , 'getAll']); //done
                     Route::post('/create' , [QuizController::class , 'store']); //done
+                    Route::post('/show/{quiz}' , [QuizController::class , 'show']); //done
                     Route::patch('/update/{quiz}' , [QuizController::class , 'update']);
                     Route::delete('/delete/{quiz}' , [QuizController::class , 'destroy']);
                     Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']);
