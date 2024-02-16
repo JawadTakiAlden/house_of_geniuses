@@ -54,7 +54,6 @@ class User extends Authenticatable
     public function teacherCourse(){
         return $this->hasMany(CourseTeacher::class , 'teacher_id');
     }
-
     public function inroledCorurses(){
         return $this->belongsToMany(Course::class , 'account_inrolments')->withPivot(['created_at']);
     }

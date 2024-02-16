@@ -20,7 +20,7 @@ class VideoController extends Controller
         $responseData = $response['body'];
         $videos = $responseData['data'];
         $test = collect($videos)->map(fn($vid) =>
-            $vid->name
+            dd($vid)
         );
         return $test;
     }
