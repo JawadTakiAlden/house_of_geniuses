@@ -24,7 +24,7 @@ class DeleteQuestionFromQuizRequest extends FormRequest
     {
         return [
             'questionQuizzes' => 'required|array',
-            'questionQuizzes.*' => ['required' , Rule::exists('questions_quizzes' , 'id')]
+            'questionQuizzes.*' => ['required' , Rule::exists('question_quizzes' , 'id')]
         ];
     }
 }
