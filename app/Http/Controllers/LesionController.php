@@ -87,7 +87,7 @@ class LesionController extends Controller
                     , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
                     "0090c4cf290951714e846847fe8b2fe5");
 
-                $response = $client->request('/videos'.$request->videoURI, array(), 'GET');
+                $response = $client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
                 return $responseData;
             }else{
