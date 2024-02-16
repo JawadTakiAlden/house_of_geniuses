@@ -21,7 +21,7 @@ class QuestionResource extends JsonResource
             'clarification_image' => asset($this->clarification_image),
             'clarification_text' => $this->clarification_text,
             'choices' => ChoiceResource::collection($this->choices),
-            'add' => $this->additional
+            'pivot' => $this->pivot
         ];
     }
 }
