@@ -21,13 +21,4 @@ class Quiz extends Model
     public function invisibleQuestion(){
         return $this->belongsToMany(Question::class , 'question_quizzes')->wherePivot('is_visible' , false);
     }
-    public function numberOfVisibleQuestion(){
-        return $this->forUserQuestions()->count();
-    }
-    public function numberOfQuestions(){
-        return $this->forAdminQuestions()->count();
-    }
-    public function numberOfInVisibleQuestion(){
-        return $this->invisibleQuestion()->count();
-    }
 }

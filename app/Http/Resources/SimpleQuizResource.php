@@ -17,9 +17,9 @@ class SimpleQuizResource extends JsonResource
         return [
             'title' => $this->title,
             'description' => $this->description,
-            'number_of_questions' => $this->numberOfQuestions,
-            'number_of_visible_question' => $this->numberOfVisibleQuestion,
-            'number_of_invisible_question' => $this->numberOfInVisibleQuestion
+            'number_of_questions' => $this->forAdminQuestions->count(),
+            'number_of_visible_question' => $this->forUserQuestions->count(),
+            'number_of_invisible_question' => $this->invisibleQuestion->count()
         ];
     }
 }
