@@ -96,7 +96,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']); //done
                     Route::get('/blocked' , [UserController::class , 'getAllBlockedUser']);
                     Route::get('/teachers' , [UserController::class , 'getTeacher']); //done
-                    Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);
+                    Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);//done
                     Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']); //done
                     Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
                 });
@@ -115,9 +115,9 @@ Route::middleware(['language'])->group(function (){
                     Route::delete('/cancelInrolment/{inrollment}' , [CourseController::class , 'cancelInfolement']); //done
                     Route::delete('/delete/{course}' , [CourseController::class , 'destroy']); //done
                     Route::get('/allInrolments' , [CourseController::class , 'getAllIneolments']);
-                    Route::post('/add-value/{course}' , [CourseValueController::class , 'store']);
-                    Route::delete('/delete-value/{value}' , [CourseValueController::class , 'destroy']);
-                    Route::patch('/update-value/{value}' , [CourseValueController::class , 'update']);
+                    Route::post('/add-value/{course}' , [CourseValueController::class , 'store']);//done
+                    Route::delete('/delete-value/{value}' , [CourseValueController::class , 'destroy']);//done
+                    Route::patch('/update-value/{value}' , [CourseValueController::class , 'update']);//done
                 });
 
                 Route::prefix('/notifications')->group(function (){
@@ -144,7 +144,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/show/{quiz}' , [QuizController::class , 'show']); //done
                     Route::patch('/update/{quiz}' , [QuizController::class , 'update']);//done
                     Route::delete('/delete/{quiz}' , [QuizController::class , 'destroy']);//done
-                    Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']);
+                    Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']); //done
                     Route::prefix('/questions')->group(function (){
                        Route::post('/add' , [QuizController::class , 'addQuestionToQuiz']);//done
                        Route::delete('/delete' , [QuizController::class , 'deleteQuestionFromQuiz']); //done
