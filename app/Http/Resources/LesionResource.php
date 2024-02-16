@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class LesionResource extends JsonResource
 {
@@ -17,7 +18,7 @@ class LesionResource extends JsonResource
         return [
             'id' => intval($this->id),
             'title' => $this->title,
-            'link' => $this->type === 'pdf' ? storage_path($this->link) : $this->link,
+            'link' => $this->type === 'pdf' ? Storage::url($this->link) : $this->link,
             'time' => intval($this->time),
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
