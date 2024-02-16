@@ -20,8 +20,7 @@ class VideoController extends Controller
         $responseData = $response['body'];
         $videos = $responseData['data'];
         $test = collect($videos);
-//        return $this->success(VideoResource::collection($test));
-        return $test;
+        return $this->success(VideoResource::collection($test));
     }
 
     public function watch($videoID){
