@@ -26,4 +26,6 @@ class LoginAdminRequest extends FormRequest
             'password' => 'required|min:4',
         ];
     }
+
+
 }

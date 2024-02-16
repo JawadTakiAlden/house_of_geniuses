@@ -12,7 +12,10 @@ class Quiz extends Model
     protected $guarded = ['id'];
 
 
-    public function questions(){
+    public function forUserQuestions(){
+        return $this->belongsToMany(Question::class , 'question_quizzes')->wherePivot('is_visible' , 1);
+    }
+    public function forAdminQuestions(){
         return $this->belongsToMany(Question::class , 'question_quizzes')->wherePivot('is_visible' , 1);
     }
 }

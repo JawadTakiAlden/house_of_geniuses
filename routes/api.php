@@ -136,11 +136,11 @@ Route::middleware(['language'])->group(function (){
                        Route::patch('/switch-to-true/{choice}' , [ChoiceController::class , 'makeChoiceTrue']);//done
                        Route::patch('/switch-visibility/{choice}' , [ChoiceController::class , 'switchVisibility']);//done
                     });
-                    Route::delete('/delete/{question}' , [QuestionController::class , 'destroy']);
+                    Route::delete('/delete/{question}' , [QuestionController::class , 'destroy']); //done
                 });
                 Route::prefix('/quizzes')->group(function (){
                     Route::get('/getAll' , [QuizController::class , 'getAll']);
-                    Route::post('/create' , [QuizController::class , 'store']);
+                    Route::post('/create' , [QuizController::class , 'store']); //done
                     Route::patch('/update/{quiz}' , [QuizController::class , 'update']);
                     Route::delete('/delete/{quiz}' , [QuizController::class , 'destroy']);
                     Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']);
