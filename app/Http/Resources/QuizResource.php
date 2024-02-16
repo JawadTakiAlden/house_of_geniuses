@@ -19,7 +19,7 @@ class QuizResource extends JsonResource
         return [
             'title' => $this->title,
             'description' => $this->description,
-            'questions' => $request->user()->type === UserType::ADMIN ? QuestionResource::collection($this->forAdminQuestions) : QuestionResource::collection($this->forUserQuestions)
+            'questions' => $request->user()->type === UserType::ADMIN ? QuestionResource::collection($this->forAdminQuestions)->additional(['fromQuizResource' => true]) : QuestionResource::collection($this->forUserQuestions)->additional(['fromQuizResource' => true])
         ];
     }
 }

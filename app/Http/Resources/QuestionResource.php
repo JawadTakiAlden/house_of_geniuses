@@ -20,8 +20,8 @@ class QuestionResource extends JsonResource
             'image' => asset($this->image),
             'clarification_image' => asset($this->clarification_image),
             'clarification_text' => $this->clarification_text,
-
-            'choices' => ChoiceResource::collection($this->choices)
+            'choices' => ChoiceResource::collection($this->choices),
+            'add' => $this->additional
         ];
     }
 }
