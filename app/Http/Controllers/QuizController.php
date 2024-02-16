@@ -91,6 +91,19 @@ class QuizController extends Controller
         }
     }
 
+    public function removeFromCourse($chapterQuizID){
+        try {
+            $chapterQuiz = ChapterQuiz::where('id' , $chapterQuizID)->first();
+            if (!$chapterQuiz){
+                return $this->error(trans('messages.quiz_not_found') , 404);
+            }
+            $chapterQuiz->delete();
+            return $this->success(null, trans('messages.delete_quiz'));
+        }catch(\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
     public function addQuestionToQuiz(StoreNewQuestionInQuizRequest $request){
         try {
             DB::beginTransaction();
