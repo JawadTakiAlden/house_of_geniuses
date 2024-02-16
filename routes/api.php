@@ -146,7 +146,7 @@ Route::middleware(['language'])->group(function (){
                     Route::delete('/delete/{quiz}' , [QuizController::class , 'destroy']);//done
                     Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']);
                     Route::prefix('/questions')->group(function (){
-                       Route::post('/add' , [QuizController::class , 'addQuestionToQuiz']);
+                       Route::post('/add' , [QuizController::class , 'addQuestionToQuiz']);//done
                        Route::delete('/delete' , [QuizController::class , 'deleteQuestionFromQuiz']); //done
                        Route::patch('/hide' , [QuizController::class , 'hideVisibility']); //done
                        Route::patch('/show' , [QuizController::class , 'showVisibility']); //done

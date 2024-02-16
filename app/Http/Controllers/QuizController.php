@@ -198,7 +198,7 @@ class QuizController extends Controller
                 return $this->error(trans('messages.chapter_not_found') , 404);
             }
             $isAddedBefore = ChapterQuiz::where('quiz_id' , $quizID)->where('chapter_id' , $chapterID)->exists();
-            if (!$isAddedBefore){
+            if ($isAddedBefore){
                 return $this->error(trans('messages.quiz_added_before_to_chapter') , 422);
             }
             ChapterQuiz::create([
