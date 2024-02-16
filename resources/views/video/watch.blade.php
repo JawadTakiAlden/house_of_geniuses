@@ -70,9 +70,6 @@
     <div class="video-container">
         <iframe src="{{ $data['player_embed_url'] }}" allowfullscreen></iframe>
     </div>
-    <div class="button-container">
-        <button id="downloadButton">Download</button>
-    </div>
 </div>
 
 <script src="{{$data['player_embed_url']}}"></script>
