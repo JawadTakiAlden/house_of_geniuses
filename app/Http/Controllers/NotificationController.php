@@ -26,7 +26,7 @@ class NotificationController extends Controller
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
-        $server_key = "BC8QQ4vjckGSkhWoABn9kD067OEpQ3cPB0xHOy0yMkd_AgPRBIF6-TaBlyRkzXyqGrzJfpoLw5hhD7ULEOMsjC4";
+        $server_key = "AAAAhggAXOM:APA91bFlPweIZXPYUlmObCTFaQlvzm3Op6G_fyq9RJcpN81kmekCaEz00vbhnW3dQLZredAQYCD1qg6kswC5H0ZAuNrucMnEqNVGfnyGp5woSd7_WENU7zNWOHIE-CiUBmXalBr_btCC";
 
         $date = [
             'registration_ids' => $FcmToken,
@@ -67,7 +67,7 @@ class NotificationController extends Controller
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
         try {
-            $tokens = User::whereNotNull('device_id')->pluck('device_id')->all();
+            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
         }catch (\Throwable $th){
@@ -79,7 +79,7 @@ class NotificationController extends Controller
         try {
             $title = 'اضافة دورة تدريبة جديدة جديد';
             $body =  'تمت اضافة دورة تدريبة جديدة تحت عنوان ' . $course->name;
-            $tokens = User::whereNotNull('device_token')->pluck('device_token')->all();
+            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
             $result = $this->BasicSendNotification($title, $body , $tokens);
             return $result;
         }catch (\Throwable $th){
