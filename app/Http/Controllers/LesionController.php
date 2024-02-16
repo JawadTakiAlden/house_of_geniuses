@@ -84,6 +84,7 @@ class LesionController extends Controller
             if ($type === 'pdf'){
                 $pdfFile = $request->file('pdfFile');
 
+                $pdfFile->store('pdf_lesions', 'public');
                 $filePath = Storage::putFile('pdf_lesions', $pdfFile);
                 $lesion = Lesion::create([
                     'title' => $request->title ?? $pdfFile->getClientOriginalName(),
