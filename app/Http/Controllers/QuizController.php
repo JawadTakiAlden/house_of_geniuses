@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\HelperFunction;
 use App\Http\Requests\AddQuizToChapterRequest;
 use App\Http\Requests\DeleteQuestionFromQuiz;
-use App\Http\Requests\DeleteQuestionFromQuizRequest;
+use App\Http\Requests\QuestionFromQuizRequest;
 use App\Http\Requests\StoreNewQuestionInQuizRequest;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
@@ -116,7 +116,7 @@ class QuizController extends Controller
         }
     }
 
-    public function deleteQuestionFromQuiz(DeleteQuestionFromQuizRequest $request){
+    public function deleteQuestionFromQuiz(QuestionFromQuizRequest $request){
         try {
             DB::beginTransaction();
             if ($request->questionQuizzes){
@@ -133,17 +133,54 @@ class QuizController extends Controller
     }
 
 
-    public function switchVisibility($quizQuestionID){
+//    public function switchVisibility($quizQuestionID){
+//        try {
+//            $questionQuiz = QuestionQuiz::where('id' , $quizQuestionID)->first();
+//            if (!$questionQuiz){
+//                return $this->error(trans('messages.question_quiz_not_found') , 404);
+//            }
+//            $questionQuiz->update([
+//                'is_visible' => !$questionQuiz->is_visible
+//            ]);
+//            return $this->success(null, trans('messages.switch_visibility_question_quiz'));
+//        }catch(\Throwable $th){
+//            return $this->catchError($th);
+//        }
+//    }
+
+
+    public function hideVisibility(QuestionFromQuizRequest $request){
         try {
-            $questionQuiz = QuestionQuiz::where('id' , $quizQuestionID)->first();
-            if (!$questionQuiz){
-                return $this->error(trans('messages.question_quiz_not_found') , 404);
+            DB::beginTransaction();
+            if ($request->questionQuizzes){
+                foreach ($request->questionQuizzes as $questionQuizz){
+                    QuestionQuiz::where('id' , $questionQuizz)->update([
+                        'is_visible' => false
+                    ]);
+                }
             }
-            $questionQuiz->update([
-                'is_visible' => !$questionQuiz->is_visible
-            ]);
-            return $this->success(null, trans('messages.switch_visibility_question_quiz'));
+            DB::commit();
+            return $this->success(null , trans('messages.delete_question_quiz'));
         }catch(\Throwable $th){
+            DB::rollBack();
+            return $this->catchError($th);
+        }
+    }
+
+    public function showVisibility(QuestionFromQuizRequest $request){
+        try {
+            DB::beginTransaction();
+            if ($request->questionQuizzes){
+                foreach ($request->questionQuizzes as $questionQuizz){
+                    QuestionQuiz::where('id' , $questionQuizz)->update([
+                        'is_visible' => true
+                    ]);
+                }
+            }
+            DB::commit();
+            return $this->success(null , trans('messages.delete_question_quiz'));
+        }catch(\Throwable $th){
+            DB::rollBack();
             return $this->catchError($th);
         }
     }
