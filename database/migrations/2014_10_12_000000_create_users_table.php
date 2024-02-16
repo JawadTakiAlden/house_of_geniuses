@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('password');
             $table->string('device_id')->nullable()->unique();
-            $table->string('device_notification_id')->unique();
+            $table->string('device_notification_id')->nullable()->unique();
             $table->boolean('is_blocked')->default(false);
             $table->string('type')->default(UserType::STUDENT);
             $table->index(['phone']);
