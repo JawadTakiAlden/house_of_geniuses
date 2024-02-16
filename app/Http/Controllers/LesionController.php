@@ -143,7 +143,7 @@ class LesionController extends Controller
             if (!$file){
                 return $this->error('file requested not found' , 404);
             }
-            return $file;
+            return Storage::get($path);
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
