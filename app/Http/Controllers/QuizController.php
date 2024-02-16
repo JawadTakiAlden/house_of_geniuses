@@ -91,7 +91,7 @@ class QuizController extends Controller
         }
     }
 
-    public function addQuestionToQuiz(QuestionFromQuizRequest $request , $quizID){
+    public function addQuestionToQuiz(StoreNewQuestionInQuizRequest $request){
         try {
             DB::beginTransaction();
             $quiz = HelperFunction::getQuizByID($request->quiz_id);

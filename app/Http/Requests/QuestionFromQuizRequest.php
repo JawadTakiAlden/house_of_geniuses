@@ -24,7 +24,6 @@ class QuestionFromQuizRequest extends FormRequest
     {
         return [
             'questionQuizzes' => 'required|array',
-            'quiz_id' => 'required|numeric',
             'questionQuizzes.*' => ['required' , Rule::exists('question_quizzes' , 'id')]
         ];
     }

@@ -23,8 +23,11 @@ class StoreNewQuestionInQuizRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_id' => 'required|numeric',
-            'is_visible' => 'required|boolean'
+
+            'quiz_id' => 'required|numeric',
+            'is_visible' => 'required|boolean',
+            'questions' => 'required|array',
+            'questions.*' => ['required' , Rule::exists('questions' , 'id')]
         ];
     }
 }
