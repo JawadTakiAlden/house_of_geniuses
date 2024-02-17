@@ -65,7 +65,7 @@ class CourseController extends Controller
             if (!$category){
                 return $this->error(trans('messages.category_not_found'), 404);
             }
-            return $this->success(CourseResource::collection($category->courses->where('is_visible' , '=' , true)));
+            return $this->success(CourseResource::collection($category->courses->filter(request('search'))->where('is_visible' , '=' , true)));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }

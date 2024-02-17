@@ -33,6 +33,12 @@ class Course extends Model
         return $this->belongsToMany(Category::class , 'course_categories');
     }
 
+    public function scopeFilter($query , array $filters){
+        $query->when($filters['search'] ?? false , fn($query , $search) =>
+            $query->where('name' , $search)
+        );
+    }
+
     public function teachers(){
         return $this->belongsToMany(User::class , 'course_teachers' , 'course_id', 'teacher_id');
     }
