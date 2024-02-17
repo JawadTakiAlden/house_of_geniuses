@@ -35,7 +35,7 @@ class Course extends Model
 
     public function scopeFilter($query , array $filters){
         $query->when($filters['search'] ?? false , fn($query , $search) =>
-            $query->where('name' , $search)
+            $query->where('name' , 'LIKE' , '%'.$search.'%')
         );
     }
 
