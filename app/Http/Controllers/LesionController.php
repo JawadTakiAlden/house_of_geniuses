@@ -107,6 +107,7 @@ class LesionController extends Controller
 
                 $response = $client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
+                return $responseData['uri'];
                 $lesion = Lesion::create([
                     'title' => $responseData['name'],
                     'link' => $responseData['uri'],
