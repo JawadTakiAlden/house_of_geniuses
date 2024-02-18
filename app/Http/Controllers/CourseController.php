@@ -279,7 +279,7 @@ class CourseController extends Controller
                 return $this->error(trans('messages.course_invisible_sign_in') , 403);
             }
             if (!$activationCode){
-                return $this->error(trans('messages.activation_code_not_found'), 404);
+                return $this->error(trans('messages.activation_code_not_found'), 403);
             }
             $existingInrole = AccountInrolment::where('user_id' , $request->user()->id)
                 ->where('course_id' , $courseID)->first();
