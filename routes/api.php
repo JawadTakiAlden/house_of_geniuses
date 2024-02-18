@@ -175,6 +175,7 @@ Route::middleware(['language'])->group(function (){
                     });
                     Route::prefix('/courses')->group(function (){
                         Route::get('/visible/{category}', [CourseController::class, 'getVisibleCourses']);
+                        Route::get('/search' , [CourseController::class , 'search']);g
                         Route::get('/show/{course}' , [CourseController::class , 'showCourseWithInfo']);
                         Route::post('/signIn/{course}' , [CourseController::class , 'inrollInCourse']);
                     });

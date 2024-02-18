@@ -58,14 +58,21 @@ class CourseController extends Controller
             return $this->catchError($th);
         }
     }
-
+    public function search() {
+        try {
+            $courses = Course::where('is_visible' , true)->filter(request('search'))->get();
+            return CourseResource::collection($courses);
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
     public function getVisibleCourses($categoryID){
         try {
             $category = HelperFunction::getCategoryByID($categoryID , ['courses']);
             if (!$category){
                 return $this->error(trans('messages.category_not_found'), 404);
             }
-            return $this->success(CourseResource::collection($category->courses->filter(request('search'))->where('is_visible' , '=' , true)));
+            return $this->success(CourseResource::collection($category->courses->where('is_visible' , '=' , true)));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
