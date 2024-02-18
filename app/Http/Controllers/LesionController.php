@@ -107,11 +107,10 @@ class LesionController extends Controller
 
                 $response = $client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
-                return $responseData['uri'];
                 $lesion = Lesion::create([
                     'title' => $responseData['name'],
                     'link' => $responseData['uri'],
-                    'time' => intval($responseData['duration']),
+                    'time' => intval($responseData['duration']) / 60,
                     'is_open' => $request->is_open,
                     'is_visible' => $request->is_visible,
                     'type' => $type,

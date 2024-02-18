@@ -16,10 +16,11 @@ class LesionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $link = $this->link;
         $data = [
             'id' => intval($this->id),
             'title' => $this->title,
-            'link' => $this->type === 'pdf' ? asset('storage/'.$this->link) : 'https://api.houseofgeniuses.tech/api/v1/watch/'.$this->link,
+            'link' => $this->type === 'pdf' ? asset('storage/'.$this->link) : 'https://api.houseofgeniuses.tech/api/v1/watch/'.$link,
             'time' => intval($this->time),
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
@@ -27,7 +28,7 @@ class LesionResource extends JsonResource
             'chapter_id' => intval($this->chapter_id),
         ];
         if (strval($this->type) === 'video'){
-            $data = array_merge($data , ['link_uri' => $this->link]);
+            $data = array_merge($data , ['link_uri' => $link]);
         }
         return $data;
     }
