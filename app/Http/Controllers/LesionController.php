@@ -109,7 +109,7 @@ class LesionController extends Controller
                 $responseData = $response['body'];
                 $lesion = Lesion::create([
                     'title' => $responseData['name'],
-                    'link' => 'https://api.houseofgeniuses.tech/api/v1/watch/'.$responseData['uri'],
+                    'link' => $responseData['uri'],
                     'time' => intval($responseData['duration']),
                     'is_open' => $request->is_open,
                     'is_visible' => $request->is_visible,
