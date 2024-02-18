@@ -60,7 +60,7 @@ class CourseController extends Controller
     }
     public function search() {
         try {
-            $courses = Course::where('is_visible' , true)->filter(request('search'))->get();
+            $courses = Course::where('is_visible' , true)->filter(request(['search']))->get();
             return CourseResource::collection($courses);
         }catch (\Throwable $th){
             return $this->catchError($th);
