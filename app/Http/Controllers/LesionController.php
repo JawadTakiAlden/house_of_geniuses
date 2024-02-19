@@ -68,6 +68,9 @@ class LesionController extends Controller
             if (!$lesion){
                 return $this->error('lesion dose\'nt found in our system' , 404);
             }
+            if ($lesion->type === 'pdf'){
+                Storage::delete($lesion->link);
+            }
             $lesion->delete();
             return $this->success(
                 LesionResource::make($lesion) ,
@@ -131,7 +134,42 @@ class LesionController extends Controller
             if (!$lesion){
                 return $this->error('lesion dose\'nt found in our system' , 404);
             }
-            $lesion->update($request->only(['title' , 'link' , 'is_open' , 'is_visible' , 'type']));
+            $type = $request->type;
+            if ($type){
+                if ($type === 'video'){
+                    $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
+                        , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
+                        "0090c4cf290951714e846847fe8b2fe5");
+
+                    $response = $client->request($request->videoURI, array(), 'GET');
+                    $responseData = $response['body'];
+                    Storage::delete($lesion->link);
+                    $data = array_merge(
+                        [
+                            'title' => $responseData['name'],
+                            'link' => $responseData['uri'],
+                            'time' => intval($responseData['duration']) / 60,
+                            'type' => $type
+                        ],
+                        $request->only(['s_visible' , 'is_open' , 'title'])
+                    );
+                    $lesion->update($data);
+                }
+                else if ($type === 'pdf'){
+                    $pdfFile = $request->file('pdfFile');
+                    $pdfFile->store('pdf_lesions', 'public');
+                    $filePath = Storage::putFile('pdf_lesions', $pdfFile);
+                    $data = array_merge(
+                        [
+                        'title' => $pdfFile->getClientOriginalName(),
+                        'link' => $filePath,
+                        'type' => $type
+                        ],
+                        $request->only(['s_visible' , 'is_open' , 'time' , 'title'])
+                    );
+                    $lesion->update($data);
+                }
+            }
             return $this->success(LesionResource::make($lesion) , $lesion->title . ' updated successfully');
         }catch (\Throwable $th){
             return $this->catchError($th);
