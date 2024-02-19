@@ -169,6 +169,8 @@ class LesionController extends Controller
                     );
                     $lesion->update($data);
                 }
+            }else{
+                $lesion->update($request->only(['is_visible' , 'is_open' , 'title']));
             }
             return $this->success(LesionResource::make($lesion) , $lesion->title . ' updated successfully');
         }catch (\Throwable $th){
