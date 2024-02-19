@@ -23,12 +23,11 @@ class UpdateLesionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'link' => 'required|string|max:255',
+            'videoURI' => 'required_without:pdfFile|string|max:255',
+            'pdfFile' => 'required_without:videoURI|file|max:10240',
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
-            'type' => 'required|in:video,pdf',
-//            'chapter_id' => ['required' , Rule::exists('chapters' , 'id')],
+            'type' => 'sometimes|in:pdf,video',
         ];
     }
 }
