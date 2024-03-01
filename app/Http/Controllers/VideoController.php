@@ -42,4 +42,12 @@ class VideoController extends Controller
             'link' => $link
         ] , 200);
     }
+
+    public function download($videoID){
+        $video = $this->client->request($videoID.'?fields=download');
+        $data = $video['body'];
+        return response([
+            'link' => $data
+        ] , 200);
+    }
 }
