@@ -45,8 +45,18 @@ class VideoController extends Controller
 
     public function download($videoID){
         $video = $this->client->request($videoID.'?fields=download');
+        $downloadArray = $video['body']['link']['body']['download'];
+//        $data = collect($video['download'])->map(fn($download) =>
+//            [
+//                'link' => $download['link'],
+//                'type' => $download['type'],
+//                'rendition' => $download['rendition'],
+//                'size_short' => $download['size_short'],
+//
+//            ]
+//        );
         return response([
-            'link' => $video
+            'link' => $downloadArray
         ] , 200);
     }
 }
