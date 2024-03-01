@@ -17,7 +17,7 @@ class VideoController extends Controller
                 , "xEjIb7Q0J2zYJRfsgpb1XRcwG2XRig/Nm5Gr3nejJMuFuuLGxr1lx0Z2A7kHN8MOvMPHhLG+pOX5fI5bk7WC5YIvQsPpv+9/pM2a8UlyqQOCfg7VqtGRZ9qtlHcOUH3t",
                 "b666b813b6109e0574302a8d4237445a");
 
-            $response = $client->request('/videos/917973997?fields=play', array(), 'GET');
+            $response = $client->request('/videos/917973997?fields=download', array(), 'GET');
             $responseData = $response['body'];
 //            $videos = $responseData['data'];
 //            $test = collect($videos);
