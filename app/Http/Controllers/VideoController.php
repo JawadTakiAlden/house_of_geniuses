@@ -33,21 +33,29 @@ class VideoController extends Controller
     }
 
     public function watch($videoID){
-        $video = $this->client->request($videoID.'?fields=play');
-        $data = $video['body'];
-        $data = $data['play'];
-        $data = $data['hls'];
-        $link = $data['link'];
-        return response([
-            'link' => $link
-        ] , 200);
+        try {
+            $video = $this->client->request($videoID.'?fields=play');
+            $data = $video['body'];
+            $data = $data['play'];
+            $data = $data['hls'];
+            $link = $data['link'];
+            return response([
+                'link' => $link
+            ] , 200);
+        }catch (\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
     }
 
     public function download($videoID){
-        $video = $this->client->request($videoID.'?fields=download');
-        $downloadArray = $video['body'];
-        return response([
-            'link' => $downloadArray
-        ] , 200);
+        try {
+            $video = $this->client->request($videoID.'?fields=download');
+            $downloadArray = $video['body'];
+            return response([
+                'link' => $downloadArray
+            ] , 200);
+        }catch (\Throwable $th){
+            return $this->error($th->getMessage() , 500);
+        }
     }
 }
