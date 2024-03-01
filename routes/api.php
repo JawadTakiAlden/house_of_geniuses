@@ -102,9 +102,6 @@ Route::middleware(['language'])->group(function (){
                     Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
                 });
 
-
-
-
                 Route::prefix('/courses')->group(function (){
                     Route::post('/create' , [CourseController::class , 'store']); //done
                     Route::get('/all' , [CourseController::class , 'getAllCourses']); //done
