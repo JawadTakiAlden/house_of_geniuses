@@ -20,7 +20,7 @@ class LesionResource extends JsonResource
         $data = [
             'id' => intval($this->id),
             'title' => $this->title,
-            'link' => $this->type === 'pdf' ? asset('storage/'.$this->link) : 'https://api.houseofgeniuses.tech/api/v1/watch/'.$link,
+            'link' => $this->type === 'pdf' ? asset('storage/'.$this->link) : $link,
             'time' => intval($this->time),
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
