@@ -19,9 +19,9 @@ class VideoController extends Controller
 
             $response = $client->request('/videos/917973997', array(), 'GET');
             $responseData = $response['body'];
-            $videos = $responseData['data'];
-            $test = collect($videos);
-            return $test;
+//            $videos = $responseData['data'];
+//            $test = collect($videos);
+            return $responseData;
 //            return $this->success(VideoResource::collection($test));
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
