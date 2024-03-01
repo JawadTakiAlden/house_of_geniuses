@@ -35,6 +35,9 @@ class VideoController extends Controller
     public function watch($videoID){
         $video = $this->client->request($videoID.'?fields=play');
         $data = $video['body'];
-        return $data;
+        $data = $data['play'];
+        $data = $data['hls'];
+        $link = $data['link'];
+        return $link;
     }
 }
