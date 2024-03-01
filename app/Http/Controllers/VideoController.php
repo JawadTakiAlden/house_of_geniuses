@@ -33,7 +33,7 @@ class VideoController extends Controller
     }
 
     public function watch($videoID){
-        $video = $this->client->request($videoID.'?field=play');
+        $video = $this->client->request($videoID.'?fields=play');
         $data = $video['body'];
         return $data;
     }
