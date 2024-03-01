@@ -38,6 +38,8 @@ class VideoController extends Controller
         $data = $data['play'];
         $data = $data['hls'];
         $link = $data['link'];
-        return $link;
+        return response([
+            'link' => $link
+        ] , 200);
     }
 }
