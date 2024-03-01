@@ -46,6 +46,7 @@ class VideoController extends Controller
     public function download($videoID){
         $video = $this->client->request($videoID.'?fields=download');
         $data = $video['body'];
+        $link = $data['link'];
 //        $data = $video['link'];
 //        $data = collect($video['download'])->map(fn($download) =>
 //            [
@@ -57,7 +58,7 @@ class VideoController extends Controller
 //            ]
 //        );
         return response([
-            'link' => $data
+            'link' => $link
         ] , 200);
     }
 }
