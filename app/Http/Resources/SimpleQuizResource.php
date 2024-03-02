@@ -26,8 +26,8 @@ class SimpleQuizResource extends JsonResource
         if ($pivot){
             $baseData = array_merge($baseData , [
                 'id_from_pivot' => $pivot->id,
-                'is_visible' => $pivot->is_visible,
-                'is_free' => $pivot->is_free
+                'is_visible' => boolval($pivot->is_visible),
+                'is_free' => boolval($pivot->is_free)
             ]);
         }
         return  $baseData;
