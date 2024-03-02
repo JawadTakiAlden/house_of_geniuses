@@ -43,12 +43,11 @@ class VideoController extends Controller
             $data = $data['play'];
             $data = $data['hls'];
             $link = $data['link'];
-            return $link;
             $m3u8Response = Http::get($link);
             if (!$m3u8Response->ok()) {
                 return $this->error('Failed to fetch m3u8 file', $m3u8Response->status());
             }
-            $m3u8Response->body();
+            return $m3u8Response->body();
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
