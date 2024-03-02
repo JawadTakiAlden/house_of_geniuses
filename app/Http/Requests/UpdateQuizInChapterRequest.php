@@ -24,7 +24,6 @@ class UpdateQuizInChapterRequest extends FormRequest
         return [
             'is_visible' => 'required|boolean',
             'is_free' => 'required|boolean',
-            'quiz_chapter_id' => 'required|numeric|min:1'
         ];
     }
 }
