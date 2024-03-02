@@ -32,9 +32,12 @@ class VideoController extends Controller
         }
     }
 
-    public function watch($videoID){
+    public function watch(){
         try {
-            $video = $this->client->request($videoID.'?fields=play');
+            if (!\request('link')){
+                return $this->error('we have some problems with your link' , 500);
+            }
+            $video = $this->client->request(\request('link').'?fields=play');
             $data = $video['body'];
             $data = $data['play'];
             $data = $data['hls'];
@@ -47,9 +50,12 @@ class VideoController extends Controller
         }
     }
 
-    public function download($videoID){
+    public function download(){
         try {
-            $video = $this->client->request($videoID.'?fields=download');
+            if (!\request('link')){
+                return $this->error('we have some problems with your link' , 500);
+            }
+            $video = $this->client->request(\request('link').'?fields=download');
             $downloadArray = $video['body'];
             return response([
                 'link' => $downloadArray

@@ -160,8 +160,10 @@ Route::middleware(['language'])->group(function (){
                     Route::prefix('/auth')->group(function (){
                         Route::post('/logout' , [AuthController::class , 'logout']);
                     });
-                    Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
-                    Route::get('/download/{video}' , [VideoController::class , 'download'])->where('video', '.*');
+                    Route::get('/watch' , [VideoController::class , 'watch']);
+                    Route::get('/download' , [VideoController::class , 'download']);
+//                    Route::get('/watch/{video}' , [VideoController::class , 'watch'])->where('video', '.*');
+//                    Route::get('/download/{video}' , [VideoController::class , 'download'])->where('video', '.*');
                     Route::prefix('/users')->group(function (){
                         Route::post('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
                         Route::get('/myProfile' , [UserController::class , 'profile']);
