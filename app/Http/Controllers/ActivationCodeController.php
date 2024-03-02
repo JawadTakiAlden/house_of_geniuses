@@ -97,7 +97,7 @@ class ActivationCodeController extends Controller
                 }
             }
 
-            $fileName = $request->title ?? $quantity . 'كود تفعيل من النوع' . $type  . 'في تاريخ' . now()->format('Y-m-d')."xlsx";
+            $fileName = $request->title ?? $quantity . 'activation codes from type ' . $type  . ' in ' . now()->format('Y-m-d')."xlsx";
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
             $coursesNameSpreatedByComma = collect($courses)->map(fn($course) =>
