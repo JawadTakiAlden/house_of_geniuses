@@ -47,7 +47,9 @@ class VideoController extends Controller
             if (!$m3u8Response->ok()) {
                 return $this->error('Failed to fetch m3u8 file', $m3u8Response->status());
             }
-            return $m3u8Response->body();
+            $m3u8Content = $m3u8Response->body();
+            return response($m3u8Content)
+                ->header('Content-Type', 'application/vnd.apple.mpegurl');
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
