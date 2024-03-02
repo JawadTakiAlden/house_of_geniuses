@@ -98,11 +98,10 @@ class ActivationCodeController extends Controller
             }
             $fileName = "";
             if ($request->title){
-                $fileName = $request->title . 'xlsx';
+                $fileName = $request->title . '.xlsx';
             }else{
-                $fileName = $quantity . 'activation codes from type ' . $type  . ' in ' . now()->format('Y-m-d')."xlsx";
+                $fileName = $quantity . ' activation codes from type ' . $type  . ' in ' . now()->format('Y-m-d').".xlsx";
             }
-            return $fileName;
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
             $coursesNameSpreatedByComma = collect($courses)->map(fn($course) =>
