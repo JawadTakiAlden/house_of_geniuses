@@ -14,4 +14,8 @@ class ActivationCode extends Model
         return $this->hasMany(CourseCanActivated::class);
     }
 
+    public function isExpired(){
+        return intval($this->time_of_usage) === 0;
+    }
+
 }

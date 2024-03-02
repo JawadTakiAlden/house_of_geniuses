@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ActivationCodesExport;
+use App\Http\Requests\CheckCodeRequest;
+use App\Http\Resources\CheckActivationCodeResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\ActivationCode;
 use App\Http\Requests\StoreActivationCodeRequest;
@@ -25,6 +27,10 @@ class ActivationCodeController extends Controller
         return $this->error($th->getMessage() , 500);
     }
 
+    private function getRandomCode(){
+        return strtoupper(Str::random(6));
+    }
+
     public function store(StoreActivationCodeRequest $request){
         try {
             $type = $request->get('type');
@@ -39,9 +45,9 @@ class ActivationCodeController extends Controller
                     return $this->error('please select just one course for single type or switch for shared type' , 422);
                 }
                 for ($i = 0 ; $i < $quantity ; $i++){
-                    $code = Str::random(15);
+                    $code = $this->getRandomCode();
                     while (ActivationCode::where('code', $code)->exists()) {
-                        $code = Str::random(15);
+                        $code = Str::random(6);
                     }
                     $newActivationCode = ActivationCode::create([
                         'code' => $code,
@@ -59,7 +65,7 @@ class ActivationCodeController extends Controller
                     return $this->error('please select more than one course for shared type or switch for single type' , 422);
                 }
                 for ($i = 0 ; $i < $quantity ; $i++){
-                    $code = Str::random(15);
+                    $code = $this->getRandomCode();
                     while (ActivationCode::where('code', $code)->exists()) {
                         $code = Str::random(15);
                     }
@@ -78,7 +84,7 @@ class ActivationCodeController extends Controller
                 }
             }else{
                 for ($i = 0 ; $i < $quantity ; $i++) {
-                    $code = Str::random(15);
+                    $code = $this->getRandomCode();
                     while (ActivationCode::where('code', $code)->exists()) {
                         $code = Str::random(15);
                     }
@@ -91,7 +97,7 @@ class ActivationCodeController extends Controller
                 }
             }
 
-            $fileName = 'activation_codes_' . time() . '.xlsx';
+            $fileName = $request->title ?? $quantity . 'كود تفعيل من النوع' . $type  . 'في تاريخ' . now()->format('Y-m-d')."xlsx";
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
             $coursesNameSpreatedByComma = collect($courses)->map(fn($course) =>
@@ -107,6 +113,18 @@ class ActivationCodeController extends Controller
             return Storage::download($filePath);
         }catch (\Throwable $th){
             DB::rollBack();
+            return $this->catchError($th);
+        }
+    }
+
+    public function checkCode(CheckCodeRequest $request){
+        try {
+            $code = ActivationCode::where('code' , $request->code)->first();
+            if (!$code){
+                return $this->error(__('messages.activation_code_not_found') , 422);
+            }
+            return $this->success(CheckActivationCodeResource::make($code));
+        }catch(\Throwable $th){
             return $this->catchError($th);
         }
     }

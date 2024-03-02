@@ -271,22 +271,21 @@ class CourseController extends Controller
         $request->validated($request->only('code'));
         try {
             $course = HelperFunction::getCourseByID($courseID);
-            $activationCode = HelperFunction::getActivationCodeByCode(strval($request->activation_code));
             if (!$course){
                 return $this->error(trans('messages.course_not_found') , 404);
             }
             if (!boolval($course->is_visible)){
                 return $this->error(trans('messages.course_invisible_sign_in') , 403);
             }
-            if (!$activationCode){
-                return $this->error(trans('messages.activation_code_not_found'), 403);
-            }
             $existingInrole = AccountInrolment::where('user_id' , $request->user()->id)
                 ->where('course_id' , $courseID)->first();
             if ($existingInrole){
                 return $this->error(trans('messages.already_sign_in_course') , 403);
             }
-            $code = ActivationCode::where('code' , $request->get('activation_code'))->first();
+            $code = HelperFunction::getActivationCodeByCode(strval($request->activation_code));
+            if (!$code){
+                return $this->error(trans('messages.activation_code_not_found'), 403);
+            }
             if (intval($code->times_of_usage) === 0){
                 return $this->error(trans('messages.activation_code_expired') , 403);
             }

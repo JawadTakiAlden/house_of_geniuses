@@ -86,6 +86,7 @@ Route::middleware(['language'])->group(function (){
                 });
                 Route::prefix('/activationCodes')->group(function (){
                     Route::post('/generate' , [ActivationCodeController::class , 'store']);
+                    Route::post('/checkCode' , [ActivationCodeController::class , 'checkCode']);
                     Route::get('/unexpired' , [ActivationCodeController::class , 'getUnExpiredCodes']);
                 });
 //                vide
