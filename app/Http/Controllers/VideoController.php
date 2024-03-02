@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\VideoResource;
 use App\HttpResponse\HTTPResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Vimeo\Vimeo;
 
 class VideoController extends Controller
@@ -43,13 +42,9 @@ class VideoController extends Controller
             $data = $data['play'];
             $data = $data['hls'];
             $link = $data['link'];
-            $m3u8Response = Http::get($link);
-            if (!$m3u8Response->ok()) {
-                return $this->error('Failed to fetch m3u8 file', $m3u8Response->status());
-            }
-            $m3u8Content = $m3u8Response->body();
-            return response($m3u8Content)
-                ->header('Content-Type', 'application/vnd.apple.mpegurl');
+            return response([
+                'link' => $link
+            ] , 200);
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
