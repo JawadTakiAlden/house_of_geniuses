@@ -19,7 +19,7 @@ class ChapterInforamtionResource extends JsonResource
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
             'lesions' => LesionResource::collection($this->visibleLesions),
-            'quizzes' => QuizResource::collection($this->quizzes)
+            'quizzes' => QuizResource::collection($this->visibleQuizzes)
         ];
     }
 }

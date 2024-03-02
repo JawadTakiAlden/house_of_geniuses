@@ -25,4 +25,8 @@ class Chapter extends Model
     public function quizzes(){
         return $this->belongsToMany(Quiz::class)->withPivot(['id' , 'is_visible' , 'is_free']);
     }
+
+    public function visibleQuizzes(){
+        return $this->belongsToMany(Quiz::class)->wherePivot('is_visible' , true)->withPivot(['id' , 'is_visible' , 'is_free']);
+    }
 }
