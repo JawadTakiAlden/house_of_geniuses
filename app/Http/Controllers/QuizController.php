@@ -66,9 +66,9 @@ class QuizController extends Controller
         }
     }
 
-    public function updateQuizInChapter(UpdateQuizInChapterRequest $request){
+    public function updateQuizInChapter(UpdateQuizInChapterRequest $request , $quiz_chapter_id){
         try {
-            $quizChapter = ChapterQuiz::where('id' , $request->quiz_chapter_id)->first();
+            $quizChapter = ChapterQuiz::where('id' , $quiz_chapter_id)->first();
             if (!$quizChapter){
                 return $this->error(trans('messages.quiz_not_found') , 404);
             }
