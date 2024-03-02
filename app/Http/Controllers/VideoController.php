@@ -40,10 +40,10 @@ class VideoController extends Controller
             $video = $this->client->request(\request('link').'?fields=play');
             $data = $video['body'];
             $data = $data['play'];
-            $data = $data['hls'];
-            $link = $data['link'];
+//            $data = $data['hls'];
+//            $link = $data['link'];
             return response([
-                'link' => $link
+                'link' => $data
             ] , 200);
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
