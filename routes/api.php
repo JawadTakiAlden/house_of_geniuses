@@ -144,6 +144,7 @@ Route::middleware(['language'])->group(function (){
                     Route::patch('/update/{quiz}' , [QuizController::class , 'update']);//done
                     Route::delete('/delete/{quiz}' , [QuizController::class , 'destroy']);//done
                     Route::post('/addQuizToChapter' , [QuizController::class , 'addQuizToChapter']); //done
+                    Route::patch('/updateQuizInChapter/{quizChapter}' , [QuizController::class , 'updateQuizInChapter']);
                     Route::delete('/removeFromCourse/{chapterQuiz}' , [QuizController::class , 'removeFromCourse']);
                     Route::prefix('/questions')->group(function (){
                        Route::post('/add' , [QuizController::class , 'addQuestionToQuiz']);//done

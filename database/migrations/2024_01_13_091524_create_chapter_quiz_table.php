@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
             $table->foreignId('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');;
-            $table->foreignId('is_visible')->default(false);
+            $table->boolean('is_visible')->default(false);
+            $table->boolean('is_free')->default(false);
             $table->timestamps();
         });
     }

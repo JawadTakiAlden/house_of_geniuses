@@ -8,6 +8,7 @@ use App\Http\Requests\DeleteQuestionFromQuiz;
 use App\Http\Requests\QuestionFromQuizRequest;
 use App\Http\Requests\StoreNewQuestionInQuizRequest;
 use App\Http\Requests\StoreQuizRequest;
+use App\Http\Requests\UpdateQuizInChapterRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\QuizResource;
@@ -60,6 +61,19 @@ class QuizController extends Controller
                 return $this->error(trans('messages.quiz_not_found') , 404);
             }
             return $this->success(QuizResource::make($quiz));
+        }catch(\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
+    public function updateQuizInChapter(UpdateQuizInChapterRequest $request){
+        try {
+            $quizChapter = ChapterQuiz::where('id' , $request->quiz_chapter_id)->first();
+            if (!$quizChapter){
+                return $this->error(trans('messages.quiz_not_found') , 404);
+            }
+            $quizChapter->update($request->only(['is_visible' , 'is_free']));
+            return $this->success(null, trans('messages.delete_update'));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
