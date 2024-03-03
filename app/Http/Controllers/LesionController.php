@@ -150,16 +150,19 @@ class LesionController extends Controller
                     $response = $client->request($request->videoURI, array(), 'GET');
                     $responseData = $response['body'];
                     Storage::delete($lesion->link);
-                    $data = array_merge(
-                        [
-                            'title' => $responseData['name'],
-                            'link' => $responseData['uri'],
-                            'description' => $responseData['description'],
-                            'time' => intval($responseData['duration']) / 60,
-                            'type' => $type
-                        ],
-                        $request->only(['s_visible' , 'is_open' , 'title'])
-                    );
+                    $data = [
+                        'link' => $responseData['uri'],
+                        'description' => $responseData['description'],
+                        'time' => intval($responseData['duration']) / 60,
+                        'type' => $type,
+                        'is_visible' => $request->is_visible,
+                        'is_open' => $request->is_open,
+                    ];
+                    if ($request->title){
+                        $data = array_merge($data , ['title' => $request->title]);
+                    }else{
+                        $data = array_merge($data , ['title' => $responseData['name']]);
+                    }
                     $lesion->update($data);
                 }
                 else if ($type === 'pdf'){
