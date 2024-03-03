@@ -27,6 +27,7 @@ class UpdateLesionRequest extends FormRequest
             'pdfFile' => 'required_without:videoURI|file|max:10240',
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
+            'title' => 'nullable|string|max:255',
             'type' => 'sometimes|in:pdf,video',
         ];
     }
