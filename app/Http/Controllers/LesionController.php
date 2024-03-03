@@ -180,7 +180,19 @@ class LesionController extends Controller
                     $lesion->update($data);
                 }
             }else{
-                $lesion->update($request->only(['is_visible' , 'is_open' , 'title']));
+                $data = $request->only(['is_visible' , 'is_open']);
+                if ($lesion->type === 'video' && !$request->title){
+                    $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
+                        , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
+                        "0090c4cf290951714e846847fe8b2fe5");
+
+                    $response = $client->request($request->videoURI, array(), 'GET');
+                    $responseData = $response['body'];
+                    $data = array_merge($data , ['title' => $responseData['name']]);
+                }else{
+                    $data = array_merge($data , ['title' => $request->title);
+                }
+                $lesion->update($data);
             }
             return $this->success(LesionResource::make($lesion) , $lesion->title . ' updated successfully');
         }catch (\Throwable $th){
