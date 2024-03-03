@@ -190,7 +190,7 @@ class LesionController extends Controller
                     $responseData = $response['body'];
                     $data = array_merge($data , ['title' => $responseData['name']]);
                 }else{
-                    $data = array_merge($data , ['title' => $request->title);
+                    $data = array_merge($data , ['title' => $request->title]);
                 }
                 $lesion->update($data);
             }
