@@ -112,6 +112,7 @@ class LesionController extends Controller
                 $responseData = $response['body'];
                 $lesion = Lesion::create([
                     'title' => $responseData['name'],
+                    'description' => $responseData['description'],
                     'link' => $responseData['uri'],
                     'time' => intval($responseData['duration']) / 60,
                     'is_open' => $request->is_open,
@@ -148,6 +149,7 @@ class LesionController extends Controller
                         [
                             'title' => $responseData['name'],
                             'link' => $responseData['uri'],
+                            'description' => $responseData['description'],
                             'time' => intval($responseData['duration']) / 60,
                             'type' => $type
                         ],

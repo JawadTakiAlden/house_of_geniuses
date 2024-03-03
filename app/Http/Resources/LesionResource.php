@@ -20,6 +20,7 @@ class LesionResource extends JsonResource
         $data = [
             'id' => intval($this->id),
             'title' => $this->title,
+            'description' => $this->description,
             'link' => $this->type === 'pdf' ? asset('storage/'.$this->link) : $link,
             'time' => intval($this->time),
             'is_open' => boolval($this->is_open),

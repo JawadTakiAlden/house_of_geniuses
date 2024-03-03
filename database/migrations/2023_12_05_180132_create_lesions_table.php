@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('lesions', function (Blueprint $table) {
             $table->id();
             $table->string("title");
+            $table->text('description')->nullable();
             $table->string('link');
             $table->integer('time');
             $table->boolean('is_visible')->default(false);
