@@ -110,8 +110,7 @@ class LesionController extends Controller
 
                 $response = $client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
-                $lesion = Lesion::create([
-                    'title' => $responseData['name'],
+                $date = [
                     'description' => $responseData['description'],
                     'link' => $responseData['uri'],
                     'time' => intval($responseData['duration']) / 60,
@@ -119,7 +118,13 @@ class LesionController extends Controller
                     'is_visible' => $request->is_visible,
                     'type' => $type,
                     'chapter_id' => $request->chapter_id
-                ]);
+                ];
+                if ($request->title){
+                    $date = array_merge($date , ['title' => $request->title]);
+                }else{
+                    $date = array_merge($date , ['title' => $responseData['name']]);
+                }
+                $lesion = Lesion::create($date);
                 return $this->success(LesionResource::make($lesion) , $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name .' course');
             }else{
                 return $this->error('you are provide unknown type of lesion' , 422);
