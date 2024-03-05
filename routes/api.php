@@ -110,6 +110,7 @@ Route::middleware(['language'])->group(function (){
                     Route::post('/update/{course}' , [CourseController::class , 'update']); //done
                     Route::patch('/switchOpenStatus/{course}' , [CourseController::class  , 'switchOpenStatus']); //done
                     Route::patch('/switchVisibility/{course}' , [CourseController::class , 'switchVisibility']); //done
+                    Route::get('/getEnrollmentWithTypeOfCodes' , [CourseController::class , 'getEnrollmentWithTypeOfCodes']);
                     Route::post('/addUser/{user}/toCourse/{course}' , [CourseController::class , 'manualInrolStudentInCourse']); //done
                     Route::delete('/cancelInrolment/{inrollment}' , [CourseController::class , 'cancelInfolement']); //done
                     Route::delete('/delete/{course}' , [CourseController::class , 'destroy']); //done

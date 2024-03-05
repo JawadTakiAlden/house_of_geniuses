@@ -134,6 +134,7 @@ class LesionController extends Controller
         }
     }
 
+//    TODO update lesion should be fixed
     public function update(UpdateLesionRequest $request , $lesionID){
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);

@@ -7,6 +7,7 @@ use App\Http\Requests\SignInCourseRequest;
 use App\Http\Resources\AllInrolledResource;
 use App\Http\Resources\CourseInformationResource;
 use App\Http\Resources\CourseResource;
+use App\Http\Resources\EnrollmentWithTypeOfCodeResource;
 use App\Http\Resources\InrolmentsResource;
 use App\Http\Resources\ShowCourseInformationForAdmin;
 use App\HttpResponse\HTTPResponse;
@@ -48,6 +49,17 @@ class CourseController extends Controller
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
+    }
+
+
+    public function getEnrollmentWithTypeOfCodes(){
+        try {
+        $courses = Course::all();
+        return $this->success(EnrollmentWithTypeOfCodeResource::collection($courses));
+        }catch (\Throwable $th){
+            return $this->catchError($th);
+        }
+
     }
 
     public function visibleCourses(){

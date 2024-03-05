@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Types\CodeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +28,16 @@ class Course extends Model
         $newImageName = uniqid() . '_' . 'image' . '.' . $image->extension();
         $image->move(public_path('course_images') , $newImageName);
         return $this->attributes['image'] =  '/'.'course_images'.'/' . $newImageName;
+    }
+
+    public function numberOfEnrolmentBySingleCode(){
+        $count = AccountInrolment::where('course_id' , $this->id)
+            ->whereHas('activationCode' , fn($query) =>
+                $query->where('type' , CodeType::SINGLE)
+            )->count();
+
+
+        return $count;
     }
 
     public function categories(){
