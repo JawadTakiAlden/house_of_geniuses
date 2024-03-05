@@ -46,10 +46,16 @@ class Course extends Model
             $query->where('type' , CodeType::SHARED_SELECTED)
             )->count();
 
+        $manualEnrolment = AccountInrolment::where('course_id' , $this->id)
+            ->whereHas('activationCode' , fn($query) =>
+            $query->where('type' , CodeType::SHARED_SELECTED)
+            )->count();
+
         return [
             'count_by_single' => $countBySingle,
             'count_by_shared' => $countByShared,
-            'count_by_shared_selected' => $countBySharedSelected
+            'count_by_shared_selected' => $countBySharedSelected,
+            'manual_enrolment' => $manualEnrolment
         ];
     }
 

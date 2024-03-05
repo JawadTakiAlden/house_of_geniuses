@@ -14,12 +14,18 @@ class EnrollmentWithTypeOfCodeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $count_by_single = intval($this->numberOfEnrolmentBySingleCode()['count_by_single']);
+        $count_by_shared = intval($this->numberOfEnrolmentBySingleCode()['count_by_shared']);
+        $count_by_shared_selected = intval($this->numberOfEnrolmentBySingleCode()['count_by_shared_selected']);
+        $manualEnrolment = intval($this->numberOfEnrolmentBySingleCode()['manual_enrolment']);
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'number_single_code_enrolment' => intval($this->numberOfEnrolmentBySingleCode()['count_by_single']),
-            'number_shared_code_enrolment' => intval($this->numberOfEnrolmentBySingleCode()['count_by_shared']),
-            'number_shared_selected_code_enrolment' => intval($this->numberOfEnrolmentBySingleCode()['count_by_shared_selected']),
+            'total' => $count_by_single+$count_by_shared+$count_by_shared_selected+$manualEnrolment,
+            'number_single_code_enrolment' => $count_by_single,
+            'number_shared_code_enrolment' => $count_by_single,
+            'number_shared_selected_code_enrolment' => $count_by_single,
+            'manual_enrolment' => $manualEnrolment
         ];
     }
 }
