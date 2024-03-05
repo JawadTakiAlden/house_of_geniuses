@@ -47,9 +47,8 @@ class Course extends Model
             )->count();
 
         $manualEnrolment = AccountInrolment::where('course_id' , $this->id)
-            ->whereHas('activationCode' , fn($query) =>
-            $query->where('type' , CodeType::SHARED_SELECTED)
-            )->count();
+            ->where('activation_code_id' , null)
+            ->count();
 
         return [
             'count_by_single' => $countBySingle,
