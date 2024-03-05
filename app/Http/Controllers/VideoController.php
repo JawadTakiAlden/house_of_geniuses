@@ -22,7 +22,12 @@ class VideoController extends Controller
 
     public function getVideos () {
         try {
-            $response = $this->client->request('/users/216130188/videos', array(), 'GET');
+            $queryParams = [];
+            if (\request('link')) {
+                $link = \request('link');
+                $queryParams['query'] = $link;
+            }
+            $response = $this->client->request('/users/216130188/videos',$queryParams, 'GET');
             $responseData = $response['body'];
             $videos = $responseData['data'];
             $test = collect($videos);
