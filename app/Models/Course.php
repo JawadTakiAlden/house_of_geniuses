@@ -31,14 +31,28 @@ class Course extends Model
     }
 
     public function numberOfEnrolmentBySingleCode(){
-        $count = AccountInrolment::where('course_id' , $this->id)
+        $countBySingle = AccountInrolment::where('course_id' , $this->id)
             ->whereHas('activationCode' , fn($query) =>
                 $query->where('type' , CodeType::SINGLE)
             )->count();
 
+        $countByShared = AccountInrolment::where('course_id' , $this->id)
+            ->whereHas('activationCode' , fn($query) =>
+            $query->where('type' , CodeType::SHARED)
+            )->count();
 
-        return $count;
+        $countBySharedSelected = AccountInrolment::where('course_id' , $this->id)
+            ->whereHas('activationCode' , fn($query) =>
+            $query->where('type' , CodeType::SHARED_SELECTED)
+            )->count();
+
+        return [
+            'count_by_single' => $countBySingle,
+            'count_by_shared' => $countByShared,
+            'count_by_shared_selected' => $countBySharedSelected
+        ];
     }
+
 
     public function categories(){
         return $this->belongsToMany(Category::class , 'course_categories');

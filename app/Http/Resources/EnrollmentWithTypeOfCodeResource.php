@@ -17,10 +17,9 @@ class EnrollmentWithTypeOfCodeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'number_single_code_enrolment' => $this->numberOfEnrolmentBySingleCode(),
-//            'number_shared_code_enrolment' => $this->numberOfEnrolmentBySharedCode(),
-//            'number_shared_selected_code_enrolment' => $this->numberOfEnrolmentBySharedSelectedCode(),
-//            'number_gift_code_enrolment' => $this->numberOfEnrolmentByGiftCode(),
+            'number_single_code_enrolment' => $this->numberOfEnrolmentBySingleCode()['count_by_single'],
+            'number_shared_code_enrolment' => $this->numberOfEnrolmentBySingleCode()['count_by_shared'],
+            'number_shared_selected_code_enrolment' => $this->numberOfEnrolmentBySingleCode()['count_by_shared_selected'],
         ];
     }
 }
