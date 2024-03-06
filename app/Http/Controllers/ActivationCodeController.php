@@ -13,6 +13,7 @@ use App\Models\Course;
 use App\Models\CourseCanActivated;
 use App\Models\ExportableFile;
 use App\Types\CodeType;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -100,7 +101,9 @@ class ActivationCodeController extends Controller
             if ($request->title){
                 $fileName = $request->title . '.xlsx';
             }else{
-                $fileName = $quantity . ' activation codes from type ' . $type  . ' in ' . now()->format('Y-m-d').".xlsx";
+                $currentDateTime = Carbon::now();
+                $formattedDateTime = $currentDateTime->format('Y-m-d h:i:s A');
+                $fileName = $quantity . ' activation codes from type ' . $type  . ' in ' . $formattedDateTime.".xlsx";
             }
             $folder = 'excel_files';
             $filePath = $folder . '/' . $fileName;
