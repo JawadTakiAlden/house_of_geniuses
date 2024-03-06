@@ -31,7 +31,7 @@ class StoreActivationCodeRequest extends FormRequest
                 'string',
                 'max:255',
                 'regex:/^[a-zA-Z0-9-_\.]+$/',
-                Rule::unique('activation_codes', 'path')->where(function ($query) {
+                Rule::unique('exportable_files', 'path')->where(function ($query) {
                     $title = $this->input('title') . '.xlsx';
                     $query->where('path', $title);
                 }),
