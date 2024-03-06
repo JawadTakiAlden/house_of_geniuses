@@ -22,6 +22,6 @@ class AdminMiddleware
         if (strval(Auth::user()->type === UserType::ADMIN)){
             return $next($request);
         }
-        return $this->error('you\'re does\'nt have permission to complete this action' , 403);
+        return $this->error(__("messages.error.admin_permission"), 403);
     }
 }
