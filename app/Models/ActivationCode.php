@@ -15,7 +15,7 @@ class ActivationCode extends Model
     }
 
     public function isExpired(){
-        return intval($this->time_of_usage) === 0;
+        return intval($this->times_of_usage) === 0;
     }
 
 }
