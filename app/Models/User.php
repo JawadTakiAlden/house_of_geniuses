@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\File;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -35,6 +36,30 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($user) {
+            if ($user->image){
+                $imagePath = public_path($user->image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+        });
+        static::updated(function ($user) {
+            if ($user->image){
+                if ($user->isDirty('image')) {
+                    $oldImagePath = public_path($user->getOriginal('image'));
+                    if (File::exists($oldImagePath)) {
+                        File::delete($oldImagePath);
+                    }
+                }
+            }
+        });
+    }
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',

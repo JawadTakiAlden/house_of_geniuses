@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 
 class Question extends Model
 {
@@ -12,6 +13,44 @@ class Question extends Model
 
     public function choices(){
         return $this->hasMany(Choice::class);
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($question) {
+            if ($question->image){
+                $imagePath = public_path($question->image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+            if ($question->clarification_image){
+                $imagePath = public_path($question->clarification_image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+        });
+        static::updated(function ($question) {
+            if ($question->image){
+                if ($question->isDirty('image')) {
+                    $oldImagePath = public_path($question->getOriginal('image'));
+                    if (File::exists($oldImagePath)) {
+                        File::delete($oldImagePath);
+                    }
+                }
+            }
+            if ($question->clarification_image){
+                if ($question->isDirty('clarification_image')) {
+                    $oldImagePath = public_path($question->getOriginal('clarification_image'));
+                    if (File::exists($oldImagePath)) {
+                        File::delete($oldImagePath);
+                    }
+                }
+            }
+        });
     }
 
     public function setImageAttribute ($image){

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Types\CodeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 
 class Course extends Model
 {
@@ -28,6 +29,31 @@ class Course extends Model
         $newImageName = uniqid() . '_' . 'image' . '.' . $image->extension();
         $image->move(public_path('course_images') , $newImageName);
         return $this->attributes['image'] =  '/'.'course_images'.'/' . $newImageName;
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($course) {
+            if ($course->image){
+                $imagePath = public_path($course->image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+
+        });
+        static::updated(function ($course) {
+            if ($course->image){
+                if ($course->isDirty('image')) {
+                    $oldImagePath = public_path($course->getOriginal('image'));
+                    if (File::exists($oldImagePath)) {
+                        File::delete($oldImagePath);
+                    }
+                }
+            }
+
+        });
     }
 
     public function numberOfEnrolmentBySingleCode(){

@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->boolean('is_visible')->default(false);
-            $table->index(['is_visible']);
-            $table->index(['id']);
+            $table->index(['is_visible' , 'id']);
             $table->timestamps();
         });
     }
