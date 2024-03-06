@@ -15,10 +15,6 @@ use Vimeo\Vimeo;
 class LesionController extends Controller
 {
     use HTTPResponse;
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
-
     private Vimeo $client;
 
     public function __construct()
@@ -31,12 +27,12 @@ class LesionController extends Controller
         try {
             $chapter = HelperFunction::getChapterByID($chpaterID);
             if (!$chapter){
-                return $this->error('chapter dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $lesions = Lesion::where('chapter_id' , $chpaterID)->get();
             return $this->success(LesionResource::collection($lesions));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -44,12 +40,12 @@ class LesionController extends Controller
         try {
             $chapter = HelperFunction::getChapterByID($chpaterID);
             if (!$chapter){
-                return $this->error('chapter dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $lesions = Lesion::where('chapter_id' , $chpaterID)->where('is_visible' , true)->get();
             return $this->success(LesionResource::collection($lesions));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -57,17 +53,14 @@ class LesionController extends Controller
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
             if (!$lesion){
-                return $this->error('lesion dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $lesion->update([
                'is_visible' => !$lesion->is_visible
             ]);
-            return $this->success(
-                LesionResource::make($lesion) ,
-                $lesion->title . ' changed to be ' . $lesion->is_visible ? 'visible' : 'invisible' . ' successfully'
-            );
+            return $this->success( LesionResource::make($lesion) , __("messages.lesion_controller.visibility_switch"));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -75,18 +68,15 @@ class LesionController extends Controller
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
             if (!$lesion){
-                return $this->error('lesion dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             if ($lesion->type === 'pdf'){
                 Storage::delete($lesion->link);
             }
             $lesion->delete();
-            return $this->success(
-                LesionResource::make($lesion) ,
-                $lesion->title . ' deleted successfully'
-            );
+            return $this->success(LesionResource::make($lesion) ,__("messages.lesion_controller.delete"));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -108,10 +98,7 @@ class LesionController extends Controller
                     'chapter_id' => $request->chapter_id
                 ]);
 
-                return $this->success(
-                    LesionResource::make($lesion),
-                    $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name . ' course'
-                );
+                return $this->success(  LesionResource::make($lesion),$lesion->title . __("messages.lesion_controller.create"));
             }else if ($type === 'video'){
                 $response = $this->client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
@@ -130,12 +117,12 @@ class LesionController extends Controller
                     $date = array_merge($date , ['title' => $responseData['name']]);
                 }
                 $lesion = Lesion::create($date);
-                return $this->success(LesionResource::make($lesion) , $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name .' course');
+                return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.create"));
             }else{
-                return $this->error('you are provide unknown type of lesion' , 422);
+                return $this->error(__("messages.error.unknown_lesion_type") , 422);
             }
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -143,7 +130,7 @@ class LesionController extends Controller
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
             if (!$lesion){
-                return $this->error('lesion dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             if ($lesion->type === LesionType::VIDEO){
                 $data = [
@@ -192,9 +179,9 @@ class LesionController extends Controller
                 }
                 $lesion->update($data);
             }
-            return $this->success(LesionResource::make($lesion) , $lesion->title . ' updated successfully');
+            return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.update"));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -202,11 +189,11 @@ class LesionController extends Controller
         try {
             $file = Storage::exists($path);
             if (!$file){
-                return $this->error('file requested not found' , 404);
+                return HelperFunction::notFoundResponce();
             }
             return Storage::get($path);
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

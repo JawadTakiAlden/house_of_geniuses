@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HelperFunction;
 use App\HttpResponse\HTTPResponse;
 use App\Models\ExportableFile;
 use Illuminate\Http\Request;
@@ -31,11 +32,11 @@ class ExportableFileController extends Controller
     {
         $file = ExportableFile::where('path', $fileName)->orderBy('created_at' , 'desc')->first();
         if (!$file) {
-            return $this->error('the requested file doesnt found in our system' , 404);
+           return HelperFunction::notFoundResponce();
         }
         ExportableFile::where('path' , $fileName)->delete();
         $filePath = 'excel_files/' . $fileName;
         Storage::delete($filePath);
-        return $this->success( null, 'file deleted successfully');
+        return $this->success( null, __("messages.exportable_file_controller.delete" , ["file_name" => $fileName]));
     }
 }

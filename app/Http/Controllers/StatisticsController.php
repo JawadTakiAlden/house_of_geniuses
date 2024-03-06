@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HelperFunction;
 use App\Http\Resources\RecentEnrolledResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\AccountInrolment;
@@ -20,16 +21,13 @@ use Illuminate\Support\Facades\Storage;
 class StatisticsController extends Controller
 {
     use HTTPResponse;
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
 
     public function getLastEnrolled(){
         try {
             $last = AccountInrolment::orderByDesc('created_at')->limit(20)->get();
             return  $this->success(RecentEnrolledResource::collection($last));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -56,7 +54,7 @@ class StatisticsController extends Controller
                 'enrolled_number' => $enrolled_number
             ]);
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -108,7 +106,7 @@ class StatisticsController extends Controller
                 'number_of_user_in_each_course' => $number_of_user_in_each_course
             ]);
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -122,10 +120,10 @@ class StatisticsController extends Controller
             Storage::deleteDirectory('excel_files');
 
         DB::commit();
-        return $this->success(null , 'statistics reset successfully and all activation codes deleted');
+        return $this->success(null , __("messages.statistics_controller.reset_successfully"));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

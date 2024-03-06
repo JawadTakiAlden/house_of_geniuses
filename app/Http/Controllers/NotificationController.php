@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HelperFunction;
 use App\Http\Requests\SendNotificationRequest;
 use App\HttpResponse\HTTPResponse;
 use App\Models\User;
@@ -13,21 +14,8 @@ class NotificationController extends Controller
 
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
-
-
-//        apiKey: "AIzaSyCquL3Sf2JDpqYPyawJ4s9Kl5g_czjZ3gw",
-//  authDomain: "houseofgeniuses-7bb6b.firebaseapp.com",
-//  projectId: "houseofgeniuses-7bb6b",
-//  storageBucket: "houseofgeniuses-7bb6b.appspot.com",
-//  messagingSenderId: "895515853250",
-//  appId: "1:895515853250:web:12e265a89b3c490ceb965b",
-//  measurementId: "G-8XC6K5DPR2"
-//        key : BHXu4tMNISTlQGe_QsfvbrNN2GpAbF0U2tHgH9kN-vkhEn0rtL9u3_6C_NXuYHm519cHAP3BX_Dx4yT2ZWqedYw
-
         $url = 'https://fcm.googleapis.com/fcm/send';
-
         $server_key = "AAAAhggAXOM:APA91bFlPweIZXPYUlmObCTFaQlvzm3Op6G_fyq9RJcpN81kmekCaEz00vbhnW3dQLZredAQYCD1qg6kswC5H0ZAuNrucMnEqNVGfnyGp5woSd7_WENU7zNWOHIE-CiUBmXalBr_btCC";
-
         $date = [
             'registration_ids' => $FcmToken,
             'notification' => [
@@ -57,12 +45,12 @@ class NotificationController extends Controller
         $result = curl_exec($ch);
 
         if ($result === FALSE){
-            return $this->error(curl_error($ch) , 500);
+            return HelperFunction::ServerErrorResponse();
         }
 
         curl_close($ch);
 
-        return $this->success($result , 'notification send successfully');
+        return $this->success($result , __('messages.notification_controller.send_successfully'));
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
@@ -83,7 +71,7 @@ class NotificationController extends Controller
             $result = $this->BasicSendNotification($title, $body , $tokens);
             return $result;
         }catch (\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

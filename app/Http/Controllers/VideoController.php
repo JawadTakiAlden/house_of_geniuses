@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HelperFunction;
 use App\Http\Resources\VideoResource;
 use App\HttpResponse\HTTPResponse;
 use Illuminate\Http\Request;
@@ -34,14 +35,14 @@ class VideoController extends Controller
             $test = collect($videos);
             return $this->success(VideoResource::collection($test));
         }catch (\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
     public function watch(){
         try {
             if (!\request('link')){
-                return $this->error('we have some problems with your link' , 500);
+                return $this->error(__('messages.video_controller.link_not_correct') , 500);
             }
             $video = $this->client->request(\request('link').'?fields=play');
             $data = $video['body'];
@@ -51,14 +52,14 @@ class VideoController extends Controller
                 'link' => $data
             ] , 200);
         }catch (\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
     public function download(){
         try {
             if (!\request('link')){
-                return $this->error('we have some problems with your link' , 500);
+                return $this->error(__('messages.video_controller.link_not_correct') , 500);
             }
             $video = $this->client->request(\request('link').'?fields=download');
             $downloadArray = $video['body'];
@@ -66,7 +67,7 @@ class VideoController extends Controller
                 'link' => $downloadArray
             ] , 200);
         }catch (\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

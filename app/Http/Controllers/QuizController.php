@@ -24,15 +24,12 @@ use Illuminate\Support\Facades\DB;
 class QuizController extends Controller
 {
     use HTTPResponse;
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
     public function getAll(){
         try {
             $quizzes = Quiz::orderBy('created_at')->get();
             return $this->success(SimpleQuizResource::collection($quizzes));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
     public function store(StoreQuizRequest $request){
@@ -47,10 +44,10 @@ class QuizController extends Controller
                 ]);
             }
             DB::commit();
-            return $this->success(QuizResource::make($quiz) , trans('messages.create_quiz'));
+            return $this->success(QuizResource::make($quiz) , __("messages.quiz_controller.create"));
         }catch(\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -58,11 +55,11 @@ class QuizController extends Controller
         try {
             $quiz = HelperFunction::getQuizByID($quizID);
             if (!$quiz){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             return $this->success(QuizResource::make($quiz));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -70,12 +67,12 @@ class QuizController extends Controller
         try {
             $quizChapter = ChapterQuiz::where('id' , $quiz_chapter_id)->first();
             if (!$quizChapter){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $quizChapter->update($request->only(['is_visible' , 'is_free']));
-            return $this->success(null, trans('messages.delete_update'));
+            return $this->success(null, __('messages.quiz_controller.update_quiz_in_chapter'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -83,12 +80,12 @@ class QuizController extends Controller
         try {
             $quiz = HelperFunction::getQuizByID($quizID);
             if (!$quiz){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $quiz->update($request->only(['title' , 'description']));
-            return $this->success(null, trans('messages.delete_update'));
+            return $this->success(null, __('messages.quiz_controller.update'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -96,12 +93,12 @@ class QuizController extends Controller
         try {
             $quiz = HelperFunction::getQuizByID($quizID);
             if (!$quiz){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $quiz->delete();
-            return $this->success(null, trans('messages.delete_quiz'));
+            return $this->success(null, __('messages.quiz_controller.delete'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -109,12 +106,12 @@ class QuizController extends Controller
         try {
             $chapterQuiz = ChapterQuiz::where('id' , $chapterQuizID)->first();
             if (!$chapterQuiz){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapterQuiz->delete();
-            return $this->success(null, trans('messages.delete_quiz'));
+            return $this->success(null,__('messages.quiz_controller.delete_from_chapter'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -123,7 +120,7 @@ class QuizController extends Controller
             DB::beginTransaction();
             $quiz = HelperFunction::getQuizByID($request->quiz_id);
             if (!$quiz){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             foreach ($request->questions as $question){
                 if (QuestionQuiz::where('question_id' , $question)->where('quiz_id' , $quiz->id)->exists()){
@@ -136,10 +133,10 @@ class QuizController extends Controller
                 ]);
             }
             DB::commit();
-            return $this->success(null, trans('messages.question_add_to_quiz'));
+            return $this->success(null, __('messages.quiz_controller.questions_added'));
         }catch(\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -152,30 +149,12 @@ class QuizController extends Controller
                 }
             }
             DB::commit();
-            return $this->success(null , trans('messages.delete_question_quiz'));
+            return $this->success(null , __('messages.quiz_controller.delete_question_from_quiz'));
         }catch(\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
-
-
-//    public function switchVisibility($quizQuestionID){
-//        try {
-//            $questionQuiz = QuestionQuiz::where('id' , $quizQuestionID)->first();
-//            if (!$questionQuiz){
-//                return $this->error(trans('messages.question_quiz_not_found') , 404);
-//            }
-//            $questionQuiz->update([
-//                'is_visible' => !$questionQuiz->is_visible
-//            ]);
-//            return $this->success(null, trans('messages.switch_visibility_question_quiz'));
-//        }catch(\Throwable $th){
-//            return $this->catchError($th);
-//        }
-//    }
-
-
     public function hideVisibility(QuestionFromQuizRequest $request){
         try {
             DB::beginTransaction();
@@ -187,10 +166,10 @@ class QuizController extends Controller
                 }
             }
             DB::commit();
-            return $this->success(null , trans('messages.delete_question_quiz'));
+            return $this->success(null , __('messages.quiz_controller.visibility_update'));
         }catch(\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -205,10 +184,10 @@ class QuizController extends Controller
                 }
             }
             DB::commit();
-            return $this->success(null , trans('messages.delete_question_quiz'));
+            return $this->success(null ,__('messages.quiz_controller.visibility_update'));
         }catch(\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -219,23 +198,23 @@ class QuizController extends Controller
             $quiz = Quiz::where('id' , $quizID)->first();
             $chapter  = HelperFunction::getChapterByID($chapterID);
             if (!$quiz){
-                return $this->error(trans('messages.quiz_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             if (!$chapter){
-                return $this->error(trans('messages.chapter_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $isAddedBefore = ChapterQuiz::where('quiz_id' , $quizID)->where('chapter_id' , $chapterID)->exists();
             if ($isAddedBefore){
-                return $this->error(trans('messages.quiz_added_before_to_chapter') , 422);
+                return $this->error(__('messages.quiz_controller.error.quiz_added_before_to_chapter'), 422);
             }
             ChapterQuiz::create([
                'chapter_id' => $chapterID,
                'quiz_id' => $quizID,
                'is_visible' => $request->is_visible
             ]);
-            return $this->success(null, trans('messages.quiz_added_to_chapter_successfully'));
+            return $this->success(null, __('messages.quiz_controller.quiz_to_chapter_successfully'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

@@ -15,25 +15,21 @@ class UserWatchController extends Controller
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
             if (!$lesion){
-                return $this->error('lesion not found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             if (
                 UserWatch::where('user_id' , auth()->user()->id)->where('lesion_id' , $lesionID)->exists()
                 || !AccountInrolment::where('course_id' , $lesion->course_id)->where('user_id' , auth()->user()->id)->exists()
             ){
-                return $this->success(null , 'watched successfully registered');
+                return $this->success(null , __('messages.user_watch_controller_watch_registered'));
             }
             UserWatch::create([
                'user_id' =>  auth()->user()->id,
                 'lesion_id' => $lesionID
             ]);
-            return $this->success(null , 'watched successfully registered');
+            return $this->success(null , __('messages.user_watch_controller_watch_registered'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
-    }
-
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
     }
 }

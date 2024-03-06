@@ -13,19 +13,16 @@ use Illuminate\Http\Request;
 class CourseValueController extends Controller
 {
     use HTTPResponse;
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
     public function store(StoreCourseValueRequest $request , $courseID){
         try {
             $course = HelperFunction::getCourseByID($courseID);
             if (!$course){
-                return $this->error(trans('messages.course_not_found'), 404);
+                return HelperFunction::notFoundResponce();
             }
             $newCourseValue = CourseValue::create( array_merge($request->only(['value']), ['course_id' => $courseID]));
-            return $this->success(CourseResource::make($newCourseValue->course) , trans('messages.create_course_value'));
+            return $this->success(CourseResource::make($newCourseValue->course) , __('messages.course_value_controller.create' , ['value_name' => $newCourseValue->value]));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -33,12 +30,12 @@ class CourseValueController extends Controller
         try {
             $value = HelperFunction::getCourseValueByID($valueID);
             if (!$value){
-                return $this->error(trans('messages.value_not_found'), 404);
+                return HelperFunction::notFoundResponce();
             }
             $value->update($request->only(['value']));
-            return $this->success(CourseResource::make($value->course) , trans('messages.update_course_value'));
+            return $this->success(CourseResource::make($value->course) , __('messages.course_value_controller.update' , ['value_name' => $value->value]));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -46,12 +43,12 @@ class CourseValueController extends Controller
         try {
             $value = HelperFunction::getCourseValueByID($valueID);
             if (!$value){
-                return $this->error(trans('messages.value_not_found'), 404);
+                return HelperFunction::notFoundResponce();
             }
             $value->delete();
-            return $this->success(CourseResource::make($value->course) , trans('messages.delete_course_value'));
+            return $this->success(CourseResource::make($value->course) , __('messages.course_value_controller.delete' , ['value_name' => $value->value]));
         }catch (\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

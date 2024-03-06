@@ -10,7 +10,8 @@ The shared activation code you used has already been utilized to activate course
         "activation_code_expired" => "⚠️ Activation Failed! ⚠️
 The activation code you provided for the course has expired. Please obtain a new activation code and try again. If you have any questions or need further assistance, please contact support. #ExpiredActivationCode",
         "admin_permission" => "Sorry, you do not have sufficient permissions to access requested resource",
-        "blocked_account" => "🚫 Uh-oh! It seems we've hit a temporary roadblock. 🛑 Don't worry though, every blockade has a solution! Please reach out to our admin team to iron out this hiccup and get back on track. Your patience is appreciated! 🌟 #SmoothSailingAhead"
+        "blocked_account" => "🚫 Uh-oh! It seems we've hit a temporary roadblock. 🛑 Don't worry though, every blockade has a solution! Please reach out to our admin team to iron out this hiccup and get back on track. Your patience is appreciated! 🌟 #SmoothSailingAhead",
+        "unknown_lesion_type" => "⚠️ Error: Invalid lesson type! ⚠️ The lesson could not be created because the provided file type is not supported. Accepted file types are PDF and video. Please upload a valid file and try again. Thank you! #InvalidLessonType"
     ],
     "activation_code_controller" => [
         "error" => [
@@ -67,38 +68,61 @@ The activation code you provided cannot be used to activate the requested course
         "free_switch" => "💰 Free status updated! 💸 the course is now :status . We're committed to providing accessible education. #FreeStatusSwitch",
         "manual_enrolled_successfully" => "✅ Enrollment process completed successfully! 📚 :username has been successfully enrolled in :course_name. The course roster has been updated.",
         "enroll_successfully" => "✅ Enrollment Successful! 📚
-Congratulations! You have been successfully enrolled in the course :course_name Get ready to embark on a journey of learning and discovery. If you have any questions or need assistance, feel free to reach out. Happy learning! #EnrollmentSuccess",
+Congratulations! You have been successfully enrolled in the course :course_name Get ready to embark on a journey of learning and discovery. If you have any questions or need assistance, feel free to reach out. Happy learning! #EnrollmentSuccess"
+    ],
 
+    "course_value_controller" => [
+        "create" => "🌟 New value added! 💡 Embracing a new principle in our learning journey: :value_name . Let's cultivate a culture of :value_name. #ValueCreation",
+        "update" => "🔄 Value updated! 🔧 Evolving our understanding of :value_name . Let's continue to refine our commitment to :value_name . #ValueUpdate",
+        "delete" => "🗑️ Value deleted! 🚫 Bid farewell to :value_name. As we let go, we make room for new insights and growth. #ValueDeletion",
+    ],
+    "exportable_file_controller" => [
+        "delete" => "🗑️ File deleted! 🚫 The file :file_name has been successfully removed from the server. Keeping our storage clean and organized. #FileDeletionConfirmation"
+    ],
+
+    "lesion_controller" => [
+        'visibility_switch' => "👁️‍🗨️ Lesson visibility switched! 🌟 The visibility has been updated. Let's continue guiding our learners with clarity and purpose! #LessonVisibilityUpdate",
+        "delete" => "🗑️ Lesson deleted! 🚫 A lesson has been successfully removed from the course. Keeping our curriculum streamlined and focused. #LessonDeletionNotification",
+        "create" => "📝 New lesson created! 🚀 A new lesson has been added to the course. Let's dive into exciting new topics and expand our knowledge! #LessonCreation",
+        "update" => "🔄 Lesson updated! 📝 The lesson has been successfully updated with the latest changes. Let's ensure our content remains engaging and informative! #LessonUpdate"
+    ],
+
+    "news_controller" => [
+        "create" => "📰 New news item added to the slider! 🌟 Stay updated with the latest happenings. #NewsCreation",
+        "update" => "🔄 News item in the slider updated! 📝 Keeping our audience informed with fresh content. #NewsUpdate",
+        "delete" => "🗑️ News item removed from the slider! 🚫 Making space for new updates. #NewsDeletion",
+        "visibility_switch" => "👁️‍🗨️ News item visibility in the slider switched! 🌈 Shining the spotlight on important "
+    ],
+
+    "notification_controller" => [
+        "send_successfully" => "✉️ Notification sent successfully! 🚀 Your message has been successfully delivered to the intended recipients. Keep the communication flowing! #NotificationSuccess"
+    ],
+    "question_controller" => [
+        "create" => "📝 New question created! 🌟 Let's expand our knowledge base with insightful inquiries. #QuestionCreation",
+        "update" => "🔄 Question updated! 🔍 Keeping our questions relevant and engaging. #QuestionUpdate",
+        "delete" => "🗑️ Question deleted! 🚫 Clearing the way for fresh inquiries. #QuestionDeletion"
+    ],
+    "quiz_controller" => [
+        "error" => [
+            "quiz_added_before_to_chapter" => "⚠️ Quiz already added to chapter! ⚠️ The quiz you're attempting to add is already present in this chapter. Please ensure content consistency and avoid duplication. If you have any questions, feel free to reach out. #QuizAlreadyAddedToChapter"
+        ],
+        "create" => "📝 New quiz created! 🌟 Let the fun and learning begin with this exciting quiz. Get ready to challenge and engage your audience! #QuizCreation",
+        "update_quiz_in_chapter" => "🔄 Quiz in chapter updated! 📝 The quiz content has been refreshed to enhance learning experiences within the chapter. Let's keep our learners engaged and motivated! #QuizUpdateInChapter",
+        "update" => "🔄 Quiz updated! 📝 The quiz has been updated with new questions and improvements. Get ready for an enhanced learning experience! #QuizUpdate",
+        "delete" => "🗑️ Quiz deleted! 🚫 The quiz has been removed. Clearing space for new challenges and learning opportunities. #QuizDeletion",
+        "delete_from_chapter" => "🗑️ Quiz deleted from chapter! 🚫 The quiz has been removed from this chapter. Adjusting content to better suit our learning objectives. #QuizDeletionFromChapter",
+        "questions_added" => "✅ Questions successfully added to the quiz! 🌟 The selected questions have been successfully integrated into the requested quiz. The quiz is now enriched with new content. #QuestionsAddedToQuiz",
+        "delete_question_from_quiz" => "🗑️ Question deleted from quiz! 🚫 The question has been removed from the quiz. Ensuring the quiz content aligns perfectly with our learning objectives. #QuestionDeletionFromQuiz",
+        "visibility_update" => "👁️‍🗨️ Question visibility updated in the quiz! 🌟 The visibility of questions inside the quiz has been adjusted. Let's ensure a seamless learning experience for our participants! #QuestionVisibilityUpdateInQuiz",
+        "quiz_to_chapter_successfully" => "✅ Quiz successfully added to chapter! 📝 The quiz has been successfully integrated into the chapter. It's now ready to engage and challenge our learners. #QuizAddedToChapter"
+    ],
+    "statistics_controller" => [
+        "reset_successfully" => "✅ Statistics reset successfully! 📊 All data has been reset, ensuring a fresh start for tracking progress and performance. #StatisticsResetSuccessful"
+    ],
+    "user_watch_controller" => [
+        "watch_registered" => "👀 Video watch registered! 📹 Your watch of the video has been successfully recorded by the system. Keep exploring our content! #VideoWatchRegistered"
+    ],
+    "video_controller" => [
+        "link_not_correct" => "⚠️ Error: Invalid link! ⚠️ The link you provided is not correct or is broken. Please double-check the URL and try again. If you continue to experience issues, please contact support for assistance. Thank you! #InvalidLinkError"
     ]
-
-//    // Authentication messages
-//    'create_new_user' => 'Welcome to the House Of Geniuses application, your account has been created successfully.',
-//    'login' => 'Welcome back, :name! You have successfully logged in.',
-//    'logout' => 'Goodbye, dear :name! You have successfully logged out.',
-//
-//    // Not found messages
-//    'user_not_found' => 'Sorry, we couldn\'t find this account. Double-check and try again.',
-//    'course_not_found' => 'Sorry, we couldn\'t find this training course in our system.',
-//    'news_not_found' => 'This news was not found in our news list.',
-//    'category_not_found' => 'This category was not found in the list of classifications.',
-//    'activation_code_not_found' => 'Your training course activation code is incorrect.',
-//
-//    'activation_code_expired' => 'Unfortunately, your activation code has expired.',
-//    'shared_activation_code_already_used_for_this_course' => 'You have already used your subscription activation code for this course.',
-//    'sign_in_course_successfully' => 'Successfully signed in to the :course course. Best wishes for your success!',
-//    'wrong_match_course_with_code' => 'This code is not valid for activating this course.',
-//
-//    'login_password_email_error' => 'There is an error in the email or password. Please verify and try again.',
-//    'block_while_login_message' => 'Login with this account on this device is not possible. The account has been temporarily blocked. Contact the system administrator to resolve the issue.',
-//    'account_blocked' => 'This account is blocked and cannot perform any operations. Contact the system administrator to resolve the issue and lift the block on the account.',
-//
-//    'course_invisible_sign_in' => 'You cannot join this training course now. Please try again later.',
-//    'already_sign_in_course' => 'You have already registered for this training course.',
-//
-//    // Permission messages
-//    'permission_denied' => 'Sorry, you cannot complete this operation as you do not have the appropriate permissions.',
-//    'user_blocked' => ':block_state successfully applied.',
-//    'block_word' => 'Block',
-//    'unblock_word' => 'Unblock',
-//    'delete_news' => 'The news has been successfully deleted from the news list.',
 ];
