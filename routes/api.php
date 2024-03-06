@@ -15,6 +15,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserWatchController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
@@ -173,6 +174,9 @@ Route::middleware(['language'])->group(function (){
                     });
                     Route::prefix('/categories')->group(function (){
                         Route::get('/visible' , [CategoryController::class , 'visibleCategories']);
+                    });
+                    Route::prefix('/lesions')->group(function (){
+                        Route::post('/watch/{lesion}' , [UserWatchController::class , 'makeNewWatch']);
                     });
                     Route::prefix('/courses')->group(function (){
                         Route::get('/visible/{category}', [CourseController::class, 'getVisibleCourses']);

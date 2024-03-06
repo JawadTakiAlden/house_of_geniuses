@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\UserWatch;
 use App\Types\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,6 +18,7 @@ class LesionResource extends JsonResource
     public function toArray(Request $request): array
     {
         $link = $this->link;
+
         $data = [
             'id' => intval($this->id),
             'title' => $this->title,
@@ -26,6 +28,7 @@ class LesionResource extends JsonResource
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
             'type' => $this->type,
+            'is_watched' => UserWatch::where('lesion_id' , $this->id)->where('user_id' , $request->user()->id)->exists(),
             'chapter_id' => intval($this->chapter_id),
         ];
         if (strval($this->type) === 'video'){
