@@ -36,7 +36,6 @@ class ExportableFileController extends Controller
         ExportableFile::where('path' , $fileName)->delete();
         $filePath = 'excel_files/' . $fileName;
         Storage::delete($filePath);
-        $file->delete();
         return $this->success( null, 'file deleted successfully');
     }
 }
