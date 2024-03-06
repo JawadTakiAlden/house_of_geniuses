@@ -26,19 +26,17 @@ class StoreActivationCodeRequest extends FormRequest
         return [
             'type' => 'required|string|in:'.CodeType::SINGLE . ',' .CodeType::SHARED . ',' . CodeType::SHARED_SELECTED,
             'quantity' => 'required|numeric|min:1|max:200',
-            'title' => [
-                'nullable',
-                'string',
-                'max:255',
-                'regex:/^[a-zA-Z0-9-_\.]+$/',
-                Rule::unique('exportable_files', 'path')->where(function ($query) {
-                    $title = $this->input('title') . '.xlsx';
-                    $query->where('path', $title);
-                }),
-            ],
+            'title' => 'nullable|string|max:255|regex:/^[a-zA-Z0-9-_\.]+$/|unique:exportable_files,path',
             'number_of_courses' => 'required_if:type,' . CodeType::SHARED_SELECTED . '|numeric|min:1' ,
             'courses' => 'required_if:type,' . CodeType::SINGLE . '|required_if:type,' . CodeType::SHARED . '|array',
             'courses.*' => ['required' , 'numeric' , Rule::exists('courses' , 'id')],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'title' => $this->title . '.xlsx',
+        ]);
     }
 }
