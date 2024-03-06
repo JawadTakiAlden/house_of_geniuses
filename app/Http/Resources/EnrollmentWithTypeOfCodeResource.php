@@ -17,6 +17,7 @@ class EnrollmentWithTypeOfCodeResource extends JsonResource
         $count_by_single = intval($this->numberOfEnrolmentBySingleCode()['count_by_single']);
         $count_by_shared = intval($this->numberOfEnrolmentBySingleCode()['count_by_shared']);
         $count_by_shared_selected = intval($this->numberOfEnrolmentBySingleCode()['count_by_shared_selected']);
+        $count_by_gift = intval($this->numberOfEnrolmentBySingleCode()['count_by_gift']);
         $manualEnrolment = intval($this->numberOfEnrolmentBySingleCode()['manual_enrolment']);
         return [
             'id' => $this->id,
