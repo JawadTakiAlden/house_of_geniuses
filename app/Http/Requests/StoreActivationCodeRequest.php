@@ -26,7 +26,16 @@ class StoreActivationCodeRequest extends FormRequest
         return [
             'type' => 'required|string|in:'.CodeType::SINGLE . ',' .CodeType::SHARED . ',' . CodeType::SHARED_SELECTED,
             'quantity' => 'required|numeric|min:1|max:200',
-            'title' => 'nullable|string|max:255',
+            'title' => [
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/^[^\x00-\x1F\\\/:\*\?"<>\|]+$/',
+                Rule::unique('activation_codes', 'path')->where(function ($query) {
+                    $title = $this->input('title') . '.xlsx';
+                    $query->where('path', $title);
+                }),
+            ],
             'number_of_courses' => 'required_if:type,' . CodeType::SHARED_SELECTED . '|numeric|min:1' ,
             'courses' => 'required_if:type,' . CodeType::SINGLE . '|required_if:type,' . CodeType::SHARED . '|array',
             'courses.*' => ['required' , 'numeric' , Rule::exists('courses' , 'id')],
