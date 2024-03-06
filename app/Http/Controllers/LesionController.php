@@ -8,6 +8,7 @@ use App\HttpResponse\HTTPResponse;
 use App\Models\Lesion;
 use App\Http\Requests\StoreLesionRequest;
 use App\Http\Requests\UpdateLesionRequest;
+use App\Types\LesionType;
 use Illuminate\Support\Facades\Storage;
 use Vimeo\Vimeo;
 
@@ -18,6 +19,14 @@ class LesionController extends Controller
         return $this->error($th->getMessage() , 500);
     }
 
+    private Vimeo $client;
+
+    public function __construct()
+    {
+        $this->client = new Vimeo("1a223f522e28ec1fb6b9e8e25f088348ecf1a6ef"
+            , "xEjIb7Q0J2zYJRfsgpb1XRcwG2XRig/Nm5Gr3nejJMuFuuLGxr1lx0Z2A7kHN8MOvMPHhLG+pOX5fI5bk7WC5YIvQsPpv+9/pM2a8UlyqQOCfg7VqtGRZ9qtlHcOUH3t",
+            "b666b813b6109e0574302a8d4237445a");
+    }
     public function getAll($chpaterID){
         try {
             $chapter = HelperFunction::getChapterByID($chpaterID);
@@ -104,11 +113,7 @@ class LesionController extends Controller
                     $lesion->title . ' added successfully to ' . $lesion->chapter->name . ' in ' . $lesion->chapter->course->name . ' course'
                 );
             }else if ($type === 'video'){
-                $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
-                    , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
-                    "0090c4cf290951714e846847fe8b2fe5");
-
-                $response = $client->request($request->videoURI, array(), 'GET');
+                $response = $this->client->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
                 $date = [
                     'description' => $responseData['description'],
@@ -134,64 +139,56 @@ class LesionController extends Controller
         }
     }
 
-//    TODO update lesion should be fixed
     public function update(UpdateLesionRequest $request , $lesionID){
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
             if (!$lesion){
                 return $this->error('lesion dose\'nt found in our system' , 404);
             }
-            $type = $request->type;
-            if ($type){
-                if ($type === 'video'){
-                    $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
-                        , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
-                        "0090c4cf290951714e846847fe8b2fe5");
-
-                    $response = $client->request($request->videoURI, array(), 'GET');
+            if ($lesion->type === LesionType::VIDEO){
+                $data = [
+                    'is_visible' => $request->is_visible,
+                    'is_open' => $request->is_open,
+                ];
+                if ($request->videoURI){
+                    $response = $this->client->request($request->videoURI, array(), 'GET');
                     $responseData = $response['body'];
-                    Storage::delete($lesion->link);
-                    $data = [
-                        'link' => $responseData['uri'],
+                    $data = array_merge($data , [
                         'description' => $responseData['description'],
                         'time' => intval($responseData['duration']) / 60,
-                        'type' => $type,
-                        'is_visible' => $request->is_visible,
-                        'is_open' => $request->is_open,
-                    ];
-                    if ($request->title){
-                        $data = array_merge($data , ['title' => $request->title]);
+                        'link' => $responseData['uri'],
+                    ]);
+                    if (!$request->title){
+                        $data['title'] = $responseData['name'];
                     }else{
-                        $data = array_merge($data , ['title' => $responseData['name']]);
+                        $data['title'] = $request->title;
                     }
-                    $lesion->update($data);
                 }
-                else if ($type === 'pdf'){
+                else{
+                    $data['title'] = $request->title;
+                }
+                $lesion->update($data);
+            }else {
+                $data = [
+                    'is_visible' => $request->is_visible,
+                    'is_open' => $request->is_open,
+                    'time' => $request->time,
+                    'description' => $request->description
+                ];
+
+                if ($request->pdfFile){
+                    Storage::delete($lesion->link);
                     $pdfFile = $request->file('pdfFile');
                     $pdfFile->store('pdf_lesions', 'public');
                     $filePath = Storage::putFile('pdf_lesions', $pdfFile);
-                    $data = array_merge(
-                        [
-                        'title' => $pdfFile->getClientOriginalName(),
-                        'link' => $filePath,
-                        'type' => $type
-                        ],
-                        $request->only(['s_visible' , 'is_open' , 'time' , 'title'])
-                    );
-                    $lesion->update($data);
-                }
-            }else{
-                $data = $request->only(['is_visible' , 'is_open']);
-                if ($lesion->type === 'video' && !$request->title){
-                    $client = new Vimeo("f5558ea3eb98817fbe2126ae2541b6e11bfb0e44"
-                        , "bXD6qM5hnj79bWmodVz7vIw4ZS1maOBgVUl8N5cWnV2r6aTMZ6QNI3UT5LwW+lOSLRH2vvfoE1xoAuKfsjNbe+pEjXwaSXt+7XCPxaJzNWQJi/GWUbkd3o4DcM307fP9",
-                        "0090c4cf290951714e846847fe8b2fe5");
-
-                    $response = $client->request($request->videoURI, array(), 'GET');
-                    $responseData = $response['body'];
-                    $data = array_merge($data , ['title' => $responseData['name']]);
+                    $data['link'] = $filePath;
+                    if (!$request->title){
+                        $data['title'] = $pdfFile->getClientOriginalName();
+                    }else{
+                        $data['title'] = $request->title;
+                    }
                 }else{
-                    $data = array_merge($data , ['title' => $request->title]);
+                    $data['title'] = $request->title;
                 }
                 $lesion->update($data);
             }
