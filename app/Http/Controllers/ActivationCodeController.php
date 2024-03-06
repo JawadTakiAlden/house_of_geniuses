@@ -37,7 +37,6 @@ class ActivationCodeController extends Controller
             $type = $request->get('type');
             $courses = $request->get('courses');
             $quantity = intval($request->get('quantity'));
-
             $exportData = collect();
             DB::beginTransaction();
             if ($type === CodeType::SINGLE){
@@ -98,11 +97,11 @@ class ActivationCodeController extends Controller
                 }
             }
             $fileName = "";
+            $currentDateTime = Carbon::now();
+            $formattedDateTime = $currentDateTime->format('Y-m-d h:i:s A');
             if ($request->title){
-                $fileName = $request->title . '.xlsx';
+                $fileName = $request->title . '_' . $currentDateTime . '.xlsx';
             }else{
-                $currentDateTime = Carbon::now();
-                $formattedDateTime = $currentDateTime->format('Y-m-d h:i:s A');
                 $fileName = $quantity . ' activation codes from type ' . $type  . ' in ' . $formattedDateTime.".xlsx";
             }
             $folder = 'excel_files';
