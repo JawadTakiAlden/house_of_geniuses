@@ -24,7 +24,7 @@ class StoreActivationCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|string|in:'.CodeType::SINGLE . ',' .CodeType::SHARED . ',' . CodeType::SHARED_SELECTED,
+            'type' => 'required|string|in:'.implode(',',[CodeType::SINGLE ,CodeType::SHARED , CodeType::SHARED_SELECTED , CodeType::GIFt]),
             'quantity' => 'required|numeric|min:1|max:200',
             'title' => 'nullable|string|max:255',
             'number_of_courses' => 'required_if:type,' . CodeType::SHARED_SELECTED . '|numeric|min:1' ,

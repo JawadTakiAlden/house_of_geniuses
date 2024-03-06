@@ -82,7 +82,7 @@ class ActivationCodeController extends Controller
                         ]);
                     }
                 }
-            }else{
+            }else if ($type === CodeType::SHARED_SELECTED){
                 for ($i = 0 ; $i < $quantity ; $i++) {
                     $code = $this->getRandomCode();
                     while (ActivationCode::where('code', $code)->exists()) {
@@ -91,6 +91,19 @@ class ActivationCodeController extends Controller
                     $newActivationCode = ActivationCode::create([
                         'code' => $code,
                         'times_of_usage' => $request->number_of_courses,
+                        'type' => $type
+                    ]);
+                    $exportData->push($newActivationCode);
+                }
+            }else {
+                for ($i = 0 ; $i < $quantity ; $i++) {
+                    $code = $this->getRandomCode();
+                    while (ActivationCode::where('code', $code)->exists()) {
+                        $code = Str::random(15);
+                    }
+                    $newActivationCode = ActivationCode::create([
+                        'code' => $code,
+                        'times_of_usage' => 1,
                         'type' => $type
                     ]);
                     $exportData->push($newActivationCode);
