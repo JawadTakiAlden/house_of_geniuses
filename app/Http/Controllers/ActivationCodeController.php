@@ -107,14 +107,14 @@ class ActivationCodeController extends Controller
             $coursesNameSpreatedByComma = collect($courses)->map(fn($course) =>
                 Course::where('id' , $course)->pluck('name')
             )->implode('| ');
-             ExportableFile::create([
+             $exportableFile = ExportableFile::create([
                'path' => $fileName,
                'type_of_code' => $type,
                'courses_name' => $coursesNameSpreatedByComma
             ]);
             Excel::store(new ActivationCodesExport($exportData->toArray()), $filePath);
             DB::commit();
-            return Storage::download($filePath);
+            return $this->success($exportableFile->path);
         }catch (\Throwable $th){
             DB::rollBack();
             return $this->catchError($th);
