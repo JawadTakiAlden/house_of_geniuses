@@ -17,7 +17,7 @@ class CategoryController extends Controller
             $categories = Category::all();
             return $this->success(CategoryResource::collection($categories));
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
     public function visibleCategories(){
@@ -25,7 +25,7 @@ class CategoryController extends Controller
             $categories = Category::where('is_visible' , true)->get();
             return $this->success(CategoryResource::collection($categories));
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -33,14 +33,14 @@ class CategoryController extends Controller
         try {
             $category = HelperFunction::getCategoryByID($categoryID);
             if (!$category) {
-                return $this->error('category does\'nt found in our system' , 404);
+                return $this->error(__("messages.error.not_found") , 404);
             }
             $category->update([
                 'is_visible' => !$category->is_visible
             ]);
             return $this->success(CategoryResource::make($category) , $category->name . ' updated successfully');
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -48,9 +48,9 @@ class CategoryController extends Controller
         $request->validated($request->only(['name','is_visible']));
         try {
             $category = Category::create($request->only(['name','is_visible']));
-            return $this->success(CategoryResource::make($category) , $category->name . ' created successfully');
+            return $this->success(CategoryResource::make($category) , __('messages.category_controller.create_category'));
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -58,11 +58,11 @@ class CategoryController extends Controller
         try {
             $category = HelperFunction::getCategoryByID($categoryID);
             if (!$category) {
-                return $this->error('category does\'nt found in our system' , 404);
+                return $this->error(__("messages.error.not_found"), 404);
             }
             return $this->success(CategoryResource::make($category));
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -70,27 +70,25 @@ class CategoryController extends Controller
         try {
             $category = HelperFunction::getCategoryByID($categoryID);
             if (!$category) {
-                return $this->error('category does\'nt found in our system' , 404);
+                return $this->error(__("messages.error.not_found") , 404);
             }
-            $request->validated($request->only(['name' , 'is_visible']));
             $category->update($request->only(['name' , 'is_visible']));
-
-            return $this->success(CategoryResource::make($category) , $category->name . ' updated successfully');
+            return $this->success(CategoryResource::make($category) , __('messages.category_controller.update_category'));
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
     public function destroy($categoryID){
-        $category = HelperFunction::getCategoryByID($categoryID);
-        if (!$category) {
-            return $this->error('category does\'nt found in our system' , 404);
-        }
         try {
+            $category = HelperFunction::getCategoryByID($categoryID);
+            if (!$category) {
+                return $this->error(__("messages.error.not_found") , 404);
+            }
             $category->delete();
-            return $this->success(CategoryResource::make($category) ,$category->name .' deleted successfully' );
+            return $this->success(CategoryResource::make($category) ,__('messages.category_controller.delete_category') );
         }catch(\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }

@@ -12,14 +12,11 @@ use App\Http\Requests\UpdateChapterRequest;
 class ChapterController extends Controller
 {
     use HTTPResponse;
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
     public function getAll($courseID){
         try {
             $course = HelperFunction::getCourseByID($courseID);
             if (!$course){
-                return $this->error('course dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapters = Chapter::where('course_id' , $courseID)->get();
             return $this->success(ChapterResource::collection($chapters));
@@ -32,7 +29,7 @@ class ChapterController extends Controller
         try {
             $course = HelperFunction::getCourseByID($courseID);
             if (!$course){
-                return $this->error('course dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapters = Chapter::where('course_id' , $courseID)->where('is_visible' , true)->get();
             return $this->success(ChapterResource::collection($chapters));
@@ -44,15 +41,12 @@ class ChapterController extends Controller
         try {
             $chapter = HelperFunction::getChapterByID($chapterID);
             if (!$chapter){
-                return $this->error('chapter dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapter->update([
                'is_visible' => !$chapter->is_visible
             ]);
-            return $this->success(ChapterResource::make($chapter)
-                , 'chapter change to be ' .
-                $chapter->is_visible ? 'visible' : 'invisible' . ' successfully'
-            );
+            return $this->success(ChapterResource::make($chapter) , __("messages.chapter_controller.visibility_switch"));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
@@ -62,40 +56,36 @@ class ChapterController extends Controller
         try {
             $chapter = HelperFunction::getChapterByID($chapterID);
             if (!$chapter){
-                return $this->error('chapter dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapter->delete();
-            return $this->success(ChapterResource::make($chapter)
-                , 'chapter deleted successfully'
-            );
+            return $this->success(ChapterResource::make($chapter) ,  __("messages.chapter_controller.delete"));
         }catch(\Throwable $th){
             return $this->catchError($th);
         }
     }
 
     public function store(StoreChapterRequest $request){
-        $request->validated($request->only('name' , 'course_id' , 'is_visible'));
         try {
             $course = HelperFunction::getCourseByID(intval($request->course_id));
             if (!$course){
-                return $this->error('course does\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapter = Chapter::create($request->only('name' , 'course_id' , 'is_visible'));
-            return $this->success(ChapterResource::make($chapter) , $chapter->name . ' added successfully to ' . $chapter->course->name);
+            return $this->success(ChapterResource::make($chapter) ,  __("messages.chapter_controller.create"));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }
     }
 
     public function update(UpdateChapterRequest $request , $chapterID){
-        $request->validated($request->only(['name' , 'is_visible']));
         try {
             $chapter = HelperFunction::getChapterByID($chapterID);
             if (!$chapter){
-                return $this->error('chapter dose\'nt found in our system' , 404);
+                return HelperFunction::notFoundResponce();
             }
             $chapter->update($request->only(['name' , 'is_visible']));
-            return $this->success(ChapterResource::make($chapter) , $chapter->name . ' updated successfully');
+            return $this->success(ChapterResource::make($chapter) ,  __("messages.chapter_controller.update"));
         }catch (\Throwable $th){
             return $this->catchError($th);
         }

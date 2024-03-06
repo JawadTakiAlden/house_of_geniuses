@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HelperFunction;
 use App\Http\Requests\LoginAdminRequest;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\SignUpRequest;
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\Gate;
 class AuthController extends Controller
 {
     use HTTPResponse;
-
     public function signup (SignUpRequest $request) {
         try {
             DB::beginTransaction();
@@ -27,10 +27,10 @@ class AuthController extends Controller
             return $this->success([
                 "token" =>  $user->createToken("API TOKEN")->plainTextToken,
                 "user" => UserResource::make($user)
-            ] , trans('messages.create_new_user'));
+            ] , __('messages.auth_controller.register'));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->error("server error with message : " . $th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -40,16 +40,16 @@ class AuthController extends Controller
             $user = User::where('phone', $request->phone)->first();
             if (!$user){
                 return $this->error(
-                    trans('messages.login_password_email_error')
+                    __('messages.not_found')
                     , 401);
             }
             if (strval($user->type) !== UserType::ADMIN){
                 return $this->error(
-                    trans('messages.admin_permission')
+                    __('messages.error.admin_permission')
                     , 403);
             }
             if (!Auth::attempt($request->only(['phone', 'password']))) {
-                return $this->error(trans('messages.login_password_email_error')
+                return $this->error(__('messages.auth_controller.error.credentials_error')
                     , 401);
             }
             $token = $user->createToken('API TOKEN')->plainTextToken;
@@ -57,10 +57,10 @@ class AuthController extends Controller
             return $this->success([
                 "token" => $token,
                 "user" => UserResource::make($user),
-            ] , trans('messages.login' , [ 'name' => $user->full_name ]));
+            ] , __('messages.auth_controller.login' , ['user_name' => $user->full_name]));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -70,14 +70,13 @@ class AuthController extends Controller
             $user = User::where('phone', $request->phone)->first();
             if (!$user){
                 return $this->error(
-                    trans('messages.login_password_email_error')
-                , 401);
+                    __('messages.not_found')
+                , 404);
             }
             if ($user->is_blocked){
-                return $this->error(trans('messages.account_blocked'), 403);
+                return $this->error(__('messages.error.blocked_account'), 403);
             }
 
-//            maybe account created from the dashboard by admin and didn't have device_id
             if (boolval($user->device_id)){
                 if ($user->device_id !== $request->device_id){
                     $user->update([
@@ -85,11 +84,11 @@ class AuthController extends Controller
                     ]);
                     $user->tokens()->delete();
                     DB::commit();
-                    return $this->error(trans('messages.block_while_login_message'), 403);
+                    return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
                 }
             }
             if (!Auth::attempt($request->only(['phone', 'password']))) {
-                return $this->error(trans('messages.login_password_email_error')
+                return $this->error(__('messages.auth_controller.error.credentials_error')
                     , 401);
             }
             if (!$user->device_id){
@@ -105,10 +104,10 @@ class AuthController extends Controller
             return $this->success([
                 "token" => $token,
                 "user" => UserResource::make($user),
-            ] , trans('messages.login' , [ 'name' => $user->full_name ]));
+            ] , __('messages.auth_controller.login' , [ 'name' => $user->full_name ]));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -118,10 +117,10 @@ class AuthController extends Controller
             $user = Auth::user();
             $user->currentAccessToken()->delete();
             DB::commit();
-            return $this->success($user , trans('messages.logout', ['name' => $user->full_name]));
+            return $this->success($user , __('messages.auth_controller.logout' , ['name' => $user->full_name]));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 

@@ -17,6 +17,7 @@ use App\Models\User;
 
 class HelperFunction
 {
+    use HTTPResponse;
     public static function getUserById ($userID , array $with = []){
         return User::with($with)->where('id' , $userID)->first();
     }
@@ -57,5 +58,13 @@ class HelperFunction
 
     public static function getQuizByID($quizID){
         return Quiz::where('id' , $quizID)->first();
+    }
+
+    public static function ServerErrorResponse(){
+        return (new HelperFunction)->error(__('messages.error.server_error') , 500);
+    }
+
+    public static function notFoundResponce(){
+        return (new HelperFunction)->error(__('messages.error.not_found') , 404);
     }
 }

@@ -13,22 +13,19 @@ use Illuminate\Http\Request;
 class ChoiceController extends Controller
 {
     use HTTPResponse;
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
     public function store(StoreChoiceRequest $request , $questionID){
         try {
             $question = HelperFunction::getQuestionByID($questionID);
             if (!$question){
-                return $this->error(trans('messages.question_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             if ($request->is_true){
                 $question->choices()->where('is_true' , true)->update(['is_true' => false]);
             }
             Choice::create(array_merge($request->only(['title' , 'is_visible' , 'image' , 'is_true']) , ['question_id' => $questionID] ));
-            return $this->success(QuestionResource::make($question) , trans('messages.create_choice'));
+            return $this->success(QuestionResource::make($question) , __('messages.choice_controller.create'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -36,12 +33,12 @@ class ChoiceController extends Controller
         try {
             $choice = HelperFunction::getChoiceByID($choiceID);
             if (!$choice){
-                return $this->error(trans('messages.choice_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $choice->update($request->only(['title','image']));
-            return $this->success(QuestionResource::make($choice->question) , trans('messages.update_choice'));
+            return $this->success(QuestionResource::make($choice->question) ,__('messages.choice_controller.update'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -49,12 +46,12 @@ class ChoiceController extends Controller
         try {
             $choice = HelperFunction::getChoiceByID($choiceID);
             if (!$choice){
-                return $this->error(trans('messages.choice_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $choice->delete();
-            return $this->success(QuestionResource::make($choice->question) , trans('messages.delete_choice'));
+            return $this->success(QuestionResource::make($choice->question) , __('messages.choice_controller.delete'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -62,7 +59,7 @@ class ChoiceController extends Controller
         try {
             $choice = HelperFunction::getChoiceByID($choiceID);
             if (!$choice){
-                return $this->error(trans('messages.choice_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $choice->question->choices()->where('is_true' , true)->update([
                 'is_true' => false
@@ -70,9 +67,9 @@ class ChoiceController extends Controller
             $choice->update([
                 'is_true' => true
             ]);
-            return $this->success(QuestionResource::make($choice->question));
+            return $this->success(QuestionResource::make($choice->question) , __('messages.choice_controller.make_choice_true'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -80,14 +77,14 @@ class ChoiceController extends Controller
         try {
             $choice = HelperFunction::getChoiceByID($choiceID);
             if (!$choice){
-                return $this->error(trans('messages.choice_not_found') , 404);
+                return HelperFunction::notFoundResponce();
             }
             $choice->update([
                 'is_visible' => !$choice->is_visible
             ]);
-            return $this->success(QuestionResource::make($choice->question));
+            return $this->success(QuestionResource::make($choice->question) , __('messages.choice_controller.visibility_switch'));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ActivationCodesExport;
+use App\Http\HelperFunction;
 use App\Http\Requests\CheckCodeRequest;
 use App\Http\Resources\CheckActivationCodeResource;
 use App\HttpResponse\HTTPResponse;
@@ -24,10 +25,6 @@ class ActivationCodeController extends Controller
 {
     use HTTPResponse;
 
-    private function catchError ($th) {
-        return $this->error($th->getMessage() , 500);
-    }
-
     private function getRandomCode(){
         return strtoupper(Str::random(6));
     }
@@ -42,7 +39,7 @@ class ActivationCodeController extends Controller
             if ($type === CodeType::SINGLE){
 //                handle single code type
                 if (count($courses) > 1){
-                    return $this->error('please select just one course for single type or switch for shared type' , 422);
+                    return $this->error(__("messages.activation_code_controller.error.select_more_than_one_course") , 422);
                 }
                 for ($i = 0 ; $i < $quantity ; $i++){
                     $code = $this->getRandomCode();
@@ -62,7 +59,7 @@ class ActivationCodeController extends Controller
                 }
             }else if ($type === CodeType::SHARED) {
                 if (count($courses) <= 1){
-                    return $this->error('please select more than one course for shared type or switch for single type' , 422);
+                    return $this->error(__("messages.activation_code_controller.error.select_less_than_two_course") , 422);
                 }
                 for ($i = 0 ; $i < $quantity ; $i++){
                     $code = $this->getRandomCode();
@@ -129,10 +126,10 @@ class ActivationCodeController extends Controller
             ]);
             Excel::store(new ActivationCodesExport($exportData->toArray()), $filePath);
             DB::commit();
-            return $this->success($exportableFile->path);
+            return $this->success($exportableFile->path , __("messages.activation_code_controller.generate_codes_successfully"));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -140,11 +137,11 @@ class ActivationCodeController extends Controller
         try {
             $code = ActivationCode::where('code' , $request->code)->first();
             if (!$code){
-                return $this->error(__('messages.activation_code_not_found') , 422);
+                return $this->error(__('messages.error.not_found') , 404);
             }
             return $this->success(CheckActivationCodeResource::make($code));
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
@@ -153,7 +150,7 @@ class ActivationCodeController extends Controller
             $codes = ActivationCode::where('times_of_usage' , '>' , 0)->get();
             return $this->success($codes);
         }catch(\Throwable $th){
-            return $this->catchError($th);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 }
