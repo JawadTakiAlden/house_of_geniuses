@@ -19,7 +19,7 @@ class CheckActivationCodeResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'type' => $this->type,
-            'is_expired' => $this->isExpired,
+            'is_expired' => $this->isExpired(),
             'courses' => $this->courseCanActivated->map(function($obj){
                 $base = [
                     'course_name' => $obj->course->name,
@@ -32,7 +32,6 @@ class CheckActivationCodeResource extends JsonResource
                             ->first()->user->full_name
                     ]);
                 }
-
                 return $base;
             })
         ];
