@@ -25,6 +25,7 @@ class VideoController extends Controller
             $queryParams = [];
             if (\request('link')) {
                 $link = \request('link');
+                $link = strtok($link, '?');
                 $queryParams['query'] = $link;
             }
             $response = $this->client->request('/users/216130188/videos',$queryParams, 'GET');
