@@ -75,7 +75,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/all/{chapter}' , [LesionController::class , 'getAll']); //not used any more
                     Route::patch('/switchVisibility/{lesion}' , [LesionController::class , 'switchVisibility']); //not used
                     Route::post('/create' , [LesionController::class , 'store']); // done
-                    Route::patch('/update/{lesion}' , [LesionController::class , 'update']); //done
+                    Route::post('/update/{lesion}' , [LesionController::class , 'update']); //done
                     Route::delete('/delete/{lesion}' , [LesionController::class , 'delete']); //done
                 });
                 Route::prefix('/statistics')->group(function (){
