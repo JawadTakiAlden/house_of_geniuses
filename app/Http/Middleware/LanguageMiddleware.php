@@ -16,7 +16,7 @@ class LanguageMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $language = $request->query('ln');
+        $language = \request('ln');
         if (in_array($language , ['ar' , 'en'])){
             App::setLocale($language);
         }
