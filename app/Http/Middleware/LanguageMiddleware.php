@@ -19,8 +19,9 @@ class LanguageMiddleware
         $language = $request->query('ln');
         if ($language === 'en'){
             App::setLocale($language);
+        }else{
+            App::setLocale('ar');
         }
-        App::setLocale('ar');
         return $next($request);
     }
 }
