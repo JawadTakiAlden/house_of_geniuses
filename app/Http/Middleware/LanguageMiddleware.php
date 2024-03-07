@@ -16,11 +16,11 @@ class LanguageMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $language = \request('ln');
+        $language = $request->query('ln');
         if (in_array($language , ['ar' , 'en'])){
             App::setLocale($language);
         }
-        App::setLocale('ar');
+        App::setLocale('en');
         return $next($request);
     }
 }
