@@ -22,10 +22,14 @@ class EnrollmentWithTypeOfCodeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'total' => $count_by_single+$count_by_shared+$count_by_shared_selected+$manualEnrolment+$count_by_gift,
+            'total' => $count_by_single
+                +$count_by_shared
+                +$count_by_shared_selected
+                +$manualEnrolment
+                +$count_by_gift,
             'number_single_code_enrolment' => $count_by_single,
-            'number_shared_code_enrolment' => $count_by_single,
-            'number_shared_selected_code_enrolment' => $count_by_single,
+            'number_shared_code_enrolment' => $count_by_shared,
+            'number_shared_selected_code_enrolment' => $count_by_shared_selected,
             'number_gift_code_enrolment' => $count_by_gift,
             'manual_enrolment' => $manualEnrolment
         ];
