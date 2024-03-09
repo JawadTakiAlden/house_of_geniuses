@@ -19,15 +19,16 @@ class UserWatchController extends Controller
             }
             if (
                 UserWatch::where('user_id' , auth()->user()->id)->where('lesion_id' , $lesionID)->exists()
-                || !AccountInrolment::where('course_id' , $lesion->course_id)->where('user_id' , auth()->user()->id)->exists()
+                || (!AccountInrolment::where('course_id' , $lesion->course_id)
+                    ->where('user_id' , auth()->user()->id)->exists() && !$lesion->is_open)
             ){
-                return $this->success(null , __('messages.user_watch_controller_watch_registered'));
+                return $this->success(null , __('messages.user_watch_controller.watch_registered'));
             }
             UserWatch::create([
                'user_id' =>  auth()->user()->id,
                 'lesion_id' => $lesionID
             ]);
-            return $this->success(null , __('messages.user_watch_controller_watch_registered'));
+            return $this->success(null , __('messages.user_watch_controller.watch_registered'));
         }catch(\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
