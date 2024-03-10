@@ -124,7 +124,7 @@ Congratulations! You have been successfully enrolled in the course :course_name 
         "update_profile" => "✅ Profile updated successfully! 🔄 Your profile information has been successfully updated. Thank you for keeping your details current! ",
         "block_switch" => "✅ Account block status updated successfully! 🚫 The block status of the account has been switched successfully. ",
         "delete_user" => "✅ Account and related data removed successfully! 🗑️ The account has been deleted along with all associated data. Cleanup complete! ",
-        "reset_password" => "We have reset the password for this account. Make sure to keep your password in a safe place"
+        "reset_password" => "✅ We have reset the password for this account. Make sure to keep your password in a safe place"
     ],
     "user_watch_controller" => [
         "watch_registered" => "👀 Video watch registered! 📹 Your watch of the video has been successfully recorded by the system. Keep exploring our content! ",
