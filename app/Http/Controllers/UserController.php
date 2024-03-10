@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\InrolmentsResource;
@@ -125,6 +126,20 @@ class UserController extends Controller
 //            return $this->error($th->getMessage() , 500);
 //        }
 //    }
+
+
+    public function resetPassword(ResetPasswordRequest $request , $userID){
+        try {
+            $user = HelperFunction::getUserById($userID);
+            if (!$user){
+                return HelperFunction::notFoundResponce();
+            }
+            $user->update($request->only(['new_password']));
+            return $this->success(UserResource::make($user) , __('messages.user_controller.reset_password'));
+        }catch (\Throwable $th){
+            return HelperFunction::ServerErrorResponse();
+        }
+    }
 
     public function switchBlockState($userID) {
         try {
