@@ -102,7 +102,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);//done
                     Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']); //done
                     Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
-                    Route::patch('/resetPassword' , [UserController::class , 'resetPassword']);
+                    Route::patch('/resetPassword/{user}' , [UserController::class , 'resetPassword']);
                 });
 
                 Route::prefix('/courses')->group(function (){
