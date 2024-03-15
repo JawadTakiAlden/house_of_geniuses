@@ -134,7 +134,9 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
-            $user->update($request->only(['new_password']));
+            $user->update([
+                'password' => $request->new_password
+            ]);
             return $this->success(UserResource::make($user) , __('messages.user_controller.reset_password'));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
