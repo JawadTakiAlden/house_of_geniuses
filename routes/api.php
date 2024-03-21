@@ -102,7 +102,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/teachers' , [UserController::class , 'getTeacher']); //done
                     Route::get('/insideCourse/{course}' , [UserController::class , 'getAllUserThatSignInToThis']);//done
                     Route::get('/allCoursesOf/{user}' , [UserController::class , 'GetAllInrolnmentCourseForThis']); //done
-                    Route::delete('/delete/{user}' , [UserController::class , 'destroy']); //done
+                     //done
                     Route::patch('/resetPassword/{user}' , [UserController::class , 'resetPassword']);
                 });
 
@@ -168,6 +168,7 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/download' , [VideoController::class , 'download']);
                     Route::prefix('/users')->group(function (){
                         Route::post('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
+                        Route::delete('/delete/{user}' , [UserController::class , 'destroy']);
                         Route::get('/myProfile' , [UserController::class , 'profile']);
                         Route::get('/{user}/courses' , [UserController::class , 'inrollnmentCourseOfUser']);
                     });

@@ -227,6 +227,9 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
+            if (intval( \request()->user()->id) !== intval($userID)){
+                return $this->permissionDenide();
+            }
             $user->delete();
             return $this->success(UserResource::make($user) , __('messages.user_controller.delete_user'));
         }catch(\Throwable $th){
