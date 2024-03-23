@@ -96,6 +96,7 @@ Route::middleware(['language'])->group(function (){
                     Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']); //done
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);
                     Route::post('/create' , [UserController::class , 'create']); // done
+                    Route::get('/students' , [UserController::class , 'getStudents']); // done
                     Route::get('/all' , [UserController::class , 'getAllUser']); // done
                     Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']); //done
                     Route::get('/blocked' , [UserController::class , 'getAllBlockedUser']);

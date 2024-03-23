@@ -162,9 +162,19 @@ class UserController extends Controller
 
     }
 
-    public function getAllUser(){
+    public function getStudents(){
         try {
             $users = User::where('type' , UserType::STUDENT)->get();
+            return $this->success(UserResource::collection($users));
+        }catch(\Throwable $th){
+            return HelperFunction::ServerErrorResponse();
+        }
+    }
+
+
+    public function getAllUser(){
+        try {
+            $users = User::orderBy('created_at' , 'desc')->get();
             return $this->success(UserResource::collection($users));
         }catch(\Throwable $th){
             return HelperFunction::ServerErrorResponse();
