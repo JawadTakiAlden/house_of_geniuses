@@ -227,7 +227,7 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
-            if (intval( \request()->user()->id) !== intval($userID)){
+            if (intval( \request()->user()->id) !== intval($userID) && \request()->user()->type !== UserType::ADMIN){
                 return $this->permissionDenide();
             }
             $user->delete();
