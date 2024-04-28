@@ -57,7 +57,8 @@ class ActivationCodeController extends Controller
                         'course_id' => $courses[0],
                     ]);
                 }
-            }else if ($type === CodeType::SHARED) {
+            }
+            else if ($type === CodeType::SHARED) {
                 if (count($courses) <= 1){
                     return $this->error(__("messages.activation_code_controller.error.select_less_than_two_course") , 422);
                 }
@@ -79,7 +80,8 @@ class ActivationCodeController extends Controller
                         ]);
                     }
                 }
-            }else if ($type === CodeType::SHARED_SELECTED){
+            }
+            else if ($type === CodeType::SHARED_SELECTED){
                 for ($i = 0 ; $i < $quantity ; $i++) {
                     $code = $this->getRandomCode();
                     while (ActivationCode::where('code', $code)->exists()) {
@@ -92,7 +94,8 @@ class ActivationCodeController extends Controller
                     ]);
                     $exportData->push($newActivationCode);
                 }
-            }else {
+            }
+            else {
                 for ($i = 0 ; $i < $quantity ; $i++) {
                     $code = $this->getRandomCode();
                     while (ActivationCode::where('code', $code)->exists()) {

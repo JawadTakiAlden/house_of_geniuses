@@ -303,7 +303,7 @@ class CourseController extends Controller
             if (intval($code->times_of_usage) === 0){
                 return $this->error(trans('messages.error.activation_code_expired') , 403);
             }
-            if ($code->type === CodeType::SHARED_SELECTED){
+            if ($code->type === CodeType::SHARED_SELECTED || $code->type === CodeType::GIFt){
                 $courseAlreadyActivatedByCode = CourseCanActivated::where('activation_code_id' , $code->id)
                     ->where('course_id' , $course->id)->first();
                 if ($courseAlreadyActivatedByCode){
