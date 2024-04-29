@@ -25,6 +25,7 @@ class ExportableFileController extends Controller
         }
 
         $filePath = 'excel_files/' . $fileName;
+        return $this->success(Storage::get($filePath));
         return Storage::download($filePath);
     }
 
