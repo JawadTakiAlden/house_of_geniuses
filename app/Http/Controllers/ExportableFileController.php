@@ -19,13 +19,18 @@ class ExportableFileController extends Controller
 
     public function downloadFile($fileName)
     {
-        $file = ExportableFile::where('path', $fileName)->first();
-        if (!$file) {
-            return $this->error('the requested file doesnt found in our system' , 404);
+        try {
+            $file = ExportableFile::where('path', $fileName)->first();
+            if (!$file) {
+                return $this->error('the requested file doesnt found in our system' , 404);
+            }
+
+            $filePath = 'excel_files/' . $fileName;
+            return Storage::download($filePath);
+        }catch (\Throwable $th){
+            return $this->error($th->getMessage() , 500);
         }
 
-        $filePath = 'excel_files/' . $fileName;
-        return Storage::download($filePath);
     }
 
     public function deleteFile($fileName)
