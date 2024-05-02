@@ -29,6 +29,8 @@ return [
     |
     */
 
+    'firebase_server_key' => env('FIREBASE_SERVER_KEY'),
+
     'env' => env('APP_ENV', 'production'),
 
     /*
