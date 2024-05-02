@@ -15,7 +15,7 @@ class NotificationController extends Controller
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $server_key = 'AAAAhggAXOM:APA91bFlPweIZXPYUlmObCTFaQlvzm3Op6G_fyq9RJcpN81kmekCaEz00vbhnW3dQLZredAQYCD1qg6kswC5H0ZAuNrucMnEqNVGfnyGp5woSd7_WENU7zNWOHIE-CiUBmXalBr_btCC';
+        $server_key = env('FIREBASE_SERVER_KEY');
         $date = [
             'registration_ids' => $FcmToken,
             'notification' => [
