@@ -25,7 +25,6 @@ class NotificationController extends Controller
 
         $this->messaging = $firebase->createMessaging();
 
-
         $messageData = [
             'notification' => [
                 'title' => $title,
@@ -37,7 +36,7 @@ class NotificationController extends Controller
 
         try {
             $this->messaging->sendMulticast($message, $FcmToken);
-            return $this->success(null , __('messages.notification_controller.send_successfully'));
+            return $this->success(null, __('messages.notification_controller.send_successfully'));
         } catch (\Kreait\Firebase\Exception\MessagingException $e) {
             Log::error($e->getMessage());
         } catch (FirebaseException $e) {
