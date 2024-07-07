@@ -38,9 +38,9 @@ class NotificationController extends Controller
             $this->messaging->sendMulticast($message, $FcmToken);
             return $this->success(null, __('messages.notification_controller.send_successfully'));
         } catch (\Kreait\Firebase\Exception\MessagingException $e) {
-            return $this->error($e->getMessage());
+            return $this->error($e->getMessage() , 500);
         } catch (FirebaseException $e) {
-            return $this->error($e->getMessage());
+            return $this->error($e->getMessage() , 500);
         }
 
 //        $url = 'https://fcm.googleapis.com/fcm/send';
