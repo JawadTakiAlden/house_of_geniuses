@@ -16,9 +16,9 @@ class VideoController extends Controller
 
     public function __construct()
     {
-        $this->client = new Vimeo("1a223f522e28ec1fb6b9e8e25f088348ecf1a6ef"
-            , "xEjIb7Q0J2zYJRfsgpb1XRcwG2XRig/Nm5Gr3nejJMuFuuLGxr1lx0Z2A7kHN8MOvMPHhLG+pOX5fI5bk7WC5YIvQsPpv+9/pM2a8UlyqQOCfg7VqtGRZ9qtlHcOUH3t",
-            "b666b813b6109e0574302a8d4237445a");
+        $this->client = new Vimeo("0c54dc9c31e4fd73ce55e96e811adabfe2464e65"
+            , "5PKi7N4vdDfxa+ItVblHQCIxz93hncjmASvTa5RYSr63/BzkpvlTdRhYrasqOMDCxDHxSnAgREh06MvtGPRrD/oFVpLd8AkYXCcTPg8yeRtmcISS8t4wXHb3DtYJQEdy",
+            "51036c9679962cd9dd9642a5f85f6ca9");
     }
 
     public function getVideos () {
