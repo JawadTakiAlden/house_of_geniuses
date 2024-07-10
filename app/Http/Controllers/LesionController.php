@@ -104,10 +104,9 @@ class LesionController extends Controller
                 return $this->success(  LesionResource::make($lesion),$lesion->title . __("messages.lesion_controller.create"));
             }
             else if ($type === 'video'){
-                return $request->videoURI;
                 $response = $this->client2->request($request->videoURI, array(), 'GET');
-                $responseData = $response['body'];
-                return $responseData;
+//                $responseData = $response['body'];
+                return $response;
                 $date = [
                     'description' => $responseData['description'],
                     'link' => $responseData['uri'],
