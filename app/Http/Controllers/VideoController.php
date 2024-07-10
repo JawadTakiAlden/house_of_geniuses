@@ -39,6 +39,7 @@ class VideoController extends Controller
 //            $videos1 = $responseData1['data'];
 //return$response2;
             $responseData2 = $response2['body'];
+            return $responseData2;
             $videos2 = $responseData2['data'];
 //            $test1 = collect($videos1);
             $test2 = collect($videos2);
