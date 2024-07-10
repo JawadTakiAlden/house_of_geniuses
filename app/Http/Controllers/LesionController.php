@@ -120,7 +120,6 @@ class LesionController extends Controller
                 return $this->error(__("messages.error.unknown_lesion_type") , 422);
             }
         }catch (\Throwable $th){
-            return $this->error($th->getMessage(), 500);
             return HelperFunction::ServerErrorResponse();
         }
     }
