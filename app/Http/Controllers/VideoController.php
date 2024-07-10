@@ -20,9 +20,9 @@ class VideoController extends Controller
         $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
             , env('VIMEO_CLIENT_SECRET'),
             env('VIMEO_ACCESS_TOKEN'));
-        $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID2')
-            , env('VIMEO_CLIENT_SECRET2'),
-            env('VIMEO_ACCESS_TOKEN2'));
+        $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
+            , env('VIMEO_CLIENT_SECRET_TWO'),
+            env('VIMEO_ACCESS_TOKEN_TWO'));
     }
 
     public function getVideos () {
