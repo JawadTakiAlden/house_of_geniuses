@@ -106,6 +106,7 @@ class LesionController extends Controller
             else if ($type === 'video'){
                 $response = $this->client2->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
+                return $responseData;
                 $date = [
                     'description' => $responseData['description'],
                     'link' => $responseData['uri'],
