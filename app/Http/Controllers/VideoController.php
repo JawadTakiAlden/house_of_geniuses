@@ -57,7 +57,7 @@ class VideoController extends Controller
             if (!\request('link')){
                 return $this->error(__('messages.video_controller.link_not_correct') , 500);
             }
-            $video = $this->client->request(\request('link').'?fields=play');
+            $video = $this->client1->request(\request('link').'?fields=play');
             $data = $video['body'];
             $data = $data['play'];
             $data = $data['progressive'];
@@ -74,7 +74,7 @@ class VideoController extends Controller
             if (!\request('link')){
                 return $this->error(__('messages.video_controller.link_not_correct') , 500);
             }
-            $video = $this->client->request(\request('link').'?fields=download');
+            $video = $this->client1->request(\request('link').'?fields=download');
             $downloadArray = $video['body'];
             return response([
                 'link' => $downloadArray
