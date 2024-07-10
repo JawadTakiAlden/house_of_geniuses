@@ -21,7 +21,7 @@ class VideoController extends Controller
             , env('VIMEO_CLIENT_SECRET'),
             env('VIMEO_ACCESS_TOKEN'));
         $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID2')
-            , env('VIMEO_CLIENT_SECRE2'),
+            , env('VIMEO_CLIENT_SECRET2'),
             env('VIMEO_ACCESS_TOKEN2'));
     }
 
