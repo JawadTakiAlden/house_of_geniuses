@@ -35,15 +35,18 @@ class VideoController extends Controller
             }
             $response1 = $this->client1->request('/users/216130188/videos',$queryParams);
             $response2 = $this->client2->request('/users/222393454/videos',$queryParams);
-            return intval($response2['status']);
-            $responseData1 = $response1['body'];
-            $videos1 = $responseData1['data'];
-            $responseData2 = $response2['body'];
-            $videos2 = $responseData2['data'];
-            $test1 = collect($videos1);
-            $test2 = collect($videos2);
-            $finalData = $test1->merge($test2);
-            return $this->success(VideoResource::collection($finalData));
+            if (intval($response1['status']) == 200 && intval($response2['status']) == 200 ){
+                $responseData1 = $response1['body'];
+                $videos1 = $responseData1['data'];
+                $responseData2 = $response2['body'];
+                $videos2 = $responseData2['data'];
+                $test1 = collect($videos1);
+                $test2 = collect($videos2);
+                $finalData = $test1->merge($test2);
+                return $this->success(VideoResource::collection($finalData));
+            }else{
+                return $this->error('cannot connect with the vimeo refresh the page or connect with support' , 400);
+            }
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
