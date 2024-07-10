@@ -35,7 +35,7 @@ class VideoController extends Controller
             }
             $response1 = $this->client1->request('/users/216130188/videos',$queryParams);
             $response2 = $this->client2->request('/users/222393454/videos',$queryParams);
-            return $response2['status'];
+            return intval($response2['status']);
             $responseData1 = $response1['body'];
             $videos1 = $responseData1['data'];
             $responseData2 = $response2['body'];
