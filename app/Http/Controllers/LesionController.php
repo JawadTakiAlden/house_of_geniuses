@@ -104,24 +104,17 @@ class LesionController extends Controller
                 return $this->success(  LesionResource::make($lesion),$lesion->title . __("messages.lesion_controller.create"));
             }
             else if ($type === 'video'){
-                $response = $this->client2->request($request->videoURI, array(), 'GET');
-//                $responseData = $response['body'];
-                return $response;
-                $date = [
-                    'description' => $responseData['description'],
-                    'link' => $responseData['uri'],
-                    'time' => intval($responseData['duration']) / 60,
-                    'is_open' => $request->is_open,
-                    'is_visible' => $request->is_visible,
-                    'type' => $type,
-                    'chapter_id' => $request->chapter_id
-                ];
-                if ($request->title){
-                    $date = array_merge($date , ['title' => $request->title]);
+                $response = $this->client1->request($request->videoURI, array(), 'GET');
+                if (intval($response['status']) === 200){
+                    $lesion = $this->createVideo($request , $response['body']);
                 }else{
-                    $date = array_merge($date , ['title' => $responseData['name']]);
+                    $response = $this->client2->request($request->videoURI, array(), 'GET');
+                    if (intval($response['status']) === 200){
+                        $lesion = $this->createVideo($request , $response['body']);
+                    }else{
+                        return $this->error("sorry we can't find your video" , 404);
+                    }
                 }
-                $lesion = Lesion::create($date);
                 return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.create"));
             }else{
                 return $this->error(__("messages.error.unknown_lesion_type") , 422);
@@ -130,6 +123,26 @@ class LesionController extends Controller
             return $this->error($th->getMessage(), 500);
             return HelperFunction::ServerErrorResponse();
         }
+    }
+
+    private function createVideo($request , $responseData) {
+        $date = [
+            'description' => $responseData['description'],
+            'link' => $responseData['uri'],
+            'time' => intval($responseData['duration']) / 60,
+            'is_open' => $request->is_open,
+            'is_visible' => $request->is_visible,
+            'type' => 'video',
+            'chapter_id' => $request->chapter_id
+        ];
+        if ($request->title){
+            $date = array_merge($date , ['title' => $request->title]);
+        }else{
+            $date = array_merge($date , ['title' => $responseData['name']]);
+        }
+        $lesion = Lesion::create($date);
+
+        return $lesion;
     }
 
     public function update(UpdateLesionRequest $request , $lesionID){
