@@ -57,18 +57,28 @@ class VideoController extends Controller
             if (!\request('link')){
                 return $this->error(__('messages.video_controller.link_not_correct') , 500);
             }
-            $video = $this->client1->request(\request('link').'?fields=play');
-            $data = $video['body'];
-            $data = $data['play'];
-            $data = $data['progressive'];
-            return response([
-                'link' => $data
-            ] , 200);
+            $response = $this->client1->request(\request('link').'?fields=play');
+            if (intval($response['status']) === 200){
+                return $this->watchLinkTransformer($response);
+            }else{
+                $response = $this->client2->request(\request('link').'?fields=play');
+                if (intval($response['status']) === 200){
+                    return $this->watchLinkTransformer($response);
+                }
+            }
+
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
     }
-
+    private function watchLinkTransformer($videoResponse){
+        $data = $videoResponse['body'];
+        $data = $data['play'];
+        $data = $data['progressive'];
+        return response([
+            'link' => $data
+        ] , 200);
+    }
     public function download(){
         try {
             if (!\request('link')){
