@@ -19,9 +19,12 @@ class LesionController extends Controller
 
     public function __construct()
     {
-        $this->client = new Vimeo("1a223f522e28ec1fb6b9e8e25f088348ecf1a6ef"
-            , "xEjIb7Q0J2zYJRfsgpb1XRcwG2XRig/Nm5Gr3nejJMuFuuLGxr1lx0Z2A7kHN8MOvMPHhLG+pOX5fI5bk7WC5YIvQsPpv+9/pM2a8UlyqQOCfg7VqtGRZ9qtlHcOUH3t",
-            "b666b813b6109e0574302a8d4237445a");
+        $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
+            , env('VIMEO_CLIENT_SECRET'),
+            env('VIMEO_ACCESS_TOKEN'));
+        $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
+            , env('VIMEO_CLIENT_SECRET_TWO'),
+            env('VIMEO_ACCESS_TOKEN_TWO'));
     }
     public function getAll($chpaterID){
         try {
@@ -101,7 +104,7 @@ class LesionController extends Controller
                 return $this->success(  LesionResource::make($lesion),$lesion->title . __("messages.lesion_controller.create"));
             }
             else if ($type === 'video'){
-                $response = $this->client->request($request->videoURI, array(), 'GET');
+                $response = $this->client2->request($request->videoURI, array(), 'GET');
                 $responseData = $response['body'];
                 $date = [
                     'description' => $responseData['description'],
@@ -139,7 +142,7 @@ class LesionController extends Controller
                     'is_open' => $request->is_open,
                 ];
                 if ($request->videoURI){
-                    $response = $this->client->request($request->videoURI, array(), 'GET');
+                    $response = $this->client1->request($request->videoURI, array(), 'GET');
                     $responseData = $response['body'];
                     $data = array_merge($data , [
                         'description' => $responseData['description'],
