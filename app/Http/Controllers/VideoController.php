@@ -45,6 +45,7 @@ class VideoController extends Controller
             $finalData = $test1->merge($test2);
             return $this->success(VideoResource::collection($finalData));
         }catch (\Throwable $th){
+            return $this->error($th->getMessage(),500);
             return HelperFunction::ServerErrorResponse();
         }
     }
