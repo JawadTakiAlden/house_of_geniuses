@@ -157,16 +157,16 @@ class LesionController extends Controller
                 ];
                 if ($request->videoURI){
                     $response = $this->client1->request($request->videoURI, array(), 'GET');
-                    $responseData = $response['body'];
-                    $data = array_merge($data , [
-                        'description' => $responseData['description'],
-                        'time' => intval($responseData['duration']) / 60,
-                        'link' => $responseData['uri'],
-                    ]);
-                    if (!$request->title){
-                        $data['title'] = $responseData['name'];
+                    if (intval($response['status']) === 200){
+                         $data = array_merge($data , $this->updatedVideoData($response , $request));
                     }else{
-                        $data['title'] = $request->title;
+                        $response = $this->client1->request($request->videoURI, array(), 'GET');
+                        if (intval($response['status']) === 200){
+                            $data = array_merge($data , $this->updatedVideoData($response , $request));
+                        }
+                        else{
+                            return $this->error('we cant update your video' , 400);
+                        }
                     }
                 }
                 else{
@@ -201,6 +201,21 @@ class LesionController extends Controller
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
+    }
+
+    private function updatedVideoData ($videoResponse , $request) {
+        $responseData = $videoResponse['body'];
+        $data = [
+            'description' => $responseData['description'],
+            'time' => intval($responseData['duration']) / 60,
+            'link' => $responseData['uri'],
+        ];
+        if (!$request->title){
+            $data['title'] = $responseData['name'];
+        }else{
+            $data['title'] = $request->title;
+        }
+        return $data;
     }
 
     public function getPdfLesion($path){
