@@ -12,13 +12,17 @@ class VideoController extends Controller
 {
     use HTTPResponse;
 
-    private Vimeo $client;
+    private Vimeo $client1;
+    private Vimeo $client2;
 
     public function __construct()
     {
-        $this->client = new Vimeo(env('VIMEO_CLIENT_ID')
+        $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
             , env('VIMEO_CLIENT_SECRET'),
             env('VIMEO_ACCESS_TOKEN'));
+        $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID2')
+            , env('VIMEO_CLIENT_SECRE2'),
+            env('VIMEO_ACCESS_TOKEN2'));
     }
 
     public function getVideos () {
@@ -29,11 +33,17 @@ class VideoController extends Controller
                 $link = strtok($link, '?');
                 $queryParams['query'] = $link;
             }
-            $response = $this->client->request('/users/216130188/videos',$queryParams, 'GET');
-            $responseData = $response['body'];
-            $videos = $responseData['data'];
-            $test = collect($videos);
-            return $this->success(VideoResource::collection($test));
+            $response1 = $this->client1->request('/users/216130188/videos',$queryParams, 'GET');
+            $response2 = $this->client2->request('/users/222393454/videos',$queryParams, 'GET');
+            $responseData1 = $response1['body'];
+            $videos1 = $responseData1['data'];
+
+            $responseData2 = $response2['body'];
+            $videos2 = $responseData2['data'];
+            $test1 = collect($videos1);
+            $test2 = collect($videos2);
+            $finalData = $test1->merge($test2);
+            return $this->success(VideoResource::collection($finalData));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
