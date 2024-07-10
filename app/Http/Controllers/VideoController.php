@@ -38,12 +38,12 @@ class VideoController extends Controller
             $responseData1 = $response1['body'];
             $videos1 = $responseData1['data'];
 
-            $responseData2 = $response2['body'];
-            $videos2 = $responseData2['data'];
+//            $responseData2 = $response2['body'];
+//            $videos2 = $responseData2['data'];
             $test1 = collect($videos1);
-            $test2 = collect($videos2);
+//            $test2 = collect($videos2);
 //            $finalData = $test1->merge($test2);
-            return $this->success(VideoResource::collection($test2));
+            return $this->success(VideoResource::collection($test1));
         }catch (\Throwable $th){
             return $this->error($th->getMessage(),500);
             return HelperFunction::ServerErrorResponse();
