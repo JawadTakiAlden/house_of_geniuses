@@ -79,16 +79,26 @@ class VideoController extends Controller
             'link' => $data
         ] , 200);
     }
+    private function donwloadLinkTransformer($videoResponse){
+        $downloadArray = $videoResponse['body'];
+        return response([
+            'link' => $downloadArray
+        ] , 200);
+    }
     public function download(){
         try {
             if (!\request('link')){
                 return $this->error(__('messages.video_controller.link_not_correct') , 500);
             }
-            $video = $this->client1->request(\request('link').'?fields=download');
-            $downloadArray = $video['body'];
-            return response([
-                'link' => $downloadArray
-            ] , 200);
+            $response = $this->client1->request(\request('link').'?fields=download');
+            if (intval($response['status']) === 200){
+                return $this->donwloadLinkTransformer($response);
+            }else{
+                $response = $this->client2->request(\request('link').'?fields=download');
+                if (intval($response['status']) === 200){
+                    return $this->donwloadLinkTransformer($response);
+                }
+            }
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
