@@ -33,18 +33,18 @@ class VideoController extends Controller
                 $link = strtok($link, '?');
                 $queryParams['query'] = $link;
             }
-//            $response1 = $this->client1->request('/users/216130188/videos',$queryParams);
-            $response2 = $this->client2->request('/users/222393454/videos',$queryParams);
-//            $responseData1 = $response1['body'];
-//            $videos1 = $responseData1['data'];
+            $response1 = $this->client1->request('/users/216130188/videos',$queryParams);
+//            $response2 = $this->client2->request('/users/222393454/videos',$queryParams);
+            $responseData1 = $response1['body'];
+            $videos1 = $responseData1['data'];
 //return$response2;
-            $responseData2 = $response2['body'];
-            return $responseData2;
-            $videos2 = $responseData2['data'];
-//            $test1 = collect($videos1);
-            $test2 = collect($videos2);
+//            $responseData2 = $response2['body'];
+//            return $responseData2;
+//            $videos2 = $responseData2['data'];
+            $test1 = collect($videos1);
+//            $test2 = collect($videos2);
 //            $finalData = $test1->merge($test2);
-            return $this->success(VideoResource::collection($test2));
+            return $this->success(VideoResource::collection($test1));
         }catch (\Throwable $th){
             return $this->error($th->getMessage(),500);
             return HelperFunction::ServerErrorResponse();
