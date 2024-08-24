@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
+use App\Http\Requests\ChangeOrderOfChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Chapter;
 use App\Http\Requests\StoreChapterRequest;
 use App\Http\Requests\UpdateChapterRequest;
+use Illuminate\Support\Facades\DB;
 
 class ChapterController extends Controller
 {
@@ -48,6 +50,24 @@ class ChapterController extends Controller
             ]);
             return $this->success(ChapterResource::make($chapter) , __("messages.chapter_controller.visibility_switch"));
         }catch(\Throwable $th){
+            return $this->catchError($th);
+        }
+    }
+
+    public function changeOrderOfChapters(ChangeOrderOfChapterRequest $request){
+        try {
+            DB::beginTransaction();
+            if ($request->chapters){
+                foreach ($request->chapters as $chapter){
+                    Chapter::where('id' , $chapter['id'])->update([
+                       'sort' => $chapter['sort']
+                    ]);
+                }
+            }
+            DB::commit();
+            return $this->success(null , 'chapter re-ordered successfully');
+        }catch(\Throwable $th){
+            DB::rollBack();
             return $this->catchError($th);
         }
     }

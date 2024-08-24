@@ -22,6 +22,8 @@ class UserController extends Controller
 
     use HTTPResponse;
 
+
+
     private function permissionDenide(){
         return $this->error(trans('messages.error.admin_permission') , 403);
     }
@@ -62,6 +64,21 @@ class UserController extends Controller
         try {
             $accounts = User::whereNot('type' , UserType::STUDENT)->get();
             return $this->success(UserResource::collection($accounts));
+        }catch (\Throwable $th){
+            return HelperFunction::ServerErrorResponse();
+        }
+    }
+
+    public function resetDeviceID($userID){
+        try {
+            $user = HelperFunction::getUserById($userID);
+            if (!$user){
+                return HelperFunction::notFoundResponce();
+            }
+            $user->update([
+               'device_id' => null
+            ]);
+            return $this->success(UserResource::make($user));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }

@@ -68,6 +68,7 @@ Route::middleware(['language'])->group(function (){
                 Route::prefix('/chapters')->group(function (){
                     Route::get('/all/{course}' , [ChapterController::class , 'getAll']); //unused
                     Route::patch('/switchVisibility/{chapter}' , [ChapterController::class , 'switchVisibility']); // unused
+                    Route::post('/changeOrderOfChapters' , [ChapterController::class , 'changeOrderOfChapters']);
                     Route::post('/create' , [ChapterController::class , 'store']); //done
                     Route::patch('/update/{chapter}' , [ChapterController::class , 'update']); //done
                     Route::delete('/delete/{chapter}' , [ChapterController::class , 'destroy']); //done
@@ -76,13 +77,14 @@ Route::middleware(['language'])->group(function (){
                     Route::get('/all/{chapter}' , [LesionController::class , 'getAll']); //not used any more
                     Route::patch('/switchVisibility/{lesion}' , [LesionController::class , 'switchVisibility']); //not used
                     Route::post('/create' , [LesionController::class , 'store']); // done
+                    Route::post('/reOrderLesions' , [LesionController::class , 'reOrderLesions']);
                     Route::post('/update/{lesion}' , [LesionController::class , 'update']); //done
                     Route::delete('/delete/{lesion}' , [LesionController::class , 'delete']); //done
                 });
                 Route::prefix('/statistics')->group(function (){
                     Route::get('/get' , [StatisticsController::class , 'statistics']); //done
                     Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
-                    Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
+//                    Route::get('/basicStatistics' , [StatisticsController::class , 'basicStatistics']); //done
                     Route::get('/last-enrolled' , [StatisticsController::class , 'getLastEnrolled']); //done
                     Route::post('/reset' , [StatisticsController::class , 'reset']); //done
                 });
@@ -93,10 +95,12 @@ Route::middleware(['language'])->group(function (){
                 });
 //                vide
                 Route::prefix('/users')->group(function (){
+                    Route::get('/students' , [UserController::class , 'getStudents']); // done
                     Route::patch('/switchBlockAccount/{user}' , [UserController::class , 'switchBlockState']); //done
+                    Route::patch('/resetDeviceID/{user}' , [UserController::class , 'resetDeviceID']);
                     Route::get('/profileOf/{user}' , [UserController::class , 'getUserProfile']);
                     Route::post('/create' , [UserController::class , 'create']); // done
-                    Route::get('/students' , [UserController::class , 'getStudents']); // done
+
                     Route::get('/all' , [UserController::class , 'getAllUser']); // done
                     Route::get('/spicialAccounts' , [UserController::class , 'getSpicialAccounts']); //done
                     Route::get('/blocked' , [UserController::class , 'getAllBlockedUser']);

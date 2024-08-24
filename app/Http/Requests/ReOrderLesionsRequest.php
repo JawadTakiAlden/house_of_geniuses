@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Types\UserType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+class ReOrderLesionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +21,10 @@ class CreateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-
         return [
-            'full_name' => 'required|string|min:4',
-            'phone' => 'required|min:10|max:10|unique:users,phone',
-            'password' => 'required|min:7|max:26',
-            'image' => 'image|mimes:png,jpg,jpeg|max:5120',
-            'type' => 'required|in:teacher,admin,student,employee'
+            'lesions' => 'required|array',
+            'lesions.*.id' => 'required|numeric|exists:lesions,id',
+            'lesions.*.sort' => 'required|numeric',
         ];
     }
 }

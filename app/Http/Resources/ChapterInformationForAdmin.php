@@ -18,8 +18,9 @@ class ChapterInformationForAdmin extends JsonResource
             'id' => intval($this->id),
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
-            'lesions' => LesionResource::collection($this->lesions),
-            'quizzes' => SimpleQuizResource::collection($this->quizzes)
+            'lesions' => LesionResource::collection($this->lesions()->orderBy('sort')->get()),
+            'quizzes' => SimpleQuizResource::collection($this->quizzes),
+            'sort' => $this->sort
         ];
     }
 }

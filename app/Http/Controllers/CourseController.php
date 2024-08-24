@@ -54,6 +54,7 @@ class CourseController extends Controller
         return $this->success(EnrollmentWithTypeOfCodeResource::collection($courses));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
+//            return $this->error($th->getMessage() , 500);
         }
 
     }
@@ -259,7 +260,8 @@ class CourseController extends Controller
             }
             return $this->success(CourseInformationResource::make($course));
         }catch (\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+//            return HelperFunction::ServerErrorResponse();
+            return $this->error($th->getMessage(),500);
         }
     }
 

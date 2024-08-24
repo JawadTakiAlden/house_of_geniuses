@@ -90,6 +90,12 @@ class Course extends Model
         ];
     }
 
+    public function getTotalCodeGeneratedByType(string $codeType){
+        return ActivationCode::where('type' , $codeType)->whereHas('courseCanActivated' , fn($query) =>
+        $query->where('course_id' , $this->id)
+        )->count();
+    }
+
 
     public function categories(){
         return $this->belongsToMany(Category::class , 'course_categories');
@@ -111,6 +117,9 @@ class Course extends Model
 
     public function chapters(){
         return $this->hasMany(Chapter::class);
+    }
+    public function chaptersOrdered(){
+        return $this->hasMany(Chapter::class)->orderBy('sort');
     }
 
     public function courseValues(){

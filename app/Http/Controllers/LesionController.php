@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
+use App\Http\Requests\ReOrderLesionsRequest;
 use App\Http\Resources\LesionResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Lesion;
 use App\Http\Requests\StoreLesionRequest;
 use App\Http\Requests\UpdateLesionRequest;
 use App\Types\LesionType;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Vimeo\Vimeo;
 
@@ -63,6 +65,24 @@ class LesionController extends Controller
             ]);
             return $this->success( LesionResource::make($lesion) , __("messages.lesion_controller.visibility_switch"));
         }catch (\Throwable $th){
+            return HelperFunction::ServerErrorResponse();
+        }
+    }
+
+    public function reOrderLesions(ReOrderLesionsRequest $request){
+        try {
+            DB::beginTransaction();
+            if ($request->lesions){
+                foreach ($request->lesions as $lesion){
+                    Lesion::where('id' , $lesion['id'])->update([
+                        'sort' => $lesion['sort']
+                    ]);
+                }
+            }
+            DB::commit();
+            return $this->success( null,__("messages.lesion_controller.delete"));
+        }catch (\Throwable $th){
+            DB::rollBack();
             return HelperFunction::ServerErrorResponse();
         }
     }

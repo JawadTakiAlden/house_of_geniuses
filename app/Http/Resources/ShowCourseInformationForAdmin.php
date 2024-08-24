@@ -21,7 +21,7 @@ class ShowCourseInformationForAdmin extends JsonResource
             'telegram_channel_link' => $this->telegram_channel_link,
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
-            'chapters' => ChapterInformationForAdmin::collection($this->chapters),
+            'chapters' => ChapterInformationForAdmin::collection($this->chapters()->orderBy('sort')->get()),
             'teachers' => $this->teachers,
             'categories' => $this->categories,
             'values' => $this->courseValues

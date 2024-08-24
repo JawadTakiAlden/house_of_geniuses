@@ -48,7 +48,8 @@ class VideoController extends Controller
                 return $this->error('cannot connect with the vimeo refresh the page or connect with support' , 400);
             }
         }catch (\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+//            return HelperFunction::ServerErrorResponse();
+            return $this->error($th->getMessage() , 500);
         }
     }
 

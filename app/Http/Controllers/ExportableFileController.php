@@ -7,6 +7,7 @@ use App\HttpResponse\HTTPResponse;
 use App\Models\ExportableFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExportableFileController extends Controller
 {
@@ -25,12 +26,11 @@ class ExportableFileController extends Controller
                 return $this->error('the requested file doesnt found in our system' , 404);
             }
 
-            $filePath = 'excel_files/' . $fileName;
+            $filePath = '/excel_files/' . $fileName;
             return Storage::download($filePath);
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
         }
-
     }
 
     public function deleteFile($fileName)
