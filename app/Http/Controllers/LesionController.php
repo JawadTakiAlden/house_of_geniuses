@@ -80,7 +80,7 @@ class LesionController extends Controller
                 }
             }
             DB::commit();
-            return $this->success( null,__("messages.lesion_controller.delete"));
+            return $this->success( null,'lesion re-ordered successfully');
         }catch (\Throwable $th){
             DB::rollBack();
             return HelperFunction::ServerErrorResponse();

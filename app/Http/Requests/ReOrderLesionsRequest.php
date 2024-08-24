@@ -22,7 +22,7 @@ class ReOrderLesionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lesions' => 'required|array',
+            'lesions' => 'array',
             'lesions.*.id' => 'required|numeric|exists:lesions,id',
             'lesions.*.sort' => 'required|numeric',
         ];
