@@ -8,7 +8,6 @@ use App\HttpResponse\HTTPResponse;
 use Illuminate\Http\Request;
 use Vimeo\Vimeo;
 
-use getID3;
 
 class VideoController extends Controller
 {
@@ -16,8 +15,6 @@ class VideoController extends Controller
 
     private Vimeo $client1;
     private Vimeo $client2;
-    protected $getID3;
-
     public function __construct()
     {
         $this->getID3 = new getID3;
@@ -107,28 +104,5 @@ class VideoController extends Controller
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
-    }
-
-    public function getVideoInfo(){
-        try {
-            $filePath = $this->downloadVideo(\request('url'));
-
-            $info = $this->getID3->analyze($filePath);
-
-            unlink($filePath);
-
-            return $this->success($info , 'get video info');
-        }catch (\Throwable $th){
-//            return HelperFunction::ServerErrorResponse();
-            return $this->error($th->getMessage() , 500);
-        }
-    }
-    protected function downloadVideo($url)
-    {
-        // Use curl or file_get_contents to download the video
-        $filePath = storage_path('app/temp_video.mp4');
-        file_put_contents($filePath, file_get_contents($url));
-
-        return $filePath;
     }
 }
