@@ -17,7 +17,6 @@ class VideoController extends Controller
     private Vimeo $client2;
     public function __construct()
     {
-        $this->getID3 = new getID3;
         $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
             , env('VIMEO_CLIENT_SECRET'),
             env('VIMEO_ACCESS_TOKEN'));
