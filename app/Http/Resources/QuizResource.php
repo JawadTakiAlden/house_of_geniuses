@@ -20,6 +20,7 @@ class QuizResource extends JsonResource
         $base = [
             'title' => $this->title,
             'description' => $this->description,
+            'attr' => $this->additional,
             'questions' => $request->user()->type === UserType::ADMIN ? QuestionResource::collection($this->forAdminQuestions) : QuestionResource::collection($this->forUserQuestions)
         ];
         if ($pivot){
@@ -27,6 +28,7 @@ class QuizResource extends JsonResource
                 'is_free' => $pivot->is_free
             ]);
         }
+
         return $base;
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('chapter_quiz', function (Blueprint $table) {
             $table->id();
             $table->foreignId('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
-            $table->foreignId('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');;
+            $table->foreignId('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
             $table->boolean('is_visible')->default(false);
             $table->boolean('is_free')->default(false);
             $table->timestamps();
