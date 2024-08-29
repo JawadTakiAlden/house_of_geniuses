@@ -19,9 +19,9 @@ class ChapterInformationForAdmin extends JsonResource
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
             'lesions' => LesionResource::collection($this->lesions()->orderBy('sort')->get()),
-            'quizzes' => SimpleQuizResource::collection($this->quizzes)->attributes([
-                'chapter_id' => $this->id
-            ]),
+            'quizzes' => SimpleQuizResource::collection($this->quizzes->map(fn($quiz) =>
+                $quiz['chapter_id'] = $this->id
+            )),
             'sort' => $this->sort
         ];
     }
