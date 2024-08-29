@@ -21,6 +21,7 @@ class SimpleQuizResource extends JsonResource
             'number_of_questions' => $this->forAdminQuestions->count(),
             'number_of_visible_question' => $this->forUserQuestions->count(),
             'number_of_invisible_question' => $this->invisibleQuestion->count(),
+            'chapter_id' => $this->chapter_id
         ];
         $pivot = $this->pivot;
         if ($pivot){
