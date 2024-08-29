@@ -108,7 +108,6 @@ class LesionController extends Controller
             $type = $request->type;
             if ($type === 'pdf'){
                 $pdfFile = $request->file('pdfFile');
-
                 $pdfFile->store('pdf_lesions', 'public');
                 $filePath = Storage::putFile('pdf_lesions', $pdfFile);
                 $lesion = Lesion::create([
@@ -124,16 +123,19 @@ class LesionController extends Controller
                 return $this->success(  LesionResource::make($lesion),$lesion->title . __("messages.lesion_controller.create"));
             }
             else if ($type === 'video'){
-                $response = $this->client1->request($request->videoURI, array(), 'GET');
-                if (intval($response['status']) === 200){
-                    $lesion = $this->createVideo($request , $response['body']);
-                }else{
-                    $response = $this->client2->request($request->videoURI, array(), 'GET');
+                if ($request->get('source') === 'vimeo-1'){
+                    $response = $this->client1->request($request->videoURI, array());
                     if (intval($response['status']) === 200){
                         $lesion = $this->createVideo($request , $response['body']);
-                    }else{
-                        return $this->error("sorry we can't find your video" , 404);
                     }
+                }
+                else if ($request->get('source') === 'vimeo-2'){
+                    $response = $this->client2->request($request->videoURI, array());
+                    if (intval($response['status']) === 200){
+                        $lesion = $this->createVideo($request , $response['body']);
+                    }
+                }else if ($request->get('source') === 'youtube'){
+                    return $this->success([] , 'not handeled youtube yet');
                 }
                 return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.create"));
             }else{
@@ -152,7 +154,8 @@ class LesionController extends Controller
             'is_open' => $request->is_open,
             'is_visible' => $request->is_visible,
             'type' => 'video',
-            'chapter_id' => $request->chapter_id
+            'chapter_id' => $request->chapter_id,
+            'source' => $request->source
         ];
         if ($request->title){
             $date = array_merge($date , ['title' => $request->title]);

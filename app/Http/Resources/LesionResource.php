@@ -32,7 +32,7 @@ class LesionResource extends JsonResource
             'chapter_id' => intval($this->chapter_id),
         ];
         if (strval($this->type) === 'video'){
-            $data = array_merge($data , ['link_uri' => $link]);
+            $data = array_merge($data , ['link_uri' => $link , 'source' => $this->source]);
         }
         return $data;
     }

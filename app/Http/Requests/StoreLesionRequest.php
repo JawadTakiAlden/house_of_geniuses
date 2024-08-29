@@ -30,6 +30,7 @@ class StoreLesionRequest extends FormRequest
             'type' => 'required|in:pdf,video',
             'title' => 'nullable|string|max:255',
             'chapter_id' => ['required' , Rule::exists('chapters' , 'id')],
+            'source' => 'required|in:vimeo-1,vimeo-2,youtube'
         ];
     }
 }
