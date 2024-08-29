@@ -14,13 +14,14 @@ class ChapterInformationForAdmin extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $chapter_id = $this->id;
         return [
             'id' => intval($this->id),
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
             'lesions' => LesionResource::collection($this->lesions()->orderBy('sort')->get()),
             'quizzes' => SimpleQuizResource::collection($this->quizzes->map(fn($quiz) =>
-                $quiz['chapter_id'] = $this->id
+                $quiz['chapter_id'] = $chapter_id
             )),
             'sort' => $this->sort
         ];
