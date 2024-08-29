@@ -3,6 +3,12 @@
 /public/build
 /public/hot
 /public/storage
+/public/choice_images
+/public/clarification_images
+/public/course_images
+/public/news_images
+/public/question_images
+/public/users_images
 /storage/*.key
 /vendor
 .env
