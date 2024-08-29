@@ -21,6 +21,7 @@ class QuizResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'attr' => $this->additional,
+            'chapter_id' => $this->chapter_id,
             'questions' => $request->user()->type === UserType::ADMIN ? QuestionResource::collection($this->forAdminQuestions) : QuestionResource::collection($this->forUserQuestions)
         ];
         if ($pivot){

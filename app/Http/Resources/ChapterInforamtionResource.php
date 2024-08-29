@@ -14,12 +14,17 @@ class ChapterInforamtionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $chapter_id = $this->id;
         return [
             'id' => intval($this->id),
             'name' => strval($this->name),
             'is_visible' => boolval($this->is_visible),
             'lesions' => LesionResource::collection($this->visibleLesions),
-            'quizzes' => QuizResource::collection($this->visibleQuizzes),
+            'quizzes' => QuizResource::collection($this->visibleQuizzes->map(function($quiz) use ($chapter_id) {
+                $quiz['chapter_id'] = $chapter_id;
+                return $quiz;
+            }
+            )),
             'course_id' => $this->course_id
         ];
     }
