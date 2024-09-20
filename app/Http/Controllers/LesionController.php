@@ -155,7 +155,8 @@ class LesionController extends Controller
             'is_visible' => $request->is_visible,
             'type' => 'video',
             'chapter_id' => $request->chapter_id,
-            'source' => $request->source
+            'source' => $request->source,
+            'original_video_name' => $responseData['name']
         ];
         if ($request->title){
             $date = array_merge($date , ['title' => $request->title]);
@@ -178,7 +179,8 @@ class LesionController extends Controller
                 $data = [
                     'is_visible' => $request->is_visible,
                     'is_open' => $request->is_open,
-                    'source' => $source
+                    'source' => $source,
+                    'original_video_name' => $request->original_video_name
                 ];
 //                check if the new uri not the same original uri
                 if ($request->videoURI !== $lesion->link){
