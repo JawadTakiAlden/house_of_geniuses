@@ -14,12 +14,6 @@ class SeedAdminAccount extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'full_name' => 'jawad taki aldeen',
-            'phone' => '0948966979',
-            'password' => 'jawad',
-            'is_blocked' => false,
-            'type' => UserType::ADMIN,
-        ]);
+
     }
 }

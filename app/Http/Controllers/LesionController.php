@@ -174,29 +174,36 @@ class LesionController extends Controller
                 return HelperFunction::notFoundResponce();
             }
             if ($lesion->type === LesionType::VIDEO){
+                $source = $request->source;
                 $data = [
                     'is_visible' => $request->is_visible,
                     'is_open' => $request->is_open,
+                    'source' => $source
                 ];
-                if ($request->videoURI){
-                    $response = $this->client1->request($request->videoURI, array(), 'GET');
-                    if (intval($response['status']) === 200){
-                         $data = array_merge($data , $this->updatedVideoData($response , $request));
-                    }else{
-                        $response = $this->client1->request($request->videoURI, array(), 'GET');
+//                check if the new uri not the same original uri
+                if ($request->videoURI !== $lesion->link){
+//                    if the uri comming in request dont equal to original uri then we should update the video uri
+                    if ($source === 'vimeo-1'){
+                        $response = $this->client1->request($request->videoURI, array());
                         if (intval($response['status']) === 200){
-                            $data = array_merge($data , $this->updatedVideoData($response , $request));
+                            $data = array_merge($data , $this->updatedVideoData($response['body'] , $request));
                         }
-                        else{
-                            return $this->error('we cant update your video' , 400);
+                    }
+                    else if ($source === 'vimeo-2'){
+                        $response = $this->client2->request($request->videoURI, array());
+                        if (intval($response['status']) === 200){
+                            $data = array_merge($data , $this->updatedVideoData($response['body'] , $request));
                         }
+                    }else if ($source === 'youtube'){
+                        return $this->success([] , 'not handeled youtube yet');
                     }
                 }
                 else{
                     $data['title'] = $request->title;
                 }
                 $lesion->update($data);
-            }else {
+            }
+            else {
                 $data = [
                     'is_visible' => $request->is_visible,
                     'is_open' => $request->is_open,

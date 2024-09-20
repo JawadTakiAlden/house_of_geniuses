@@ -42,7 +42,7 @@ Route::middleware(['language'])->group(function (){
 //    Admin Routes
         Route::prefix('/v1')->group(function (){
             Route::middleware(['admin'])->group(function (){
-                Route::get('/videoInfo' , [VideoController::class , 'getVideoInfo']);
+                Route::get('/videoInfo' , [VideoController::class , 'searchVideosByTitle']);
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
                 Route::prefix('/files')->group(function (){
                     Route::get('/pdf_lesion/{path}' , [LesionController::class , 'getPdfLesion'])->where('path', '.*');
