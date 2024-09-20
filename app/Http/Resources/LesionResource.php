@@ -34,6 +34,9 @@ class LesionResource extends JsonResource
         if (strval($this->type) === 'video'){
             $data = array_merge($data , ['link_uri' => $link , 'source' => $this->source]);
         }
+        if ($request->user()->type === UserType::ADMIN){
+            $data = array_merge($data , ['original_video_name' => $this->original_video_name]);
+        }
         return $data;
     }
 
