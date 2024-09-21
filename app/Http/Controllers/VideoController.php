@@ -67,12 +67,12 @@ class VideoController extends Controller
 
     public function watch(Request $request){
         try {
-            if ($request->query('link')){
+            if ($request->get('link')){
                 return $this->error(__('messages.video_controller.link_not_correct') , 422);
             }
             return  [
-                $request->query('source'),
-                $request->query('link')
+                $request->get('source'),
+                $request->get('link')
             ];
             if ($request->query('source') === 'vimeo-1'){
                 $response = $this->client1->request(\request('link').'?fields=play');
