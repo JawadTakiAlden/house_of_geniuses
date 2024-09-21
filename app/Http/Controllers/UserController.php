@@ -239,13 +239,12 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
-//            if (Gate::denies('get_courses_of_user' , $user)){
-//                return $this->permissionDenide();
-//            }
+            if (Gate::denies('get_courses_of_user' , $user)){
+                return $this->permissionDenide();
+            }
             return $this->success(CourseResource::collection($user->inroledCorurses));
         }catch(\Throwable $th){
-//            return HelperFunction::ServerErrorResponse();
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
 
     }
