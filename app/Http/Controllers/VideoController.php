@@ -68,9 +68,9 @@ class VideoController extends Controller
 
     public function watch(WatchVideoRequest $request){
         try {
-            if ($request->link){
-                return $this->error(__('messages.video_controller.link_not_correct') , 422);
-            }
+//            if ($request->link){
+//                return $this->error(__('messages.video_controller.link_not_correct') , 422);
+//            }
             return  [
                 $request->link,
               $request->source
