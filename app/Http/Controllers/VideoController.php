@@ -76,7 +76,7 @@ class VideoController extends Controller
                 return $this->success($this->watchLinkTransformer($response));
             }else if ($request->source === 'vimeo-2'){
                 $response = $this->client2->request(\request('link').'?fields=play');
-                return  $response->status;
+                return  $response['status'];
                 return $this->success($this->watchLinkTransformer($response));
             }
         }catch (\Throwable $th){
