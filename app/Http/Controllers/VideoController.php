@@ -70,10 +70,6 @@ class VideoController extends Controller
             if (!\request('link')){
                 return $this->error(__('messages.video_controller.link_not_correct') , 422);
             }
-            return [
-                "link" => \request('link'),
-                "source" => \request('source')
-            ];
             if (\request('source') === 'vimeo-1'){
                 $response = $this->client1->request(\request('link').'?fields=play');
                 return $this->success($this->watchLinkTransformer($response));
