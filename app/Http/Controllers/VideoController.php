@@ -72,10 +72,10 @@ class VideoController extends Controller
             }
             if (\request('source') === 'vimeo-1'){
                 $response = $this->client1->request(\request('link').'?fields=play');
-                return $this->watchLinkTransformer($response);
+                return $this->success($this->watchLinkTransformer($response));
             }else if (\request('source') === 'vimeo-2'){
                 $response = $this->client2->request(\request('link').'?fields=play');
-                return $this->watchLinkTransformer($response);
+                return $this->success($this->watchLinkTransformer($response));
             }
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
@@ -96,15 +96,15 @@ class VideoController extends Controller
         $data = $videoResponse['body'];
         $data = $data['play'];
         $data = $data['progressive'];
-        return response([
+        return [
             'link' => $data
-        ] , 200);
+        ];
     }
     private function donwloadLinkTransformer($videoResponse){
         $downloadArray = $videoResponse['body'];
-        return response([
+        return [
             'link' => $downloadArray
-        ] , 200);
+        ];
     }
     public function download(){
         try {
@@ -114,12 +114,12 @@ class VideoController extends Controller
             if (\request('source') === 'vimeo-1'){
                 $response = $this->client1->request(\request('link').'?fields=download');
                 if (intval($response['status']) === 200){
-                    return $this->donwloadLinkTransformer($response);
+                    return $this->success($this->donwloadLinkTransformer($response));
                 }
             }else if (\request('source') === 'vimeo-2'){
                 $response = $this->client2->request(\request('link').'?fields=download');
                 if (intval($response['status']) === 200){
-                    return $this->donwloadLinkTransformer($response);
+                    return $this->success($this->donwloadLinkTransformer($response));
                 }
             }
         }catch (\Throwable $th){
