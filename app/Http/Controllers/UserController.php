@@ -244,8 +244,10 @@ class UserController extends Controller
             }
             return $this->success(CourseResource::collection($user->inroledCorurses));
         }catch(\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+//            return HelperFunction::ServerErrorResponse();
+            return $this->error($th->getMessage() , 500);
         }
+
     }
 
     public function destroy($userID){
