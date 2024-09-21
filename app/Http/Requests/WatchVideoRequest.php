@@ -11,7 +11,7 @@ class WatchVideoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class WatchVideoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'source' => "in:vimeo-1,vimeo-2"
         ];
     }
 }
