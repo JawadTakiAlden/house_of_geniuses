@@ -171,7 +171,7 @@ Route::middleware(['language'])->group(function (){
                         Route::post('/logout' , [AuthController::class , 'logout']);
                     });
                     Route::post('/watch' , [VideoController::class , 'watch']);
-                    Route::get('/download' , [VideoController::class , 'download']);
+                    Route::post('/download' , [VideoController::class , 'download']);
                     Route::prefix('/users')->group(function (){
                         Route::post('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
                         Route::delete('/delete/{user}' , [UserController::class , 'destroy']);

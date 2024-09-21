@@ -72,14 +72,14 @@ class VideoController extends Controller
                 return $this->error(__('messages.video_controller.link_not_correct') , 422);
             }
             if ($request->source === 'vimeo-1'){
-                $response = $this->client1->request(\request('link').'?fields=play');
+                $response = $this->client1->request($request->link.'?fields=play');
                 if ($response['status'] == 200){
                     return $this->success($this->watchLinkTransformer($response));
                 }else{
                     return $this->error($response['body']['error'] , $response['status']);
                 }
             }else if ($request->source === 'vimeo-2'){
-                $response = $this->client2->request(\request('link').'?fields=play');
+                $response = $this->client2->request($request->link.'?fields=play');
                 if ($response['status'] == 200){
                     return $this->success($this->watchLinkTransformer($response));
                 }else{
@@ -115,20 +115,24 @@ class VideoController extends Controller
             'link' => $downloadArray
         ];
     }
-    public function download(){
+    public function download(WatchVideoRequest $request){
         try {
-            if (!\request('link')){
-                return $this->error(__('messages.video_controller.link_not_correct') , 500);
+            if (!$request->link){
+                return $this->error(__('messages.video_controller.link_not_correct') , 422);
             }
-            if (\request('source') === 'vimeo-1'){
-                $response = $this->client1->request(\request('link').'?fields=download');
+            if ($request->source === 'vimeo-1'){
+                $response = $this->client1->request($request->link.'?fields=download');
                 if (intval($response['status']) === 200){
                     return $this->success($this->donwloadLinkTransformer($response));
+                }else{
+                    return $this->error($response['body']['error'] , $response['status']);
                 }
-            }else if (\request('source') === 'vimeo-2'){
-                $response = $this->client2->request(\request('link').'?fields=download');
+            }else if ($request->source === 'vimeo-2'){
+                $response = $this->client2->request($request->link.'?fields=download');
                 if (intval($response['status']) === 200){
                     return $this->success($this->donwloadLinkTransformer($response));
+                }else{
+                    return $this->error($response['body']['error'] , $response['status']);
                 }
             }
         }catch (\Throwable $th){
