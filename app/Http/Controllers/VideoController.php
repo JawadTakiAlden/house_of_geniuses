@@ -79,7 +79,8 @@ class VideoController extends Controller
                 return $this->success($this->watchLinkTransformer($response));
             }
         }catch (\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+//            return HelperFunction::ServerErrorResponse();
+            return $this->error($th->getMessage() , 500);
         }
     }
 
