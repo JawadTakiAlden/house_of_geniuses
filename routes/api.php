@@ -170,7 +170,7 @@ Route::middleware(['language'])->group(function (){
                     Route::prefix('/auth')->group(function (){
                         Route::post('/logout' , [AuthController::class , 'logout']);
                     });
-                    Route::get('/watch' , [VideoController::class , 'watch']);
+                    Route::post('/watch' , [VideoController::class , 'watch']);
                     Route::get('/download' , [VideoController::class , 'download']);
                     Route::prefix('/users')->group(function (){
                         Route::post('/updateProfile/{user}' , [UserController::class , 'updateProfile']);
