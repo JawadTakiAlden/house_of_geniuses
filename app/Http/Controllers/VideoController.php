@@ -73,20 +73,21 @@ class VideoController extends Controller
             }
             if ($request->source === 'vimeo-1'){
                 $response = $this->client1->request(\request('link').'?fields=play');
-                return $response['body']['error'];
-                return $this->success($this->watchLinkTransformer($response));
+                if ($response['status'] == 200){
+                    return $this->success($this->watchLinkTransformer($response));
+                }else{
+                    return $this->error($response['body']['error'] , $response['status']);
+                }
             }else if ($request->source === 'vimeo-2'){
                 $response = $this->client2->request(\request('link').'?fields=play');
                 if ($response['status'] == 200){
                     return $this->success($this->watchLinkTransformer($response));
                 }else{
-                    return $this->error($response['message'] , $response['status']);
+                    return $this->error($response['body']['error'] , $response['status']);
                 }
-
             }
         }catch (\Throwable $th){
-//            return HelperFunction::ServerErrorResponse();
-            return $this->error($th->getMessage() , 500);
+            return HelperFunction::ServerErrorResponse();
         }
     }
 
