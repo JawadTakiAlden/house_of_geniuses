@@ -28,7 +28,7 @@ class CourseResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image ? asset($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
-            'is_open' => boolval($this->is_open),
+            'is_open' => $request->query('os') === 'ios' || boolval($this->is_open) ,
             'is_visible' => boolval($this->is_visible),
             'is_paid' => boolval($is_paid),
         ];
