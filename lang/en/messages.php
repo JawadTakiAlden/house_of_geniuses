@@ -1,5 +1,6 @@
 <?php
 return [
+    "old_version" => "📱✨ Important Update! Our app has a new version available on the App Store and Google Play. Please download the new app to access all courses and continue your learning journey. Note: Your account on this version will no longer be available soon, and you will be permanently logged out. Make sure to switch to the new app to continue learning without interruption. 🌟",
     "error" => [
         "server_error" => "Oops! It seems like our server encountered an unexpected error. We're sorry for the inconvenience this may have caused you. Our team has been notified and is working diligently to fix it. In the meantime, you can try refreshing the page or coming back later. Thank you for your patience and understanding",
         "not_found" => "404 Lost in the Digital Wilderness 🌲🔍 Oops! The path you're seeking seems to have vanished into the digital ether. Perhaps it's time to retrace your steps or explore a new route? If you need guidance, our digital rangers are here to help you navigate back to civilization. 🗺️",
