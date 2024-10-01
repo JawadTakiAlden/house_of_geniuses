@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\BlockedMiddelWare;
 use App\Http\Middleware\LanguageMiddleware;
+use App\Http\Middleware\OldAppVersionMiddleware;
 use App\Http\Middleware\StudentAdminMiddleware;
 use App\Http\Middleware\StudentTeacherAdminMiddleware;
 use App\Http\Middleware\UnHashTokenMiddleware;
@@ -74,6 +75,7 @@ class Kernel extends HttpKernel
         'student_teacher_admin' => StudentTeacherAdminMiddleware::class,
         'blocked_account' => BlockedMiddelWare::class,
         'unHashToken' => UnHashTokenMiddleware::class,
-        'language' => LanguageMiddleware::class
+        'language' => LanguageMiddleware::class,
+        'old_app_version' => OldAppVersionMiddleware::class
     ];
 }
