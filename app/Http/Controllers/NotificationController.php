@@ -35,13 +35,13 @@ class NotificationController extends Controller
         $message = CloudMessage::fromArray($messageData);
         $tokenChunks = array_chunk($FcmToken, 500);
 
-        return $this->success($FcmToken);
+//        return $this->success($FcmToken);
 
         try {
             foreach ($tokenChunks as $tokens) {
-                $this->messaging->sendMulticast($message, $tokens);
+                $report = $this->messaging->sendMulticast($message, $tokens);
             }
-            return $this->success(null, __('messages.notification_controller.send_successfully'));
+            return $this->success($report, __('messages.notification_controller.send_successfully'));
         } catch (\Kreait\Firebase\Exception\MessagingException $e) {
             return $this->error($e->getMessage() , 500);
         } catch (FirebaseException $e) {
