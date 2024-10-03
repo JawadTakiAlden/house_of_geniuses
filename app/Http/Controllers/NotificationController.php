@@ -19,23 +19,10 @@ class NotificationController extends Controller
 
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
-
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
-
         $this->messaging = $firebase->createMessaging();
-
-//        $messageData = [
-//            'notification' => [
-//                'title' => $title,
-//                'body' => $body
-//            ],
-//        ];
-
         $notification = Notification::create($title, $body);
-//        $tokenChunks = array_chunk($FcmToken, 500);
-
-//        return $this->success($FcmToken);
         $result = null;
         foreach ($FcmToken as $token) {
             $message = CloudMessage::withTarget('token', $token)
@@ -45,20 +32,8 @@ class NotificationController extends Controller
             } catch (\Exception $e) {
                 Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
             }
-            return $this->success($result ,  __('messages.notification_controller.send_successfully'));
         }
-
-//        try {
-//            $report = null;
-//            foreach ($tokenChunks as $tokens) {
-//                $report = $this->messaging->sendMulticast($message, $tokens);
-//            }
-//            return $this->success([$report , $FcmToken], __('messages.notification_controller.send_successfully'));
-//        } catch (\Kreait\Firebase\Exception\MessagingException $e) {
-//            return $this->error($e->getMessage() , 500);
-//        } catch (FirebaseException $e) {
-//            return $this->error($e->getMessage() , 500);
-//        }
+        return $this->success($result ,  __('messages.notification_controller.send_successfully'));
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
