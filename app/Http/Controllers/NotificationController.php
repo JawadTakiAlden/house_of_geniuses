@@ -36,15 +36,16 @@ class NotificationController extends Controller
 //        $tokenChunks = array_chunk($FcmToken, 500);
 
 //        return $this->success($FcmToken);
-
+        $result = null;
         foreach ($FcmToken as $token) {
             $message = CloudMessage::withTarget('token', $token)
                 ->withNotification($notification);
             try {
-                $this->messaging->send($message);
+                $result = $this->messaging->send($message);
             } catch (\Exception $e) {
                 Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
             }
+            return $this->success($result);
         }
 
 //        try {
