@@ -25,21 +25,21 @@ class NotificationController extends Controller
 
         $this->messaging = $firebase->createMessaging();
 
-        $messageData = [
-            'notification' => [
-                'title' => $title,
-                'body' => $body
-            ],
-        ];
+//        $messageData = [
+//            'notification' => [
+//                'title' => $title,
+//                'body' => $body
+//            ],
+//        ];
 
-        $message = CloudMessage::fromArray($messageData);
+        $notification = Notification::create($title, $body);
 //        $tokenChunks = array_chunk($FcmToken, 500);
 
 //        return $this->success($FcmToken);
 
         foreach ($FcmToken as $token) {
             $message = CloudMessage::withTarget('token', $token)
-                ->withNotification($message);
+                ->withNotification($notification);
             try {
                 $this->messaging->send($message);
             } catch (\Exception $e) {
