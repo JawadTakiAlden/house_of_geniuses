@@ -35,6 +35,8 @@ class NotificationController extends Controller
         $message = CloudMessage::fromArray($messageData);
         $tokenChunks = array_chunk($FcmToken, 500);
 
+        return $this->success($FcmToken);
+
         try {
             foreach ($tokenChunks as $tokens) {
                 $this->messaging->sendMulticast($message, $tokens);
