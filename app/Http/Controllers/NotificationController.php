@@ -45,7 +45,7 @@ class NotificationController extends Controller
             } catch (\Exception $e) {
                 Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
             }
-            return $this->success($result);
+            return $this->success($result ,  __('messages.notification_controller.send_successfully'));
         }
 
 //        try {
