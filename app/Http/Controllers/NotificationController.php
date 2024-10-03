@@ -33,59 +33,31 @@ class NotificationController extends Controller
         ];
 
         $message = CloudMessage::fromArray($messageData);
-        $tokenChunks = array_chunk($FcmToken, 500);
+//        $tokenChunks = array_chunk($FcmToken, 500);
 
 //        return $this->success($FcmToken);
 
-        try {
-            $report = null;
-            foreach ($tokenChunks as $tokens) {
-                $report = $this->messaging->sendMulticast($message, $tokens);
+        foreach ($FcmToken as $token) {
+            $message = CloudMessage::withTarget('token', $token)
+                ->withNotification($message);
+            try {
+                $this->messaging->send($message);
+            } catch (\Exception $e) {
+                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
             }
-            return $this->success([$report , $FcmToken], __('messages.notification_controller.send_successfully'));
-        } catch (\Kreait\Firebase\Exception\MessagingException $e) {
-            return $this->error($e->getMessage() , 500);
-        } catch (FirebaseException $e) {
-            return $this->error($e->getMessage() , 500);
         }
 
-//        $url = 'https://fcm.googleapis.com/fcm/send';
-//        $server_key = config('app.firebase_server_key');
-//        $date = [
-//            'registration_ids' => $FcmToken,
-//            'notification' => [
-//                'title' => $title,
-//                'body' => $body
-//            ]
-//        ];
-//
-//        $encodedData = json_encode($date);
-//
-//        $headers = [
-//            'Authorization: key='.$server_key,
-//            'Content-Type: application/json'
-//        ];
-//
-//        $ch = curl_init();
-//
-//        curl_setopt($ch , CURLOPT_URL , $url);
-//        curl_setopt($ch , CURLOPT_POST , true);
-//        curl_setopt($ch , CURLOPT_HTTPHEADER , $headers);
-//        curl_setopt($ch , CURLOPT_RETURNTRANSFER , true);
-//        curl_setopt($ch , CURLOPT_SSL_VERIFYHOST , 0);
-//        curl_setopt($ch , CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1);
-//        curl_setopt($ch , CURLOPT_SSL_VERIFYPEER , false);
-//        curl_setopt($ch , CURLOPT_POSTFIELDS , $encodedData);
-//
-//        $result = curl_exec($ch);
-//
-//        if ($result === FALSE){
-//            return HelperFunction::ServerErrorResponse();
+//        try {
+//            $report = null;
+//            foreach ($tokenChunks as $tokens) {
+//                $report = $this->messaging->sendMulticast($message, $tokens);
+//            }
+//            return $this->success([$report , $FcmToken], __('messages.notification_controller.send_successfully'));
+//        } catch (\Kreait\Firebase\Exception\MessagingException $e) {
+//            return $this->error($e->getMessage() , 500);
+//        } catch (FirebaseException $e) {
+//            return $this->error($e->getMessage() , 500);
 //        }
-//
-//        curl_close($ch);
-//
-//
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
