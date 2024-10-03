@@ -38,6 +38,7 @@ class NotificationController extends Controller
 //        return $this->success($FcmToken);
 
         try {
+            $report = null;
             foreach ($tokenChunks as $tokens) {
                 $report = $this->messaging->sendMulticast($message, $tokens);
             }
