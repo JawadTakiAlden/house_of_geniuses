@@ -41,7 +41,7 @@ class NotificationController extends Controller
             foreach ($tokenChunks as $tokens) {
                 $report = $this->messaging->sendMulticast($message, $tokens);
             }
-            return $this->success($report, __('messages.notification_controller.send_successfully'));
+            return $this->success([$report , $FcmToken], __('messages.notification_controller.send_successfully'));
         } catch (\Kreait\Firebase\Exception\MessagingException $e) {
             return $this->error($e->getMessage() , 500);
         } catch (FirebaseException $e) {
