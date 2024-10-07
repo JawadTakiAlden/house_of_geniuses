@@ -13,6 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+
+Route::get('/downloadApplication' , function (){
+    $filePath = storage_path('app/public/house_of_geniuses.apk');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'File not found.');
+    }
+
+    return response()->download($filePath, 'house_of_geniuses.apk', [
+        'Content-Type' => 'application/vnd.android.package-archive',
+    ]);
+})->name("downloadApk");
+
+Route::get('/download' , function (){
+    return view('download_app.download');
 });
