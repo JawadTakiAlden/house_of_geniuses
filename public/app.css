@@ -1,0 +1,110 @@
+:root{
+    --background-color :#161622;
+    --primary-color : linear-gradient(90deg, #FF8C00 0%, #FFA300 100%, #BD65D0 100%);
+    --text : #FFFFFF;
+    --gray-100 : #CDCDE0;
+    --gray-200 : #7B7B8B;
+    --note : #FFA300;
+    --primary-200 : #FFA300;
+    --paper : #1E1E2D;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+ .main-content{
+     min-height: calc(100vh - 60px);
+ }
+body{
+    background-color: var(--background-color);
+    color: var(--text);
+    direction: rtl;
+    font-family: "Cairo" , sans-serif ;
+}
+
+.content{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding : 20px;
+}
+
+.head-1{
+    font-size: 30px;
+    max-width: 600px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.body-1{
+    color: var(--gray-100);
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 700px;
+}
+
+
+
+.head-2{
+    font-size: 22px;
+    margin: 30px 0;
+    font-weight: 600;
+}
+
+.list{
+    list-style: none;
+}
+.list .list-item{
+    padding : 10px 20px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.note{
+    color: var(--note);
+    margin-bottom: 20px;
+    display: block;
+    font-size: 20px;
+}
+
+
+.download-btn-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-btn{
+    background-image: var(--primary-color);
+    color: var(--background-color);
+    font-size: 20px;
+    text-transform: capitalize;
+    text-decoration: none;
+    padding: 6px 25px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px var(--text);
+}
+
+
+.footer{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--paper);
+    padding: 10px 0;
+    border-radius: 10px 10px 0 0;
+}
+
+.footer h1{
+    text-align: center;
+    font-size: 18px;
+    color: var(--text);
+}
