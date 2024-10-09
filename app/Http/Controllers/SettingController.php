@@ -22,14 +22,12 @@ class SettingController
             $this->saveJsonData($data);
 
             return response()->json([
-                'success' => true,
                 'message' => 'Screenshot setting updated successfully.',
-                'new_value' => $data['screenshot']
+                'screenshot' => $data['screenshot']
             ]);
         }
 
         return response()->json([
-            'success' => false,
             'message' => 'Screenshot setting not found.'
         ], 404);
     }
@@ -39,7 +37,6 @@ class SettingController
 
         if (isset($data['screenshot'])) {
             return response()->json([
-                'success' => true,
                 'screenshot' => $data['screenshot']
             ]);
         }
