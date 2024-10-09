@@ -188,13 +188,13 @@ class LesionController extends Controller
                     if ($source === 'vimeo-1'){
                         $response = $this->client1->request($request->videoURI, array());
                         if (intval($response['status']) === 200){
-                            $data = array_merge($data , $this->updatedVideoData($response['body'] , $request));
+                            $data = array_merge($data , $this->updatedVideoData($response , $request));
                         }
                     }
                     else if ($source === 'vimeo-2'){
                         $response = $this->client2->request($request->videoURI, array());
                         if (intval($response['status']) === 200){
-                            $data = array_merge($data , $this->updatedVideoData($response['body'] , $request));
+                            $data = array_merge($data , $this->updatedVideoData($response, $request));
                         }
                     }else if ($source === 'youtube'){
                         return $this->success([] , 'not handeled youtube yet');
