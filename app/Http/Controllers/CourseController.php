@@ -86,7 +86,10 @@ class CourseController extends Controller
 //                return HelperFunction::notFoundResponce();
 //            }
 
-            $courses = Course::whereHas('courseCategorys' , fn($q) => $q->where('category_id' , $categoryID))->get();
+            $courses = Course::whereHas('courseCategorys' , fn($q) => $q->where('category_id' , $categoryID))->with([
+                'accountInrolments',
+                'teachers'
+            ])->get();
             return $this->success(CourseResource::collection($courses));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
