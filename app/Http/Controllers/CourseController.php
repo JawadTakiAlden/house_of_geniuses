@@ -77,13 +77,17 @@ class CourseController extends Controller
     }
     public function getVisibleCourses($categoryID){
         try {
-            $category = HelperFunction::getCategoryByID($categoryID , [
-                'courses' => fn($q) => $q->where('is_visible' , true),
-            ]);
-            if (!$category){
-                return HelperFunction::notFoundResponce();
-            }
-            return $this->success(CourseResource::collection($category->courses));
+//            $category = HelperFunction::getCategoryByID($categoryID , [
+//                'courses' => fn($q) => $q->where('is_visible' , true),
+//            ]);
+
+
+//            if (!$category){
+//                return HelperFunction::notFoundResponce();
+//            }
+
+            $courses = Course::whereHas('courseCategorys' , fn($q) => $q->where('category_id' , $categoryID))->get();
+            return $this->success(CourseResource::collection($courses));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
