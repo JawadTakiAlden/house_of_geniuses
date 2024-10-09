@@ -35,7 +35,7 @@ Route::middleware(['language'])->group(function (){
         Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
     });
     Route::prefix('settings')->group(function (){
-        Route::post('/get' , [SettingController::class , 'getScreenshotValue']);
+        Route::get('/get' , [SettingController::class , 'getScreenshotValue']);
     });
     /* @commented code for routes if the mobile can discover content without auth */
 //    Route::prefix('/news')->group(function (){
