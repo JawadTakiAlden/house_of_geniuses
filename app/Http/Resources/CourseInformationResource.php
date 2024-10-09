@@ -58,9 +58,10 @@ class CourseInformationResource extends JsonResource
             'is_visible' => boolval($this->is_visible),
             'is_paid' => boolval($is_paid),
             'total_time' => intval($totalTimeOfCourse),
-            'teachers' => User::whereHas('teacherCourse' , fn($query) =>
-            $query->where('course_id' , $this->id)
-            )->get()->map(fn ($user) => $user->full_name),
+//            'teachers' => User::whereHas('teacherCourse' , fn($query) =>
+//            $query->where('course_id' , $this->id)
+//            )->get()->map(fn ($user) => $user->full_name),
+            'teachers' => $this->teachers->pluck('full_name'),
             'chapters' => ChapterInforamtionResource::collection($this->visibleChapters),
             'values_of_course' => $this->courseValues
         ];

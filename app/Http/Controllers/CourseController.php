@@ -254,7 +254,9 @@ class CourseController extends Controller
 
     public function showCourseWithInfo($courseID){
         try {
-            $course = HelperFunction::getCourseByID($courseID);
+            $course = HelperFunction::getCourseByID($courseID , [
+
+            ]);
             if (!$course){
                 return HelperFunction::notFoundResponce();
             }
