@@ -14,6 +14,7 @@ use App\Models\News;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
+use PHPUnit\Event\Code\Throwable;
 
 class HelperFunction
 {
@@ -60,7 +61,10 @@ class HelperFunction
         return Quiz::where('id' , $quizID)->first();
     }
 
-    public static function ServerErrorResponse(){
+    public static function ServerErrorResponse($th = null){
+        if ($th){
+            return (new HelperFunction)->error($th->getMessage() , 500);
+        }
         return (new HelperFunction)->error(__('messages.error.server_error') , 500);
     }
 

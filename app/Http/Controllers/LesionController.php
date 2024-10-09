@@ -231,7 +231,7 @@ class LesionController extends Controller
             }
             return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.update"));
         }catch (\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+            return HelperFunction::ServerErrorResponse($th);
         }
     }
 
