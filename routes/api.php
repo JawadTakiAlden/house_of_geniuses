@@ -27,11 +27,15 @@ Route::middleware(['language'])->group(function (){
             Route::post('/login' , [AuthController::class , 'login']);
             Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
         });
+
     });
     Route::prefix('/v2/auth/')->group(function (){
         Route::post('/register' , [AuthController::class , 'signup']);
         Route::post('/login' , [AuthController::class , 'login']);
         Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
+    });
+    Route::prefix('settings')->group(function (){
+        Route::post('/get' , [SettingController::class , 'getScreenshotValue']);
     });
     /* @commented code for routes if the mobile can discover content without auth */
 //    Route::prefix('/news')->group(function (){
@@ -178,9 +182,6 @@ Route::middleware(['language'])->group(function (){
                 });
 //        Mobile App
                 Route::middleware(['student_teacher_admin'])->group(function (){
-                    Route::prefix('settings')->group(function (){
-                        Route::post('/get' , [SettingController::class , 'getScreenshotValue']);
-                    });
                     Route::middleware(['blocked_account'])->group(function (){
                         Route::prefix('/auth')->group(function (){
                             Route::post('/logout' , [AuthController::class , 'logout']);
