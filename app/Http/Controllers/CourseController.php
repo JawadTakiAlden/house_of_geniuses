@@ -78,13 +78,12 @@ class CourseController extends Controller
     public function getVisibleCourses($categoryID){
         try {
             $category = HelperFunction::getCategoryByID($categoryID , [
-                'courses' => fn($q) => $q->where('is_visible' , true),
-                'teachers'
+                'courses'
             ]);
             if (!$category){
                 return HelperFunction::notFoundResponce();
             }
-            return $this->success(CourseResource::collection($category->courses));
+            return $this->success(CourseResource::collection($category->courses->where('is_visible' , '=' , true)));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
@@ -254,9 +253,7 @@ class CourseController extends Controller
 
     public function showCourseWithInfo($courseID){
         try {
-            $course = HelperFunction::getCourseByID($courseID , [
-
-            ]);
+            $course = HelperFunction::getCourseByID($courseID);
             if (!$course){
                 return HelperFunction::notFoundResponce();
             }
