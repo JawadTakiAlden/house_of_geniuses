@@ -79,7 +79,6 @@ class CourseController extends Controller
         try {
             $category = HelperFunction::getCategoryByID($categoryID , [
                 'courses',
-                'teachers'
             ]);
             if (!$category){
                 return HelperFunction::notFoundResponce();
