@@ -78,12 +78,12 @@ class CourseController extends Controller
     public function getVisibleCourses($categoryID){
         try {
             $category = HelperFunction::getCategoryByID($categoryID , [
-                'courses',
+                'courses' => fn($q) => $q->where('is_visible' , true),
             ]);
             if (!$category){
                 return HelperFunction::notFoundResponce();
             }
-            return $this->success(CourseResource::collection($category->courses->where('is_visible' , '=' , true)));
+            return $this->success(CourseResource::collection($category->courses));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
