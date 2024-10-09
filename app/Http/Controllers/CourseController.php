@@ -78,7 +78,8 @@ class CourseController extends Controller
     public function getVisibleCourses($categoryID){
         try {
             $category = HelperFunction::getCategoryByID($categoryID , [
-                'courses' => fn($q) => $q->where('is_visible' , true)
+                'courses' => fn($q) => $q->where('is_visible' , true),
+                'teachers'
             ]);
             if (!$category){
                 return HelperFunction::notFoundResponce();
