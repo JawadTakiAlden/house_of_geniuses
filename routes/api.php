@@ -13,6 +13,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserWatchController;
@@ -50,6 +51,9 @@ Route::middleware(['language'])->group(function (){
         Route::middleware('old_app_version')->group(function (){
             Route::prefix('/v1')->group(function (){
                 Route::middleware(['admin'])->group(function (){
+                    Route::prefix('settings')->group(function (){
+                        Route::get('/update' , [SettingController::class , 'switchScreenshot']);
+                    });
                     Route::get('/videoInfo' , [VideoController::class , 'searchVideosByTitle']);
                     Route::get('/videos/get' , [VideoController::class , 'getVideos']);
                     Route::prefix('/files')->group(function (){
@@ -174,6 +178,9 @@ Route::middleware(['language'])->group(function (){
                 });
 //        Mobile App
                 Route::middleware(['student_teacher_admin'])->group(function (){
+                    Route::prefix('settings')->group(function (){
+                        Route::post('/get' , [SettingController::class , 'getScreenshotValue']);
+                    });
                     Route::middleware(['blocked_account'])->group(function (){
                         Route::prefix('/auth')->group(function (){
                             Route::post('/logout' , [AuthController::class , 'logout']);
