@@ -87,7 +87,6 @@ class CourseController extends Controller
 //            }
 
             $courses = Course::whereHas('courseCategorys' , fn($q) => $q->where('category_id' , $categoryID))->with([
-                'accountInrolments',
                 'teachers'
             ])->get();
             return $this->success(CourseResource::collection($courses));
