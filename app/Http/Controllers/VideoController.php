@@ -75,19 +75,15 @@ class VideoController extends Controller
                 $response = $this->client1->request($request->link.'?fields=play');
                 if ($response['status'] == 200){
                     return $this->success($this->watchLinkTransformer($response));
-                }else{
-                    return $this->error($response['body']['error'] , $response['status']);
                 }
             }else if ($request->source === 'vimeo-2'){
                 $response = $this->client2->request($request->link.'?fields=play');
                 if ($response['status'] == 200){
                     return $this->success($this->watchLinkTransformer($response));
-                }else{
-                    return $this->error($response['body']['error'] , $response['status']);
                 }
             }
         }catch (\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+            return HelperFunction::ServerErrorResponse($th);
         }
     }
 
