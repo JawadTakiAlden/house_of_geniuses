@@ -8,8 +8,6 @@ use App\Http\Resources\VideoResource;
 use App\HttpResponse\HTTPResponse;
 use Illuminate\Http\Request;
 use Vimeo\Vimeo;
-use Google\Client;
-use Google\Service\YouTube;
 
 class VideoController extends Controller
 {
@@ -17,8 +15,6 @@ class VideoController extends Controller
 
     private Vimeo $client1;
     private Vimeo $client2;
-    protected $youtubeClient;
-    protected $youtube;
     public function __construct()
     {
         $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
@@ -27,13 +23,6 @@ class VideoController extends Controller
         $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
             , env('VIMEO_CLIENT_SECRET_TWO'),
             env('VIMEO_ACCESS_TOKEN_TWO'));
-
-        $this->client = new Client();
-
-        $this->client->setDeveloperKey(env('YOUTUBE_API_KEY'));
-        $this->client->setApplicationName('House Of Geniuses YouTube API');
-
-        $this->youtube = new YouTube($this->client);
     }
 
     public function getVideos () {
@@ -54,8 +43,6 @@ class VideoController extends Controller
                 $responseData = $response['body'];
                 $videos = $responseData['data'];
                 return $this->success(VideoResource::collection($videos));
-            } else if (\request('source') === 'youtube') {
-                return $this->success([] , 'from youtube');
             }else{
                 return $this->error('you are provide unsupported platform to get videos' , 422);
             }
@@ -89,16 +76,6 @@ class VideoController extends Controller
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();
         }
-    }
-
-    public function searchVideosByTitle()
-    {
-        $response = $this->youtube->search->listSearch('snippet', [
-            'q' => \request('title'),
-            'type' => 'video',
-        ]);
-
-        return $this->success($response);
     }
 
     private function watchLinkTransformer($videoResponse){
