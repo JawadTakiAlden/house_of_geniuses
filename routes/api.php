@@ -26,7 +26,7 @@ Route::middleware(['language'])->group(function (){
         Route::post('/login' , [AuthController::class , 'login']);
         Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
     });
-    Route::prefix('settings')->group(function (){
+    Route::prefix('/v2/settings')->group(function (){
         Route::get('/get' , [SettingController::class , 'getScreenshotValue']);
     });
     Route::middleware('old_app_version')->group(function (){
