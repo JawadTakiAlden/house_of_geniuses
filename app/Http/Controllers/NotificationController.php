@@ -30,7 +30,7 @@ class NotificationController extends Controller
 
         $message = CloudMessage::new()
             ->withNotification($notification);
-        $report = $messaging->send($message, $FcmToken[0]);
+        $report = $messaging->send($message, $FcmToken);
 //        $reporst = collect();
 //        foreach ($chunks as $chunk) {
 //            // Create the notification
@@ -59,7 +59,7 @@ class NotificationController extends Controller
     public function sendNotificationForAllUser(SendNotificationRequest $request){
         try {
 //            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
-            $tokens = User::where('phone' , "0948966976")->pluck('device_notification_id')->all();
+            $tokens = User::where('phone' , "0948966976")->first()->pluck('device_notification_id');
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
         }catch (\Throwable $th){
