@@ -21,19 +21,35 @@ class NotificationController extends Controller
     public function BasicSendNotification($title , $body , $FcmToken){
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
-        $this->messaging = $firebase->createMessaging();
+        $messaging = $firebase->createMessaging();
 //        $notification = Notification::create($title, $body);
         $notification = Notification::create($title, $body);
         $result = null;
-//        foreach ($FcmToken as $token) {
-            $message = CloudMessage::new();
-            $message->withNotification($notification);
+
+        $chunks = array_chunk($FcmToken, 500);
+
+        $message = CloudMessage::new()
+            ->withNotification($notification);
+
+        foreach ($chunks as $chunk) {
+            // Create the notification
 
             try {
-                $result = $this->messaging->sendMulticast($message , $FcmToken);
+                // Send the message as a multicast
+                $messaging->sendMulticast($message, $chunk);
             } catch (\Exception $e) {
-                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
+                Log::error('Failed to send multicast notification: ' . $e->getMessage());
             }
+        }
+//        foreach ($FcmToken as $token) {
+//            $message = CloudMessage::new();
+//            $message->withNotification($notification);
+//
+//            try {
+//                $result = $this->messaging->sendMulticast($message , $FcmToken);
+//            } catch (\Exception $e) {
+//                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
+//            }
 //        }
         return $this->success($result ,  __('messages.notification_controller.send_successfully'));
     }
