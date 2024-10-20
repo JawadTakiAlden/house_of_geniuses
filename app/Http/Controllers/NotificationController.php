@@ -36,9 +36,10 @@ class NotificationController extends Controller
 
 
 //        $reporst = collect();
-        foreach ($chunks as $chunk) {
+        foreach ($FcmToken as $fcm) {
+            $message->withChangedTarget("token" , $fcm);
             try {
-                $messaging->sendMulticast($message , $chunk);
+                $messaging->send($message);
             } catch (\Exception $e) {
                 Log::error('Failed to send multicast notification: ' . $e->getMessage());
             }
@@ -60,7 +61,8 @@ class NotificationController extends Controller
         try {
 //            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
 //            $tokens = User::where('phone' , "0948966976")->first()->pluck('device_notification_id');
-            $tokens = User::where("device_notification_id" , "!=" , null)->pluck("device_notification_id");
+            $tokens = User::where("phone" , "0948966976")->get("device_notification_id");
+            return $tokens->toArray();
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
         }catch (\Throwable $th){
