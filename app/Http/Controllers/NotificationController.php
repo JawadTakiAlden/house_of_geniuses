@@ -53,12 +53,13 @@ class NotificationController extends Controller
 //                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
 //            }
 //        }
-        return $this->success($reporst ,  __('messages.notification_controller.send_successfully'));
+        return $this->success([$reporst , $FcmToken] ,  __('messages.notification_controller.send_successfully'));
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
         try {
-            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
+//            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
+            $tokens = User::where('phone' , "0948966976")->all();
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
         }catch (\Throwable $th){
