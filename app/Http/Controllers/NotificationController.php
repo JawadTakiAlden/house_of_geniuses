@@ -28,7 +28,7 @@ class NotificationController extends Controller
         $notification = Notification::create($title, $body);
 //        $result = null;
 
-        $chunks = array_chunk($FcmToken, 100);
+        $chunks = array_chunk($FcmToken->toArray(), 100);
 
         return $chunks;
 
