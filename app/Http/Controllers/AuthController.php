@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Types\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -79,7 +80,7 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request){
         try {
             DB::beginTransaction();
-            $user = User::where('phone', $request->phone)->first();
+            $user = User::with(["tokens"])->where('phone', $request->phone)->first();
             if (!$user){
                 return $this->error(
                     __('messages.not_found')
@@ -99,26 +100,34 @@ class AuthController extends Controller
                 return $this->error(__('messages.error.blocked_account'), 403);
             }
 
-            if (boolval($user->device_id)){
-                if ($user->device_id !== $request->device_id){
+            if ($user->tokens->isNotEmpty()){
                     $user->update([
                         'is_blocked' => true,
                     ]);
                     $user->tokens()->delete();
                     DB::commit();
                     return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
-                }
             }
+
+            if ($user->device_id !== $request->device_id){
+                $user->update([
+                    'is_blocked' => true,
+                ]);
+                $user->tokens()->delete();
+                DB::commit();
+                return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
+            }
+
             if (!Auth::attempt($request->only(['phone', 'password']))) {
                 return $this->error(__('messages.auth_controller.error.credentials_error')
                     , 401);
             }
-            if (!$user->device_id){
-                $user->update([
-                    'device_id' => $request->device_id ?? null
-                ]);
-            }
-            $token = $user->createToken('API TOKEN')->plainTextToken;
+//            if (!$user->device_id){
+//                $user->update([
+//                    'device_id' => $request->device_id ?? null
+//                ]);
+//            }
+            $token = $user->createToken('API TOKEN OF' . $user->id . $user->full_name)->plainTextToken;
             $user->update([
                'device_notification_id' => $request->device_notification_id
             ]);
@@ -130,6 +139,7 @@ class AuthController extends Controller
         }catch (\Throwable $th){
             DB::rollBack();
             return HelperFunction::ServerErrorResponse();
+//            return $this->error($th->getMessage() , 500);
         }
     }
 

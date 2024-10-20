@@ -78,6 +78,7 @@ class UserController extends Controller
             $user->update([
                'device_id' => null
             ]);
+            $user->tokens()->delete();
             return $this->success(UserResource::make($user));
         }catch (\Throwable $th){
             return HelperFunction::ServerErrorResponse();

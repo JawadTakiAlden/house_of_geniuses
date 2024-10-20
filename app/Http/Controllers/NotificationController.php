@@ -22,17 +22,19 @@ class NotificationController extends Controller
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
         $this->messaging = $firebase->createMessaging();
+//        $notification = Notification::create($title, $body);
         $notification = Notification::create($title, $body);
         $result = null;
-        foreach ($FcmToken as $token) {
-            $message = CloudMessage::withTarget('token', $token)
-                ->withNotification($notification);
+//        foreach ($FcmToken as $token) {
+            $message = CloudMessage::new();
+            $message->withNotification($notification);
+
             try {
-                $result = $this->messaging->send($message);
+                $result = $this->messaging->sendMulticast($message , $FcmToken);
             } catch (\Exception $e) {
                 Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
             }
-        }
+//        }
         return $this->success($result ,  __('messages.notification_controller.send_successfully'));
     }
 
