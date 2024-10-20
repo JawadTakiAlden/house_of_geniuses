@@ -23,12 +23,14 @@ class NotificationController extends Controller
             ->withServiceAccount(config_path('firebase_config.json'));
         $messaging = $firebase->createMessaging();
 
-        return $FcmToken;
+
 //        $notification = Notification::create($title, $body);
         $notification = Notification::create($title, $body);
 //        $result = null;
 
-//        $chunks = array_chunk($FcmToken, 500);
+        $chunks = array_chunk($FcmToken, 100);
+
+        return $chunks;
 
         $message = CloudMessage::withTarget('token' , $FcmToken)
             ->withNotification($notification);
