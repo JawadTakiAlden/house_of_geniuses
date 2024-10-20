@@ -19,19 +19,38 @@ class NotificationController extends Controller
 
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
+//        $firebase = (new Factory())
+//            ->withServiceAccount(config_path('firebase_config.json'));
+//        $messaging = $firebase->createMessaging();
+//
+//        $notification = Notification::create($title, $body);
+//
+//        foreach ($FcmToken as $token) {
+//            $message = CloudMessage::withTarget('token', $token)
+//                ->withNotification($notification);
+//            try {
+//                $messaging->send($message);
+//            } catch (\Exception $e) {
+//                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
+//            }
+//        }
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
         $messaging = $firebase->createMessaging();
 
         $notification = Notification::create($title, $body);
 
-        foreach ($FcmToken as $token) {
-            $message = CloudMessage::withTarget('token', $token)
-                ->withNotification($notification);
+        $chunks = array_chunk($FcmToken, 500); // Firebase multicast supports max 500 tokens
+
+        foreach ($chunks as $chunk) {
+            $message = CloudMessage::new()
+                ->withNotification($notification)
+                ->withTarget('tokens', $chunk); // Send to a chunk of tokens
+
             try {
-                $messaging->send($message);
+                $messaging->sendMulticast($message);
             } catch (\Exception $e) {
-                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
+                Log::error('Failed to send notification , request failed with message : ' . $e->getMessage());
             }
         }
         return $this->success(null ,  __('messages.notification_controller.send_successfully'));
