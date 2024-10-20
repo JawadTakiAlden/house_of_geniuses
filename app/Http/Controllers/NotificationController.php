@@ -28,9 +28,9 @@ class NotificationController extends Controller
 
 //        $chunks = array_chunk($FcmToken, 500);
 
-        $message = CloudMessage::new()
+        $message = CloudMessage::withTarget('token' , $FcmToken)
             ->withNotification($notification);
-        $report = $messaging->send($message, $FcmToken);
+        $report = $messaging->send($message);
 //        $reporst = collect();
 //        foreach ($chunks as $chunk) {
 //            // Create the notification
