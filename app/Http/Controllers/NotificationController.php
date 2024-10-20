@@ -23,45 +23,23 @@ class NotificationController extends Controller
             ->withServiceAccount(config_path('firebase_config.json'));
         $messaging = $firebase->createMessaging();
 
-
-//        $notification = Notification::create($title, $body);
         $notification = Notification::create($title, $body);
-//        $result = null;
 
-        $chunks = array_chunk($FcmToken->toArray(), 100);
-
-
-        $message = CloudMessage::new()
-            ->withNotification($notification);
-
-
-        $result = null;
-        foreach ($FcmToken as $fcm) {
-            $message->withChangedTarget("token" , $fcm);
+        foreach ($FcmToken as $token) {
+            $message = CloudMessage::withTarget('token', $token)
+                ->withNotification($notification);
             try {
-                $result = $messaging->send($message);
+                $messaging->send($message);
             } catch (\Exception $e) {
-                Log::error('Failed to send multicast notification: ' . $e->getMessage());
+                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
             }
         }
-//        foreach ($FcmToken as $token) {
-//            $message = CloudMessage::new();
-//            $message->withNotification($notification);
-//
-//            try {
-//                $result = $this->messaging->sendMulticast($message , $FcmToken);
-//            } catch (\Exception $e) {
-//                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
-//            }
-//        }
-        return $this->success($result ,  __('messages.notification_controller.send_successfully'));
+        return $this->success(null ,  __('messages.notification_controller.send_successfully'));
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
         try {
-//            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
-//            $tokens = User::where('phone' , "0948966976")->first()->pluck('device_notification_id');
-            $tokens = User::where("phone" , "0948966976")->pluck("device_notification_id");
+            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
         }catch (\Throwable $th){
