@@ -64,7 +64,7 @@ class NotificationController extends Controller
 //            $tokens = User::where('phone' , "0948966976")->first()->pluck('device_notification_id');
             $tokens = User::where("device_notification_id" , "!=" , null)->pluck("device_notification_id");
             return [
-                "tokens" => $tokens
+                "tokens" => $tokens[0]
             ];
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
