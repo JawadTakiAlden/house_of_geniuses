@@ -22,6 +22,8 @@ class NotificationController extends Controller
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
         $messaging = $firebase->createMessaging();
+
+        return $FcmToken;
 //        $notification = Notification::create($title, $body);
         $notification = Notification::create($title, $body);
 //        $result = null;
