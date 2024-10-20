@@ -37,7 +37,6 @@ class NotificationController extends Controller
 
 //        $reporst = collect();
         foreach ($FcmToken as $fcm) {
-            return "fcm:".$fcm;
             $message->withChangedTarget("token" , $fcm);
             try {
                 $messaging->send($message);
