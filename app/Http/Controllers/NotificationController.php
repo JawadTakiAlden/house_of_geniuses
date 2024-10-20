@@ -30,23 +30,19 @@ class NotificationController extends Controller
 
         $chunks = array_chunk($FcmToken->toArray(), 100);
 
-        return $chunks;
 
-        $message = CloudMessage::withTarget('token' , $FcmToken)
+        $message = CloudMessage::new()
             ->withNotification($notification);
-        $report = $messaging->send($message);
+
+
 //        $reporst = collect();
-//        foreach ($chunks as $chunk) {
-//            // Create the notification
-//
-//            try {
-//                // Send the message as a multicast
-//
-//                $reporst->push($report);
-//            } catch (\Exception $e) {
-//                Log::error('Failed to send multicast notification: ' . $e->getMessage());
-//            }
-//        }
+        foreach ($chunks as $chunk) {
+            try {
+                $messaging->sendMulticast($message , $chunk);
+            } catch (\Exception $e) {
+                Log::error('Failed to send multicast notification: ' . $e->getMessage());
+            }
+        }
 //        foreach ($FcmToken as $token) {
 //            $message = CloudMessage::new();
 //            $message->withNotification($notification);
@@ -57,7 +53,7 @@ class NotificationController extends Controller
 //                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
 //            }
 //        }
-        return $this->success([$report , $FcmToken] ,  __('messages.notification_controller.send_successfully'));
+        return $this->success(null ,  __('messages.notification_controller.send_successfully'));
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
