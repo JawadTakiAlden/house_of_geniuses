@@ -62,7 +62,7 @@ class NotificationController extends Controller
         try {
 //            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
 //            $tokens = User::where('phone' , "0948966976")->first()->pluck('device_notification_id');
-            $tokens = User::first()->select("device_notification_id");
+            $tokens = User::select("device_notification_id");
             return [
                 "tokens" => $tokens
             ];
