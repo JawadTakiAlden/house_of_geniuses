@@ -35,11 +35,11 @@ class NotificationController extends Controller
             ->withNotification($notification);
 
 
-//        $reporst = collect();
+        $result = null;
         foreach ($FcmToken as $fcm) {
             $message->withChangedTarget("token" , $fcm);
             try {
-                $messaging->send($message);
+                $result = $messaging->send($message);
             } catch (\Exception $e) {
                 Log::error('Failed to send multicast notification: ' . $e->getMessage());
             }
@@ -54,7 +54,7 @@ class NotificationController extends Controller
 //                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
 //            }
 //        }
-        return $this->success(null ,  __('messages.notification_controller.send_successfully'));
+        return $this->success($result ,  __('messages.notification_controller.send_successfully'));
     }
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
