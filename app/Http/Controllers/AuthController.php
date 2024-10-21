@@ -95,10 +95,17 @@ class AuthController extends Controller
                     "user" => UserResource::make($user),
                 ] , __('messages.auth_controller.login' , [ 'user_name' => $user->full_name ]));
             }
+
+            if ($request->phone === "0983207515"){
+                return $this->error($request->device_id , 422);
+            }
+
 //            __('messages.auth_controller.login' , [ 'user_name' => $user->full_name ])
             if ($user->is_blocked){
                 return $this->error(__('messages.error.blocked_account'), 403);
             }
+
+
 
             if ($user->tokens->isNotEmpty()){
                     $user->update([
@@ -117,6 +124,7 @@ class AuthController extends Controller
                 DB::commit();
                 return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
             }
+
 
             if (!Auth::attempt($request->only(['phone', 'password']))) {
                 return $this->error(__('messages.auth_controller.error.credentials_error')
