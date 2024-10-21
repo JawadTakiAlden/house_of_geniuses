@@ -109,15 +109,14 @@ class AuthController extends Controller
                     return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
             }
 
-            if ($user->device_id !== $request->device_id){
-                $user->update([
-                    'is_blocked' => true,
-                ]);
-                $user->tokens()->delete();
-                DB::commit();
-                return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
-            }
-
+//            if ($user->device_id !== $request->device_id){
+//                $user->update([
+//                    'is_blocked' => true,
+//                ]);
+//                $user->tokens()->delete();
+//                DB::commit();
+//                return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
+//            }
 
             if (!Auth::attempt($request->only(['phone', 'password']))) {
                 return $this->error(__('messages.auth_controller.error.credentials_error')
