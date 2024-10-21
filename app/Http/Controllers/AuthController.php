@@ -100,8 +100,6 @@ class AuthController extends Controller
                 return $this->error(__('messages.error.blocked_account'), 403);
             }
 
-
-
             if ($user->tokens->isNotEmpty()){
                     $user->update([
                         'is_blocked' => true,
