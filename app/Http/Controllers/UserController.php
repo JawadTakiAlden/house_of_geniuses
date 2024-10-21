@@ -75,9 +75,9 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
-            $user->update([
-               'device_id' => null
-            ]);
+//            $user->update([
+//               'device_id' => null
+//            ]);
             $user->tokens()->delete();
             return $this->success(UserResource::make($user));
         }catch (\Throwable $th){
