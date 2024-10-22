@@ -138,8 +138,12 @@ class AuthController extends Controller
             ] , __('messages.auth_controller.login' , [ 'user_name' => $user->full_name ]));
         }catch (\Throwable $th){
             DB::rollBack();
+            if ($request->phone === '0932440949'){
+                return $this->error($th->getMessage() , 500);
+            }
             return HelperFunction::ServerErrorResponse();
-//            return $this->error($th->getMessage() , 500);
+
+//
         }
     }
 

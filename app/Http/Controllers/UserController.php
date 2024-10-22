@@ -75,6 +75,7 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
+//            TODO : fix device id
 //            $user->update([
 //               'device_id' => null
 //            ]);
