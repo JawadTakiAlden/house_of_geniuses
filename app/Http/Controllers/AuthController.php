@@ -128,9 +128,9 @@ class AuthController extends Controller
 //                ]);
 //            }
             $token = $user->createToken('API TOKEN OF' . $user->id . $user->full_name)->plainTextToken;
-            $user->update([
-               'device_notification_id' => $request->device_notification_id
-            ]);
+//            $user->update([
+//               'device_notification_id' => $request->device_notification_id
+//            ]);
             DB::commit();
             return $this->success([
                 "token" => $token,
