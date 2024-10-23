@@ -20,21 +20,21 @@ class NotificationController extends Controller
 
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
-//        $firebase = (new Factory())
-//            ->withServiceAccount(config_path('firebase_config.json'));
-//        $messaging = $firebase->createMessaging();
-//
-//        $notification = Notification::create($title, $body);
-//
-//        foreach ($FcmToken as $token) {
-//            $message = CloudMessage::withTarget('token', $token)
-//                ->withNotification($notification);
-//            try {
-//                $messaging->send($message);
-//            } catch (\Exception $e) {
-//                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
-//            }
-//        }
+        $firebase = (new Factory())
+            ->withServiceAccount(config_path('firebase_config.json'));
+        $messaging = $firebase->createMessaging();
+
+        $notification = Notification::create($title, $body);
+
+        foreach ($FcmToken as $token) {
+            $message = CloudMessage::withTarget('token', $token)
+                ->withNotification($notification);
+            try {
+                $messaging->send($message);
+            } catch (\Exception $e) {
+                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
+            }
+        }
 //        $firebase = (new Factory())
 //            ->withServiceAccount(config_path('firebase_config.json'));
 //        $messaging = $firebase->createMessaging();
@@ -55,9 +55,9 @@ class NotificationController extends Controller
 //            }
 //        }
 
-        foreach ($FcmToken as $token) {
-            dispatch(new SendFirebaseNotificationJob($title, $body, $token));
-        }
+//        foreach ($FcmToken as $token) {
+//            dispatch(new SendFirebaseNotificationJob($title, $body, $token));
+//        }
         return $this->success(null ,  __('messages.notification_controller.send_successfully'));
     }
 
