@@ -34,8 +34,9 @@ class NotificationController extends Controller
 
     public function sendNotificationForAllUser(SendNotificationRequest $request){
         try {
-            $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
-            $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
+            $tokens = User::where('device_notification_id' , "!=" , null)->pluck('device_notification_id');
+            return $tokens;
+            $result = $this->BasicSendNotification($request->title , $request->body , $tokens->toArray());
             return $result;
         }catch (\Throwable $th){
             return $this->error($th->getMessage() , 500);
