@@ -21,10 +21,9 @@ class NotificationController extends Controller
 
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
-        $chunks = array_chunk($FcmToken, 200);
 
-        foreach ($chunks as $chunk) {
-            dispatch(new SendMulticastFirebaseNotification($title, $body, $chunk));
+        foreach ($FcmToken as $token) {
+            dispatch(new SendFirebaseNotificationJob($title, $body, $token));
         }
 //        foreach ($FcmToken as $token) {
 //            dispatch(new SendFirebaseNotificationJob($title , $body , $token));
