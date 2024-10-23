@@ -6,6 +6,7 @@ use App\Http\HelperFunction;
 use App\Http\Requests\SendNotificationRequest;
 use App\HttpResponse\HTTPResponse;
 use App\Jobs\SendFirebaseNotificationJob;
+use App\Jobs\SendMulticastFirebaseNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Exception\FirebaseException;
@@ -20,43 +21,13 @@ class NotificationController extends Controller
 
     use HTTPResponse;
     public function BasicSendNotification($title , $body , $FcmToken){
-        $firebase = (new Factory())
-            ->withServiceAccount(config_path('firebase_config.json'));
-        $messaging = $firebase->createMessaging();
+        $chunks = array_chunk($FcmToken, 200);
 
-        $notification = Notification::create($title, $body);
-
-        foreach ($FcmToken as $token) {
-            $message = CloudMessage::withTarget('token', $token)
-                ->withNotification($notification);
-            try {
-                $messaging->send($message);
-            } catch (\Exception $e) {
-                Log::error('Failed to send notification , request failed with message : '.$e->getMessage());
-            }
+        foreach ($chunks as $chunk) {
+            dispatch(new SendMulticastFirebaseNotification($title, $body, $chunk));
         }
-//        $firebase = (new Factory())
-//            ->withServiceAccount(config_path('firebase_config.json'));
-//        $messaging = $firebase->createMessaging();
-//
-//        $notification = Notification::create($title, $body);
-//
-//        $chunks = array_chunk($FcmToken, 500); // Firebase multicast supports max 500 tokens
-//
-//        foreach ($chunks as $chunk) {
-//            $message = CloudMessage::new()
-//                ->withNotification($notification)
-//                ->withTarget('tokens', $chunk); // Send to a chunk of tokens
-//
-//            try {
-//                $messaging->sendMulticast($message);
-//            } catch (\Exception $e) {
-//                Log::error('Failed to send notification , request failed with message : ' . $e->getMessage());
-//            }
-//        }
-
 //        foreach ($FcmToken as $token) {
-//            dispatch(new SendFirebaseNotificationJob($title, $body, $token));
+//            dispatch(new SendFirebaseNotificationJob($title , $body , $token));
 //        }
         return $this->success(null ,  __('messages.notification_controller.send_successfully'));
     }
@@ -64,7 +35,6 @@ class NotificationController extends Controller
     public function sendNotificationForAllUser(SendNotificationRequest $request){
         try {
             $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
-            return $tokens;
             $result = $this->BasicSendNotification($request->title , $request->body , $tokens);
             return $result;
         }catch (\Throwable $th){
