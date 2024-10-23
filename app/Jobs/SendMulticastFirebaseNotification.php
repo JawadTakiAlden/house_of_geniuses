@@ -47,15 +47,7 @@ class SendMulticastFirebaseNotification implements ShouldQueue
         $message = CloudMessage::new()->withNotification($notification);
 
         try {
-            // Send multicast message to all tokens in one request
-            $response = $messaging->sendMulticast($message, $this->FcmTokens);
-
-            // Handle failures
-            if ($response->hasFailures()) {
-                foreach ($response->failures()->getItems() as $failure) {
-                    Log::error('Failed to send to token: ' . $failure->target()->value() . ' due to ' . $failure->error()->getMessage());
-                }
-            }
+            $messaging->sendMulticast($message, $this->FcmTokens);
         } catch (\Exception $e) {
             Log::error('Failed to send notification, request failed with message: ' . $e->getMessage());
         }
