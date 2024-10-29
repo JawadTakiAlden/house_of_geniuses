@@ -28,8 +28,8 @@ class SignUpRequest extends FormRequest
             'phone' => 'required|min:10|max:10|unique:users,phone',
             'password' => 'required|min:7|max:26',
             'image' => 'image|mimes:png,jpg,jpeg|max:5120',
-            'device_id' => 'required',
-            'device_notification_id' => 'required'
+            'device_id' => 'nullable|string',
+            'device_notification_id' => 'string|nullable'
         ];
     }
 
