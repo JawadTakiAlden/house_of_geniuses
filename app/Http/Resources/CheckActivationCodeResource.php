@@ -28,7 +28,7 @@ class CheckActivationCodeResource extends JsonResource
                 if (boolval($obj->is_used)){
                     $activator = AccountInrolment::where('course_id' , $obj['course_id'])
                         ->where('activation_code_id' , $this->id)
-                        ->first()->user;
+                        ->first()?->user;
                     $base = array_merge($base , [
                         'activator' =>$activator->full_name,
                         'phone' => $activator->phone
