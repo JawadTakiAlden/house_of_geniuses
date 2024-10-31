@@ -144,7 +144,7 @@ class ActivationCodeController extends Controller
             }
             return $this->success(CheckActivationCodeResource::make($code));
         }catch(\Throwable $th){
-            return HelperFunction::ServerErrorResponse();
+            return HelperFunction::ServerErrorResponse($th);
         }
     }
 
