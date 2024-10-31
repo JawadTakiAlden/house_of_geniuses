@@ -30,8 +30,8 @@ class CheckActivationCodeResource extends JsonResource
                         ->where('activation_code_id' , $this->id)
                         ->first()?->user;
                     $base = array_merge($base , [
-                        'activator' =>$activator->full_name,
-                        'phone' => $activator->phone
+                        'activator' =>$activator?->full_name,
+                        'phone' => $activator?->phone
                     ]);
                 }
                 return $base;
