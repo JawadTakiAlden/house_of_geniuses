@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ImageController extends Controller
 {
@@ -15,22 +16,25 @@ class ImageController extends Controller
 
         $scaleX = $request->query('scaleX', 1);
         $scaleY = $request->query('scaleY', 1);
+        $scale = $request->query('scale', 1);
         $height = $request->query('height', 0);
         $width = $request->query('width', 0);
 
 
-        $img = Image::make($filePath);
+        $img = Image::read($filePath);
 
         if ($width == null && $height == null){
-            $width = $img->width() * $scaleX ;
+            if ($scale !== null){
+             $width = $img->width() * $scale ;
+            $height = $img->height() * $scale ;
+            }else {
+                $width = $img->width() * $scaleX ;
             $height = $img->height() * $scaleY ;
+            }
+
         }
+        $img->resize($width, $height);
 
-        $img->resize($width, $height, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-
-        return $img->response('jpg');
+        return $img;
     }
 }
