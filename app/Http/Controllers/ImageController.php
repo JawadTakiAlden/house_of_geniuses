@@ -7,7 +7,9 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class ImageController extends Controller
 {
-    public function getImage($filepath , Request $request){
+    public function getImage(Request $request){
+
+        $filepath = $request->query('filepath', 1);
         $filePath = public_path($filepath);
 
         if (!file_exists($filePath)) {

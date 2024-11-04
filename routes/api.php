@@ -38,7 +38,7 @@ Route::middleware(['language'])->group(function (){
         });
     });
 
-    Route::get('/v2/image/{filepath}' , [ImageController::class , 'getImage']);
+    Route::get('/v2/image' , [ImageController::class , 'getImage']);
 
     /* @commented code for routes if the mobile can discover content without auth */
 //    Route::prefix('/news')->group(function (){
