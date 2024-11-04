@@ -8,6 +8,7 @@ use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseValueController;
 use App\Http\Controllers\ExportableFileController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LesionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotificationController;
@@ -35,8 +36,9 @@ Route::middleware(['language'])->group(function (){
             Route::post('/login' , [AuthController::class , 'login']);
             Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
         });
-
     });
+
+    Route::get('/v2/image/{filepath}' , [ImageController::class , 'getImage']);
 
     /* @commented code for routes if the mobile can discover content without auth */
 //    Route::prefix('/news')->group(function (){
