@@ -38,11 +38,9 @@ class ImageController extends Controller
 
             }
             $img->resize($width, $height);
-
-            return $img;
+            return response()->file($img->toPng());
         }catch(\Throwable $th){
             return HelperFunction::ServerErrorResponse($th);
         }
-
     }
 }
