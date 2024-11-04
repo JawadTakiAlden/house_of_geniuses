@@ -25,7 +25,7 @@ class ImageController extends Controller
             $width = $request->query('width', 0);
 
 
-            $img = Image::make($filePath);
+            $img = Image::read($filePath);
 
             if ($width == null && $height == null){
                 if ($scale !== null){
@@ -39,7 +39,9 @@ class ImageController extends Controller
             }
             $img->resize($width, $height);
 
-            return $img->response('jpg');
+            return response([
+               'img' => $img
+            ]);
         }catch(\Throwable $th){
             return HelperFunction::ServerErrorResponse($th);
         }
