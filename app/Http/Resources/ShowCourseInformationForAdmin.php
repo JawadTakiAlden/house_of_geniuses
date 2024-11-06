@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\HelperFunction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class ShowCourseInformationForAdmin extends JsonResource
         return [
             'id' => intval($this->id),
             'name' => $this->name,
-            'image' => $this->image ? asset($this->image) : null,
+            'image' => $this->image ? HelperFunction::getImage($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
             'is_open' => boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),

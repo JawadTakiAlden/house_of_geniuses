@@ -14,6 +14,7 @@ use App\Models\News;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 use PHPUnit\Event\Code\Throwable;
 
 class HelperFunction
@@ -70,5 +71,13 @@ class HelperFunction
 
     public static function notFoundResponce(){
         return (new HelperFunction)->error(__('messages.error.not_found') , 404);
+    }
+
+    public  static  function getImage($path){
+        if (File::exists(public_path($path))){
+            return asset($path);
+        }
+
+        return null;
     }
 }

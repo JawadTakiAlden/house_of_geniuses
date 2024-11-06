@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\HelperFunction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +19,7 @@ class QuestionResource extends JsonResource
         $baseData = [
             'id' => $this->id,
             'title' => $this->title,
-            'image' => $this->image ? asset($this->image) : null,
+            'image' => $this->image ? HelperFunction::getImage($this->image) : null,
             'clarification_image' => $this->clarification_image ? asset($this->clarification_image) : null,
             'clarification_text' => $this->clarification_text,
             'choices' => ChoiceResource::collection($this->choices),

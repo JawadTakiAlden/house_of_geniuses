@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\HelperFunction;
 use App\Models\AccountInrolment;
 use App\Types\UserType;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class CourseResource extends JsonResource
         $array = [
             'id' => intval($this->id),
             'name' => $this->name,
-            'image' => $this->image ? asset($this->image) : null,
+            'image' => $this->image ? HelperFunction::getImage($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
             'is_open' => $request->query('os') === 'ios' || boolval($this->is_open) ,
             'is_visible' => boolval($this->is_visible),

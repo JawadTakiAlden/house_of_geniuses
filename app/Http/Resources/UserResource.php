@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\HelperFunction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +19,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'full_name' => $this->full_name,
             'phone' => $this->phone,
-            'image' => $this->image ? asset($this->image) : null,
+            'image' => $this->image ? HelperFunction::getImage($this->image) : null,
             'is_blocked' => boolval($this->is_blocked),
             'type' => $this->type,
         ];
