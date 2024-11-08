@@ -25,7 +25,7 @@ class LoginUserRequest extends FormRequest
         return [
             'phone' => 'required',
             'password' => 'required|min:4',
-            'device_id' => 'string',
+            'device_id' => 'string|required',
             'device_notification_id' => 'string|nullable'
         ];
     }

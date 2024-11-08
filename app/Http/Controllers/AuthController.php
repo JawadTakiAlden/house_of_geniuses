@@ -20,11 +20,11 @@ class AuthController extends Controller
     public function signup (SignUpRequest $request) {
         try {
             DB::beginTransaction();
-//            if (User::where('device_id' , $request->device_id)->exists()){
-//                return $this->error(
-//                    __('messages.auth_controller.device_id_unique')
-//                    , 422);
-//            }
+            if (User::where('device_id' , $request->device_id)->exists()){
+                return $this->error(
+                    __('messages.auth_controller.device_id_unique')
+                    , 422);
+            }
             $user = User::create($request->only(
                 [
                     'full_name' ,
@@ -32,7 +32,7 @@ class AuthController extends Controller
                     'device_notification_id' ,
                     'phone' ,
                     'password' ,
-//                    'device_id'
+                    'device_id'
                 ]
             ));
             DB::commit();
@@ -100,34 +100,39 @@ class AuthController extends Controller
                 return $this->error(__('messages.error.blocked_account'), 403);
             }
 
-            if ($user->tokens->isNotEmpty()){
+//            if ($user->tokens->isNotEmpty()){
+//                    $user->update([
+//                        'is_blocked' => true,
+//                    ]);
+//                    $user->tokens()->delete();
+//                    DB::commit();
+//                    return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
+//            }
+
+            if ($user->device_id !== null){
+                if ($user->device_id !== $request->device_id){
                     $user->update([
                         'is_blocked' => true,
                     ]);
                     $user->tokens()->delete();
                     DB::commit();
                     return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
+                }
             }
-
-//            if ($user->device_id !== $request->device_id){
-//                $user->update([
-//                    'is_blocked' => true,
-//                ]);
-//                $user->tokens()->delete();
-//                DB::commit();
-//                return $this->error(trans('messages.auth_controller.error.block_account_while_login'), 403);
-//            }
 
             if (!Auth::attempt($request->only(['phone', 'password']))) {
                 return $this->error(__('messages.auth_controller.error.credentials_error')
                     , 401);
             }
-//            if (!$user->device_id){
-//                $user->update([
-//                    'device_id' => $request->device_id ?? null
-//                ]);
-//            }
+
+            if (!$user->device_id){
+                $user->update([
+                    'device_id' => $request->device_id ?? null
+                ]);
+            }
+
             $token = $user->createToken('API TOKEN OF' . $user->id . $user->full_name)->plainTextToken;
+
             $user->update([
                'device_notification_id' => $request->device_notification_id
             ]);
@@ -138,12 +143,7 @@ class AuthController extends Controller
             ] , __('messages.auth_controller.login' , [ 'user_name' => $user->full_name ]));
         }catch (\Throwable $th){
             DB::rollBack();
-            if ($request->phone === '0932440949'){
-                return $this->error($th->getMessage() , 500);
-            }
             return HelperFunction::ServerErrorResponse();
-
-//
         }
     }
 

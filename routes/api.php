@@ -21,19 +21,22 @@ use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['language'])->group(function (){
-    Route::prefix('/v2/auth/')->group(function (){
+    Route::prefix('/v3/auth/')->group(function (){
         Route::post('/register' , [AuthController::class , 'signup']);
         Route::post('/login' , [AuthController::class , 'login']);
         Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
     });
-    Route::prefix('/v2/settings')->group(function (){
+    Route::prefix('/v3/settings')->group(function (){
         Route::get('/get' , [SettingController::class , 'getScreenshotValue']);
     });
     Route::middleware('old_app_version')->group(function (){
-        Route::prefix('/v1/auth/')->group(function (){
+        Route::prefix('/v2/auth/')->group(function (){
             Route::post('/register' , [AuthController::class , 'signup']);
             Route::post('/login' , [AuthController::class , 'login']);
             Route::post('/admin/login' , [AuthController::class , 'loginAdmin']);
+        });
+        Route::prefix('/v2/settings')->group(function (){
+            Route::get('/get' , [SettingController::class , 'getScreenshotValue']);
         });
     });
 
@@ -53,7 +56,7 @@ Route::middleware(['language'])->group(function (){
 
     Route::middleware(['auth:sanctum'])->group(function () {
 //    Admin Routes
-        Route::prefix('/v2')->group(function (){
+        Route::prefix('/v3')->group(function (){
             Route::middleware(['admin'])->group(function (){
                 Route::get('/videos/get' , [VideoController::class , 'getVideos']);
                 Route::prefix('/files')->group(function (){
@@ -210,7 +213,7 @@ Route::middleware(['language'])->group(function (){
         });
 
         Route::middleware('old_app_version')->group(function (){
-            Route::prefix('/v1')->group(function (){
+            Route::prefix('/v2')->group(function (){
                 Route::middleware(['admin'])->group(function (){
                     Route::prefix('settings')->group(function (){
                         Route::get('/update' , [SettingController::class , 'switchScreenshot']);
