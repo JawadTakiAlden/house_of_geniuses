@@ -29,7 +29,7 @@ Route::middleware(['language'])->group(function (){
     Route::prefix('/v3/settings')->group(function (){
         Route::get('/get' , [SettingController::class , 'getScreenshotValue']);
     });
-//    Route::middleware('old_app_version')->group(function (){
+    Route::middleware('old_app_version')->group(function (){
         Route::prefix('/v2/auth/')->group(function (){
             Route::post('/register' , [AuthController::class , 'signup']);
             Route::post('/login' , [AuthController::class , 'login']);
@@ -38,7 +38,7 @@ Route::middleware(['language'])->group(function (){
         Route::prefix('/v2/settings')->group(function (){
             Route::get('/get' , [SettingController::class , 'getScreenshotValue']);
         });
-//    });
+    });
 
 
     /* @commented code for routes if the mobile can discover content without auth */
@@ -212,7 +212,7 @@ Route::middleware(['language'])->group(function (){
             });
         });
 
-//        Route::middleware('old_app_version')->group(function (){
+        Route::middleware('old_app_version')->group(function (){
             Route::prefix('/v2')->group(function (){
                 Route::middleware(['admin'])->group(function (){
                     Route::prefix('settings')->group(function (){
@@ -373,5 +373,5 @@ Route::middleware(['language'])->group(function (){
                 });
             });
         });
-//    });
+    });
 });

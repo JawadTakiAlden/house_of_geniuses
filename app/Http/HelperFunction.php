@@ -78,6 +78,6 @@ class HelperFunction
             return asset($path);
         }
 
-        return null;
+        return asset("/logo.png");
     }
 }
