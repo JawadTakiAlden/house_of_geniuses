@@ -20,7 +20,7 @@ class QuestionResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'image' => $this->image ? HelperFunction::getImage($this->image) : null,
-            'clarification_image' => $this->clarification_image ? asset($this->clarification_image) : null,
+            'clarification_image' => $this->clarification_image ? HelperFunction::getImage($this->clarification_image) : null,
             'clarification_text' => $this->clarification_text,
             'choices' => ChoiceResource::collection($this->choices),
         ];
