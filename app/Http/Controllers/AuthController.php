@@ -20,11 +20,6 @@ class AuthController extends Controller
     public function signup (SignUpRequest $request) {
         try {
             DB::beginTransaction();
-            if($request->phone === '0948966976'){
-                return $this->error(
-                    $request->device_id
-                    , 422);
-            }
             if (User::where('device_id' , $request->device_id)->exists()){
                 return $this->error(
                     __('messages.auth_controller.device_id_unique')
