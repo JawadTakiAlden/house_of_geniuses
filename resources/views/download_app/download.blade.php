@@ -55,10 +55,10 @@
                     </ul>
                     <q class="note">جاهز للانطلاق! الآن على أندرويد وقريبًا على آيفون. كن من أوائل المستفيدين من بيت العباقرة، حيث تبدأ رحلتك نحو التفوق والنجاح.</q>
                     <div class="download-btn-container">
-{{--                        <a  href="{{ route('downloadApk') }}" class="custom-btn">--}}
-{{--                            download app--}}
-{{--                        </a>--}}
-                        <h1 style="text-align: center; color: #FFFFFF">تم ايقاف هذه الصفحة مؤقتا و نحن نعمل على حل مشكلة تقنية , شكرا لصبركم </h1>
+                        <a  href="{{ route('downloadApk') }}" class="custom-btn">
+                            download app
+                        </a>
+{{--                        <h1 style="text-align: center; color: #FFFFFF">تم ايقاف هذه الصفحة مؤقتا و نحن نعمل على حل مشكلة تقنية , شكرا لصبركم </h1>--}}
                     </div>
                 </div>
             </div>
