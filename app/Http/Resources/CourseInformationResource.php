@@ -55,7 +55,7 @@ class CourseInformationResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image ? HelperFunction::getImage($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
-            'is_open' => boolval($this->is_open),
+            'is_open' => $request->query('os') === 'ios' ? true : boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
             'is_paid' => boolval($is_paid),
             'total_time' => intval($totalTimeOfCourse),
