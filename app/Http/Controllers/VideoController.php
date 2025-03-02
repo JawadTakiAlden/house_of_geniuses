@@ -15,6 +15,7 @@ class VideoController extends Controller
 
     private Vimeo $client1;
     private Vimeo $client2;
+    private Vimeo $client3;
     public function __construct()
     {
         $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
@@ -23,6 +24,9 @@ class VideoController extends Controller
         $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
             , env('VIMEO_CLIENT_SECRET_TWO'),
             env('VIMEO_ACCESS_TOKEN_TWO'));
+        $this->client3 = new Vimeo(env('VIMEO_CLIENT_ID_THREE')
+            , env('VIMEO_CLIENT_SECRET_THREE'),
+            env('VIMEO_ACCESS_TOKEN_THREE'));
     }
 
     public function getVideos () {
@@ -40,6 +44,12 @@ class VideoController extends Controller
                 return $this->success(VideoResource::collection($videos));
             }else if (\request('source') === 'vimeo-2') {
                 $response = $this->client2->request('/users/222393454/videos',$queryParams);
+                $responseData = $response['body'];
+                $videos = $responseData['data'];
+                return $this->success(VideoResource::collection($videos));
+            }
+            else if (\request('source') === 'vimeo-3') {
+                $response = $this->client3->request('/users/235955659/videos',$queryParams);
                 $responseData = $response['body'];
                 $videos = $responseData['data'];
                 return $this->success(VideoResource::collection($videos));
@@ -68,6 +78,14 @@ class VideoController extends Controller
                 }
             }else if ($request->source === 'vimeo-2'){
                 $response = $this->client2->request($request->link.'?fields=play');
+                if ($response['status'] == 200){
+                    return $this->success($this->watchLinkTransformer($response));
+                }
+                else{
+                    return $this->error($response['body']['error'] , 422);
+                }
+            }else if ($request->source === 'vimeo-3'){
+                $response = $this->client3->request($request->link.'?fields=play');
                 if ($response['status'] == 200){
                     return $this->success($this->watchLinkTransformer($response));
                 }
@@ -108,6 +126,14 @@ class VideoController extends Controller
                 }
             }else if ($request->source === 'vimeo-2'){
                 $response = $this->client2->request($request->link.'?fields=download');
+                if (intval($response['status']) === 200){
+                    return $this->success($this->donwloadLinkTransformer($response));
+                }else{
+                    return $this->error($response['body']['error'] , $response['status']);
+                }
+            }
+            else if ($request->source === 'vimeo-3'){
+                $response = $this->client3->request($request->link.'?fields=download');
                 if (intval($response['status']) === 200){
                     return $this->success($this->donwloadLinkTransformer($response));
                 }else{

@@ -27,6 +27,9 @@ class LesionController extends Controller
         $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
             , env('VIMEO_CLIENT_SECRET_TWO'),
             env('VIMEO_ACCESS_TOKEN_TWO'));
+        $this->client3 = new Vimeo(env('VIMEO_CLIENT_ID_THREE')
+            , env('VIMEO_CLIENT_SECRET_THREE'),
+            env('VIMEO_ACCESS_TOKEN_THREE'));
     }
     public function getAll($chpaterID){
         try {
@@ -134,6 +137,12 @@ class LesionController extends Controller
                     if (intval($response['status']) === 200){
                         $lesion = $this->createVideo($request , $response['body']);
                     }
+                }
+                else if ($request->get('source') === 'vimeo-3'){
+                    $response = $this->client3->request($request->videoURI, array());
+                    if (intval($response['status']) === 200){
+                        $lesion = $this->createVideo($request , $response['body']);
+                    }
                 }else if ($request->get('source') === 'youtube'){
                     return $this->success([] , 'not handeled youtube yet');
                 }
@@ -193,6 +202,12 @@ class LesionController extends Controller
                     }
                     else if ($source === 'vimeo-2'){
                         $response = $this->client2->request($request->videoURI, array());
+                        if (intval($response['status']) === 200){
+                            $data = array_merge($data , $this->updatedVideoData($response, $request));
+                        }
+                    }
+                    else if ($source === 'vimeo-3'){
+                        $response = $this->client3->request($request->videoURI, array());
                         if (intval($response['status']) === 200){
                             $data = array_merge($data , $this->updatedVideoData($response, $request));
                         }
