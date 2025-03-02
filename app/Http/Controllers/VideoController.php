@@ -51,6 +51,7 @@ class VideoController extends Controller
             else if (\request('source') === 'vimeo-3') {
                 $response = $this->client3->request('/users/235955659/videos',$queryParams);
                 $responseData = $response['body'];
+                return $response;
                 $videos = $responseData['data'];
                 return $this->success(VideoResource::collection($videos));
             }else{
