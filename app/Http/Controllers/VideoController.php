@@ -8,6 +8,7 @@ use App\Http\Resources\VideoResource;
 use App\HttpResponse\HTTPResponse;
 use Illuminate\Http\Request;
 use Vimeo\Vimeo;
+use Illuminate\Support\Facades\Log;
 
 class VideoController extends Controller
 {
@@ -68,6 +69,9 @@ class VideoController extends Controller
             if (!$request->link){
                 return $this->error(__('messages.video_controller.link_not_correct') , 422);
             }
+
+            Log::info("Source watch video : " + $request->source);
+            
             if ($request->source === 'vimeo-1'){
                 $response = $this->client1->request($request->link.'?fields=play');
                 if ($response['status'] == 200){
