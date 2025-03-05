@@ -22,7 +22,7 @@ class WatchVideoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'source' => "in:vimeo-1,vimeo-2"
+            'source' => "in:vimeo-1,vimeo-2,vimeo-3"
         ];
     }
 }
