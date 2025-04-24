@@ -25,7 +25,7 @@ class NotificationController extends Controller
         $chunks = array_chunk($FcmToken, 200);
 
         foreach ($chunks as $chunk) {
-            dispatch(new SendFirebaseNotificationJob($title, $body, $chunk));
+            dispatch_sync(new SendFirebaseNotificationJob($title, $body, $chunk));
         }
 
         // foreach ($chunks as $chunk) {
