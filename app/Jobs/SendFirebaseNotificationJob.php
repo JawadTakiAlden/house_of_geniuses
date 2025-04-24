@@ -34,7 +34,7 @@ class SendFirebaseNotificationJob implements ShouldQueue
     public function handle(): void
     {
         $firebase = (new Factory())
-            ->withServiceAccount(config_path('firebase_config.json'));
+            ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
 
         $messaging = $firebase->createMessaging();
 
