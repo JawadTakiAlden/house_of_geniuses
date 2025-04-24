@@ -23,11 +23,11 @@ class SendFirebaseNotificationJob implements ShouldQueue
     protected $title;
     protected $body;
     protected $tokens;
-    public function __construct($title, $body, $token)
+    public function __construct($title, $body, $tokens)
     {
         $this->title = $title;
         $this->body = $body;
-        $this->tokens = $token;
+        $this->tokens = $tokens;
     }
 
     /**
@@ -42,17 +42,17 @@ class SendFirebaseNotificationJob implements ShouldQueue
 
         $notification = Notification::create($this->title, $this->body);
 
-        foreach ($this->tokens as $token) {
-            $message = CloudMessage::withTarget('token', $token)
-                ->withNotification($notification);
+        $message = CloudMessage::new()
+            ->withNotification($notification);
 
-            try {
+        $sendReport = $messaging->sendMulticast($message, $this->tokens);
 
-                $messaging->send($message);
+        if ($sendReport->hasFailures()) {
+            foreach ($sendReport->failures()->getItems() as $failure) {
 
-            } catch (\Exception $e) {
-                Log::error("Failed to send notification to token {$token}: " . $e->getMessage());
+                Log::error($failure->error()->getMessage() . PHP_EOL);
             }
         }
+
     }
 }
