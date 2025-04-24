@@ -22,6 +22,8 @@ class NotificationController extends Controller
     use HTTPResponse;
     public function BasicSendNotification($title, $body, $FcmToken)
     {
+
+        return collect($FcmToken)->chunk(500);
         collect($FcmToken)->chunk(500)->each(function ($chunk) use ($title, $body) {
             dispatch(new SendFirebaseNotificationJob($title, $body, $chunk->values()->all()));
         });
