@@ -22,12 +22,12 @@ class SendFirebaseNotificationJob implements ShouldQueue
      */
     protected $title;
     protected $body;
-    protected $token;
+    protected $tokens;
     public function __construct($title, $body, $token)
     {
         $this->title = $title;
         $this->body = $body;
-        $this->token = $token;
+        $this->tokens = $token;
     }
 
     /**
@@ -43,7 +43,7 @@ class SendFirebaseNotificationJob implements ShouldQueue
         $notification = Notification::create($this->title, $this->body);
 
         foreach ($this->tokens as $token) {
-            $message = CloudMessage::withTarget('token', $this->token)
+            $message = CloudMessage::withTarget('token', $token)
                 ->withNotification($notification);
 
             try {
