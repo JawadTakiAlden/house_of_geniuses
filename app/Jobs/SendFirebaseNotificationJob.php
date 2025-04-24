@@ -38,23 +38,19 @@ class SendFirebaseNotificationJob implements ShouldQueue
 
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
+
         $messaging = $firebase->createMessaging();
-
-
         $notification = Notification::create($this->title, $this->body);
 
-        $messages = [];
-
         foreach ($this->tokens as $token) {
-            $messages[] = CloudMessage::new()
-                ->withTarget('token', $token)
+            $message = CloudMessage::withTarget('token', $token)
                 ->withNotification($notification);
-        }
 
-        try {
-            $messaging->sendAll($messages);
-        } catch (\Exception $e) {
-            Log::error("Multicast failed: " . $e->getMessage());
+            try {
+                $messaging->send($message);
+            } catch (\Exception $e) {
+                Log::error("Failed to send notification to token {$token}: " . $e->getMessage());
+            }
         }
     }
 }
