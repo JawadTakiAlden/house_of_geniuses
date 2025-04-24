@@ -22,9 +22,6 @@ class NotificationController extends Controller
     use HTTPResponse;
     public function BasicSendNotification($title, $body, $FcmToken)
     {
-
-
-
         $firebase = (new Factory())
             ->withServiceAccount(config_path('firebase_config.json'));
 
@@ -39,8 +36,13 @@ class NotificationController extends Controller
 
         $message = $message->withNotification($notification);
 
+        $chunks = array_chunk($FcmToken, 200);
+
         $messaging->sendMulticast($message, $FcmToken);
 
+        foreach ($chunks as $chunk) {
+            $messaging->sendMulticast($message, $chunk);
+        }
 
         // foreach ($chunks as $chunk) {
         //     dispatch(new SendFirebaseNotificationJob($title, $body, $chunk->toArray()));
@@ -55,7 +57,6 @@ class NotificationController extends Controller
     {
         try {
             $tokens = User::whereNotNull('device_notification_id')
-                ->whereIn('phone', ['0948966987', '1111111112'])
                 ->pluck('device_notification_id');
 
             $result = $this->BasicSendNotification($request->title, $request->body, $tokens->toArray());
