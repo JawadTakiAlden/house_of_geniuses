@@ -20,35 +20,37 @@ class NotificationController extends Controller
 
 
     use HTTPResponse;
-    public function BasicSendNotification($title , $body , $FcmToken){
-
-        foreach ($FcmToken as $token) {
-            dispatch(new SendFirebaseNotificationJob($title, $body, $token));
-        }
-//        foreach ($FcmToken as $token) {
+    public function BasicSendNotification($title, $body, $FcmToken)
+    {
+        collect($FcmToken)->chunk(500)->each(function ($chunk) use ($title, $body) {
+            dispatch(new SendFirebaseNotificationJob($title, $body, $chunk->values()->all()));
+        });
+        //        foreach ($FcmToken as $token) {
 //            dispatch(new SendFirebaseNotificationJob($title , $body , $token));
 //        }
-        return $this->success(null ,  __('messages.notification_controller.send_successfully'));
+        return $this->success(null, __('messages.notification_controller.send_successfully'));
     }
 
-    public function sendNotificationForAllUser(SendNotificationRequest $request){
+    public function sendNotificationForAllUser(SendNotificationRequest $request)
+    {
         try {
-            $tokens = User::where('device_notification_id' , "!=" , null)->pluck('device_notification_id');
-            $result = $this->BasicSendNotification($request->title , $request->body , $tokens->toArray());
+            $tokens = User::where('device_notification_id', "!=", null)->pluck('device_notification_id');
+            $result = $this->BasicSendNotification($request->title, $request->body, $tokens->toArray());
             return $result;
-        }catch (\Throwable $th){
-            return $this->error($th->getMessage() , 500);
+        } catch (\Throwable $th) {
+            return $this->error($th->getMessage(), 500);
         }
     }
 
-    public function addNewCourseNotification($course){
+    public function addNewCourseNotification($course)
+    {
         try {
             $title = 'اضافة دورة تدريبة جديدة جديد';
-            $body =  'تمت اضافة دورة تدريبة جديدة تحت عنوان ' . $course->name;
+            $body = 'تمت اضافة دورة تدريبة جديدة تحت عنوان ' . $course->name;
             $tokens = User::whereNotNull('device_notification_id')->pluck('device_notification_id')->all();
-            $result = $this->BasicSendNotification($title, $body , $tokens);
+            $result = $this->BasicSendNotification($title, $body, $tokens);
             return $result;
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }

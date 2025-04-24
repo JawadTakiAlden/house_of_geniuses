@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
-Route::get('/downloadApplication' , function (){
+Route::get('/downloadApplication', function () {
     $filePath = storage_path('app/public/house_of_geniuses.apk');
 
     if (!file_exists($filePath)) {
@@ -30,6 +30,6 @@ Route::get('/downloadApplication' , function (){
     ]);
 })->name("downloadApk");
 
-Route::get('/download' , function (){
+Route::get('/download', function () {
     return view('download_app.download');
 });
