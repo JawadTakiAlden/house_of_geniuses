@@ -25,7 +25,7 @@ class NotificationController extends Controller
 
         $chunks = collect($FcmToken)->chunk(500);
         foreach ($chunks as $chunk) {
-            return $chunk;
+            return $chunk->values()->all();
         }
         collect($FcmToken)->chunk(500)->each(function ($chunk) use ($title, $body) {
             dispatch(new SendFirebaseNotificationJob($title, $body, $chunk->values()->all()));
