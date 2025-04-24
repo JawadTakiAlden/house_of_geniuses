@@ -24,9 +24,29 @@ class NotificationController extends Controller
     {
 
         $chunks = collect($FcmToken)->chunk(500);
+
+
+        $firebase = (new Factory())
+            ->withServiceAccount(config_path('firebase_config.json'));
+
+        $messaging = $firebase->createMessaging();
+
+        $notification = Notification::fromArray([
+            'title' => $this->title,
+            'body' => $this->body,
+        ]);
+
+        $message = CloudMessage::new();
+
+        $message = $message->withNotification($notification);
+
         foreach ($chunks as $chunk) {
-            dispatch(new SendFirebaseNotificationJob($title, $body, $chunk->toArray()));
+            $messaging->sendMulticast($message, $chunk);
         }
+
+        // foreach ($chunks as $chunk) {
+        //     dispatch(new SendFirebaseNotificationJob($title, $body, $chunk->toArray()));
+        // }
         //        foreach ($FcmToken as $token) {
 //            dispatch(new SendFirebaseNotificationJob($title , $body , $token));
 //        }
