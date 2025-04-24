@@ -32,8 +32,8 @@ class NotificationController extends Controller
         $messaging = $firebase->createMessaging();
 
         $notification = Notification::fromArray([
-            'title' => $this->title,
-            'body' => $this->body,
+            'title' => $title,
+            'body' => $body,
         ]);
 
         $message = CloudMessage::new();
