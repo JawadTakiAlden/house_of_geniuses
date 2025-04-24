@@ -3,12 +3,10 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
@@ -49,13 +47,6 @@ class SendFirebaseNotificationJob implements ShouldQueue
 
         $message = $message->withNotification($notification);
 
-        $sendReport = $messaging->sendMulticast($message, $this->tokens);
-
-        if ($sendReport->hasFailures()) {
-            foreach ($sendReport->failures()->getItems() as $failure) {
-                Log::channel('fcm')->error($failure->error()->getMessage());
-            }
-        }
-
+        $messaging->sendMulticast($message, $this->tokens);
     }
 }

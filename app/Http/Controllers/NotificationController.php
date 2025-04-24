@@ -22,26 +22,10 @@ class NotificationController extends Controller
     use HTTPResponse;
     public function BasicSendNotification($title, $body, $FcmToken)
     {
-        $firebase = (new Factory())
-            ->withServiceAccount(config_path('firebase_config.json'));
-
-        $messaging = $firebase->createMessaging();
-
-        $notification = Notification::fromArray([
-            'title' => $title,
-            'body' => $body,
-        ]);
-
-        $message = CloudMessage::new();
-
-        $message = $message->withNotification($notification);
-
         $chunks = array_chunk($FcmToken, 200);
 
-        $messaging->sendMulticast($message, $FcmToken);
-
         foreach ($chunks as $chunk) {
-            $messaging->sendMulticast($message, $chunk);
+            dispatch(new SendFirebaseNotificationJob($title, $body, $chunk));
         }
 
         // foreach ($chunks as $chunk) {
