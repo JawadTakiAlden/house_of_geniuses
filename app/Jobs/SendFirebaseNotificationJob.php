@@ -40,17 +40,20 @@ class SendFirebaseNotificationJob implements ShouldQueue
 
         $messaging = $firebase->createMessaging();
 
-        $notification = Notification::create($this->title, $this->body);
+        $notification = Notification::fromArray([
+            'title' => $this->title,
+            'body' => $this->body,
+        ]);
 
-        $message = CloudMessage::new()
-            ->withNotification($notification);
+        $message = CloudMessage::new();
+
+        $message = $message->withNotification($notification);
 
         $sendReport = $messaging->sendMulticast($message, $this->tokens);
 
         if ($sendReport->hasFailures()) {
             foreach ($sendReport->failures()->getItems() as $failure) {
-
-                Log::error($failure->error()->getMessage() . PHP_EOL);
+                Log::channel('fcm')->error($failure->error()->getMessage());
             }
         }
 
