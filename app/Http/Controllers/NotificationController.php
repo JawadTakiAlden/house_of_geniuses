@@ -59,6 +59,7 @@ class NotificationController extends Controller
             $tokens = User::whereNotNull('device_notification_id')
                 ->whereIn('phone', ['0948966987', '1111111112'])
                 ->pluck('device_notification_id');
+            return $tokens;
             $result = $this->BasicSendNotification($request->title, $request->body, $tokens->toArray());
             return $result;
         } catch (\Throwable $th) {
