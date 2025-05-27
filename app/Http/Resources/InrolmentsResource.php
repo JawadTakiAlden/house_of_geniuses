@@ -16,7 +16,7 @@ class InrolmentsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => intval($this->id),
+            'id' => intval($this->course->id),
             'name' => $this->course->name,
             'image' => $this->course->image ? HelperFunction::getImage($this->course->image) : null,
             'telegram_channel_link' => $this->course->telegram_channel_link,
