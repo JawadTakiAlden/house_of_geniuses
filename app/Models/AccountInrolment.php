@@ -13,10 +13,6 @@ class AccountInrolment extends Model
     /**
      * @return string[]
      */
-    public function getWith(): array
-    {
-        return $this->with(['activationCode']);
-    }
 
     public function course(){
         return $this->belongsTo(Course::class);
