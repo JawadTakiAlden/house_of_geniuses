@@ -35,6 +35,7 @@ class AuthController extends Controller
                     'device_id'
                 ]
             ));
+
             DB::commit();
             return $this->success([
                 "token" =>  $user->createToken("API TOKEN")->plainTextToken,

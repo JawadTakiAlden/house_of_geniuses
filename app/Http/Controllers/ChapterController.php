@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class ChapterController extends Controller
 {
     use HTTPResponse;
+
     public function getAll($courseID){
         try {
             $course = HelperFunction::getCourseByID($courseID);
