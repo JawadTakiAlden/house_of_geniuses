@@ -22,7 +22,7 @@ class InrolmentsResource extends JsonResource
             'telegram_channel_link' => $this->course->telegram_channel_link,
             'created_at' => $this->created_at->diffForHumans(),
             "activation_code" => [
-                "type" => $this->activationCode->type,
+                "type" => $this->activationCode ? $this->activationCode->type : "Manual",
             ]
         ];
     }
