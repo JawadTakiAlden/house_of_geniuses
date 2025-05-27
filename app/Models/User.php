@@ -84,4 +84,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Course::class, 'account_inrolments' , "user_id" , "course_id")
                 ->withPivot('created_at', 'activation_code_id')->with(["activationCode"]);
     }
+
+    public function inroledCoursesAdvanced()
+    {
+        return $this->hasMany(AccountInrolment::class , "user_id")->with(["course" , "activationCode"]);
+    }
 }

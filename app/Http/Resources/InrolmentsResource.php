@@ -17,11 +17,11 @@ class InrolmentsResource extends JsonResource
     {
         return [
             'id' => intval($this->id),
-            'name' => $this->name,
-            'image' => $this->image ? HelperFunction::getImage($this->image) : null,
-            'telegram_channel_link' => $this->telegram_channel_link,
-            'created_at' => $this->pivot->created_at->diffForHumans(),
-            "activation_code" => $this->pivot->activationCode
+            'name' => $this->course->name,
+            'image' => $this->course->image ? HelperFunction::getImage($this->course->image) : null,
+            'telegram_channel_link' => $this->course->telegram_channel_link,
+            'created_at' => $this->created_at->diffForHumans(),
+            "activation_code" => $this->activationCode
         ];
     }
 }
