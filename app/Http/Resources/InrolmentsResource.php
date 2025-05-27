@@ -21,7 +21,7 @@ class InrolmentsResource extends JsonResource
             'image' => $this->image ? HelperFunction::getImage($this->image) : null,
             'telegram_channel_link' => $this->telegram_channel_link,
             'created_at' => $this->pivot->created_at->diffForHumans(),
-            "activation_code" => $this->activationCode
+            "activation_code" => $this->pivot->activationCode
         ];
     }
 }
