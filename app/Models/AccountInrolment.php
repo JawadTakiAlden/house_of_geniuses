@@ -27,6 +27,6 @@ class AccountInrolment extends Model
     }
 
     public function activationCode(){
-        return $this->belongsTo(ActivationCode::class);
+        return $this->belongsTo(ActivationCode::class , "activation_code_id");
     }
 }
