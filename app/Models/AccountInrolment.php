@@ -10,6 +10,7 @@ class AccountInrolment extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    protected $with = ['activationCode'];
 
     public function course(){
         return $this->belongsTo(Course::class);
