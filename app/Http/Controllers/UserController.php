@@ -216,7 +216,6 @@ class UserController extends Controller
             if (!$user){
                 return HelperFunction::notFoundResponce();
             }
-            return  $this->success($user->inroledCorurses);
             return $this->success(InrolmentsResource::collection($user->inroledCorurses));
         }catch(\Throwable $th){
             return HelperFunction::ServerErrorResponse($th);
