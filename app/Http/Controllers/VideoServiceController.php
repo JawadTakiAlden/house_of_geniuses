@@ -46,7 +46,6 @@ class VideoServiceController extends Controller
     {
         try {
 
-            return $request->allFiles();
             if (!$request->hasFile('video')) {
 
                 return response()->json(['error' => 'No video file uploaded'], 400);

@@ -22,6 +22,7 @@ class VideoUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "video" => "required|file|max:102400"
         ];
     }
 }
