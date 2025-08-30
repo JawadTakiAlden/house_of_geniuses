@@ -46,8 +46,7 @@ class VideoServiceController extends Controller
     {
 
         $resolutions = $request->input('resolutions', ['720p']);
-
-
+        return resolutions;
         $result = $this->videoService->uploadVideo(
             $request->file("video"),
             $resolutions
