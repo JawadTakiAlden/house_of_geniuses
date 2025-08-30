@@ -41,6 +41,11 @@ Route::middleware(['language'])->group(function () {
                 Route::get('/download/{fileName}', [ExportableFileController::class, 'downloadFile']);
                 Route::delete('/delete/{fileName}', [ExportableFileController::class, 'deleteFile']);
             });
+            Route::prefix('videos_service')->group(function () {
+                Route::get('/', [VideoServiceController::class, 'index']);
+                Route::get('{id}', [VideoServiceController::class, 'show']);
+                Route::post('/', [VideoServiceController::class, 'upload']);
+            });
             Route::prefix('/news')->group(function () {
                 Route::get('/all', [NewsController::class, 'index']);
                 Route::post('/create', [NewsController::class, 'store']);
@@ -160,11 +165,6 @@ Route::middleware(['language'])->group(function () {
             Route::middleware(['blocked_account'])->group(function () {
                 Route::prefix('/auth')->group(function () {
                     Route::post('/logout', [AuthController::class, 'logout']);
-                });
-                Route::prefix('videos_service')->group(function () {
-                    Route::get('/', [VideoServiceController::class, 'index']);
-                    Route::get('{id}', [VideoServiceController::class, 'show']);
-                    Route::post('/', [VideoServiceController::class, 'upload']);
                 });
                 Route::post('/watch', [VideoController::class, 'watch']);
                 Route::post('/download', [VideoController::class, 'download']);
