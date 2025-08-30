@@ -70,13 +70,16 @@ class VideoService
         $response = Http::withHeaders([
             'x-client-id' => $this->clientId,
             'x-client-secret' => $this->clientSecret,
-        ])->attach(
-                'video',
-                fopen($file->getRealPath(), 'r'),
-                $file->getClientOriginalName()
-
-            )->post($this->apiUrl . '/api/videos', [
-                    'resolutions' => $resolutions
+        ])->asMultipart()->post($this->apiUrl . '/api/videos', [
+                    [
+                        'name' => 'video',
+                        'contents' => fopen($file->getRealPath(), 'r'),
+                        'filename' => $file->getClientOriginalName()
+                    ],
+                    [
+                        'name' => 'resolutions',
+                        'contents' => json_encode($resolutions)
+                    ]
                 ]);
 
         if ($response->failed()) {
