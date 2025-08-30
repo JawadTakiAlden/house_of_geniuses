@@ -44,7 +44,7 @@ class VideoServiceController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'video' => 'required|file|mimes:mp4,mov,mkv|max:5120', // 5GB max
+            'video' => 'required|file', // 5GB max
             'resolutions' => 'array', // optional resolutions
             'resolutions.*' => 'in:480p,720p,1080p'
         ]);
@@ -52,7 +52,6 @@ class VideoServiceController extends Controller
         $resolutions = $request->input('resolutions', ['720p']);
 
 
-        return response()->json("debug fiald in upload service");
         $result = $this->videoService->uploadVideo(
             $request->file('video'),
             $resolutions
