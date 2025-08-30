@@ -42,11 +42,12 @@ class VideoServiceController extends Controller
      * POST /api/videos
      * Upload a video
      */
-    public function upload(VideoUploadRequest $request)
+    public function upload(Request $request)
     {
 
         $resolutions = $request->input('resolutions', ['720p']);
         return resolutions;
+
         $result = $this->videoService->uploadVideo(
             $request->file("video"),
             $resolutions
