@@ -76,7 +76,7 @@ class VideoService
                 $file->getClientOriginalName()
 
             )->post($this->apiUrl . '/api/videos', [
-                    'resolutions' => json_encode($resolutions),
+                    'resolutions' => $resolutions
                 ]);
 
         if ($response->failed()) {
