@@ -23,19 +23,21 @@ class LesionResource extends JsonResource
             'id' => intval($this->id),
             'title' => $this->title,
             'description' => $this->description,
-            'link' => $this->type === 'pdf' ? asset('storage/'.$this->link) : $link,
+            'link' => $this->type === 'pdf' ? asset('storage/' . $this->link) : $link,
             'time' => intval($this->time),
             'is_open' => $request->query('os') === 'ios' || boolval($this->is_open),
             'is_visible' => boolval($this->is_visible),
             'type' => $this->type,
-            'is_watched' => UserWatch::where('lesion_id' , $this->id)->where('user_id' , $request->user()->id)->exists(),
+            'is_watched' => UserWatch::where('lesion_id', $this->id)->where('user_id', $request->user()->id)->exists(),
             'chapter_id' => intval($this->chapter_id),
+            "about" => $this->about,
+            "learned_values" => $this->learned_values
         ];
-        if (strval($this->type) === 'video'){
-            $data = array_merge($data , ['link_uri' => $link , 'source' => $this->source]);
+        if (strval($this->type) === 'video') {
+            $data = array_merge($data, ['link_uri' => $link, 'source' => $this->source]);
         }
-        if ($request->user()->type === UserType::ADMIN){
-            $data = array_merge($data , ['original_video_name' => $this->original_video_name]);
+        if ($request->user()->type === UserType::ADMIN) {
+            $data = array_merge($data, ['original_video_name' => $this->original_video_name]);
         }
         return $data;
     }
