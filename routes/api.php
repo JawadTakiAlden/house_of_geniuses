@@ -42,9 +42,9 @@ Route::middleware(['language'])->group(function () {
                 Route::delete('/delete/{fileName}', [ExportableFileController::class, 'deleteFile']);
             });
             Route::prefix('videos_service')->group(function () {
+                Route::post('/create', [VideoServiceController::class, 'upload']);
                 Route::get('/', [VideoServiceController::class, 'index']);
                 Route::get('{id}', [VideoServiceController::class, 'show']);
-                Route::post('/', [VideoServiceController::class, 'upload']);
             });
             Route::prefix('/news')->group(function () {
                 Route::get('/all', [NewsController::class, 'index']);

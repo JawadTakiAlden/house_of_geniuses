@@ -72,10 +72,11 @@ class VideoService
             'x-client-secret' => $this->clientSecret,
         ])->attach(
                 'video',
-                file_get_contents($file->getRealPath()),
+                fopen($file->getRealPath(), 'r'),
                 $file->getClientOriginalName()
+
             )->post($this->apiUrl . '/api/videos', [
-                    'resolutions' => $resolutions
+                    'resolutions' => json_encode($resolutions),
                 ]);
 
         if ($response->failed()) {
