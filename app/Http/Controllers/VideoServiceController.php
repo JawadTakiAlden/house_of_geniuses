@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VideoUploadRequest;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
 
@@ -41,19 +42,14 @@ class VideoServiceController extends Controller
      * POST /api/videos
      * Upload a video
      */
-    public function upload(Request $request)
+    public function upload(VideoUploadRequest $request)
     {
-        $request->validate([
-            'video' => 'required|file', // 5GB max
-            'resolutions' => 'array', // optional resolutions
-            'resolutions.*' => 'in:480p,720p,1080p'
-        ]);
 
         $resolutions = $request->input('resolutions', ['720p']);
 
 
         $result = $this->videoService->uploadVideo(
-            $request->file('video'),
+            $request->video,
             $resolutions
         );
 
