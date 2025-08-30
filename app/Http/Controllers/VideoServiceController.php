@@ -44,15 +44,29 @@ class VideoServiceController extends Controller
      */
     public function upload(Request $request)
     {
+        try {
+            if (!$request->hasFile('video')) {
+                return response()->json(['error' => 'No video file uploaded'], 400);
+            }
 
-        $resolutions = $request->input('resolutions', ['720p']);
-        return resolutions;
+            if (!$request->file('video')->isValid()) {
+                return response()->json(['error' => 'Uploaded file is not valid'], 400);
+            }
 
-        $result = $this->videoService->uploadVideo(
-            $request->file("video"),
-            $resolutions
-        );
+            $resolutions = $request->input('resolutions', ['720p']);
 
-        return response()->json($result);
+            $result = $this->videoService->uploadVideo(
+                $request->file('video'),
+                $resolutions
+            );
+
+            return response()->json($result);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => 'Server error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
