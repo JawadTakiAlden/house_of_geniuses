@@ -22,8 +22,9 @@ class VideoUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'video' => 'required|file|mimes:mp4,mov,mkv|max:5120000',
             'resolutions' => 'array',
-            'resolutions.*' => 'in:480p,720p,1080p'
+            'resolutions.*' => 'in:480p,720p,1080p',
         ];
     }
 }

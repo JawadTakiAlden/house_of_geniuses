@@ -42,7 +42,7 @@ class VideoServiceController extends Controller
      * POST /api/videos
      * Upload a video
      */
-    public function upload(Request $request)
+    public function upload(VideoUploadRequest $request)
     {
         try {
             if (!$request->hasFile('video')) {
