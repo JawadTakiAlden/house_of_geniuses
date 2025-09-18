@@ -14,19 +14,23 @@ class AccountInrolment extends Model
      * @return string[]
      */
 
-    public function course(){
+    public function course()
+    {
         return $this->belongsTo(Course::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function chapters(){
+    public function chapters()
+    {
         return $this->hasMany(Chapter::class);
     }
 
-    public function activationCode(){
-        return $this->belongsTo(ActivationCode::class , "activation_code_id");
+    public function activationCode()
+    {
+        return $this->belongsTo(ActivationCode::class, "activation_code_id");
     }
 }

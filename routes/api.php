@@ -34,6 +34,10 @@ Route::middleware(['language'])->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         //    Admin Routes
         Route::middleware(['admin'])->group(function () {
+
+            Route::prefix("/videos/library")->group(function () {
+                Route::post("create_lesson", [LesionController::class, "createLibraryLesson"]);
+            });
             Route::get('/videos/get', [VideoController::class, 'getVideos']);
             Route::prefix('/files')->group(function () {
                 Route::get('/pdf_lesion/{path}', [LesionController::class, 'getPdfLesion'])->where('path', '.*');

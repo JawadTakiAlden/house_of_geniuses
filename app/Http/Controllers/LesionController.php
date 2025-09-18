@@ -21,95 +21,117 @@ class LesionController extends Controller
 
     public function __construct()
     {
-        $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
-            , env('VIMEO_CLIENT_SECRET'),
-            env('VIMEO_ACCESS_TOKEN'));
-        $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
-            , env('VIMEO_CLIENT_SECRET_TWO'),
-            env('VIMEO_ACCESS_TOKEN_TWO'));
-        $this->client3 = new Vimeo(env('VIMEO_CLIENT_ID_THREE')
-            , env('VIMEO_CLIENT_SECRET_THREE'),
-            env('VIMEO_ACCESS_TOKEN_THREE'));
+        $this->client1 = new Vimeo(
+            env('VIMEO_CLIENT_ID')
+            ,
+            env('VIMEO_CLIENT_SECRET'),
+            env('VIMEO_ACCESS_TOKEN')
+        );
+        $this->client2 = new Vimeo(
+            env('VIMEO_CLIENT_ID_TWO')
+            ,
+            env('VIMEO_CLIENT_SECRET_TWO'),
+            env('VIMEO_ACCESS_TOKEN_TWO')
+        );
+        $this->client3 = new Vimeo(
+            env('VIMEO_CLIENT_ID_THREE')
+            ,
+            env('VIMEO_CLIENT_SECRET_THREE'),
+            env('VIMEO_ACCESS_TOKEN_THREE')
+        );
     }
-    public function getAll($chpaterID){
+
+
+    public function createLibraryLesson(StoreLesionRequest $request)
+    {
+
+    }
+
+    public function getAll($chpaterID)
+    {
         try {
             $chapter = HelperFunction::getChapterByID($chpaterID);
-            if (!$chapter){
+            if (!$chapter) {
                 return HelperFunction::notFoundResponce();
             }
-            $lesions = Lesion::where('chapter_id' , $chpaterID)->get();
+            $lesions = Lesion::where('chapter_id', $chpaterID)->get();
             return $this->success(LesionResource::collection($lesions));
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function getVisible($chpaterID){
+    public function getVisible($chpaterID)
+    {
         try {
             $chapter = HelperFunction::getChapterByID($chpaterID);
-            if (!$chapter){
+            if (!$chapter) {
                 return HelperFunction::notFoundResponce();
             }
-            $lesions = Lesion::where('chapter_id' , $chpaterID)->where('is_visible' , true)->get();
+            $lesions = Lesion::where('chapter_id', $chpaterID)->where('is_visible', true)->get();
             return $this->success(LesionResource::collection($lesions));
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function switchVisibility($lesionID){
+    public function switchVisibility($lesionID)
+    {
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
-            if (!$lesion){
+            if (!$lesion) {
                 return HelperFunction::notFoundResponce();
             }
             $lesion->update([
-               'is_visible' => !$lesion->is_visible
+                'is_visible' => !$lesion->is_visible
             ]);
-            return $this->success( LesionResource::make($lesion) , __("messages.lesion_controller.visibility_switch"));
-        }catch (\Throwable $th){
+            return $this->success(LesionResource::make($lesion), __("messages.lesion_controller.visibility_switch"));
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function reOrderLesions(ReOrderLesionsRequest $request){
+    public function reOrderLesions(ReOrderLesionsRequest $request)
+    {
         try {
             DB::beginTransaction();
-            if ($request->lesions){
-                foreach ($request->lesions as $lesion){
-                    Lesion::where('id' , $lesion['id'])->update([
+            if ($request->lesions) {
+                foreach ($request->lesions as $lesion) {
+                    Lesion::where('id', $lesion['id'])->update([
                         'sort' => $lesion['sort']
                     ]);
                 }
             }
             DB::commit();
-            return $this->success( null,'lesion re-ordered successfully');
-        }catch (\Throwable $th){
+            return $this->success(null, 'lesion re-ordered successfully');
+        } catch (\Throwable $th) {
             DB::rollBack();
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function delete($lesionID){
+    public function delete($lesionID)
+    {
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
-            if (!$lesion){
+            if (!$lesion) {
                 return HelperFunction::notFoundResponce();
             }
-            if ($lesion->type === 'pdf'){
+            if ($lesion->type === 'pdf') {
                 Storage::delete($lesion->link);
             }
             $lesion->delete();
-            return $this->success(LesionResource::make($lesion) ,__("messages.lesion_controller.delete"));
-        }catch (\Throwable $th){
+            return $this->success(LesionResource::make($lesion), __("messages.lesion_controller.delete"));
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function store(StoreLesionRequest $request){
+    public function store(StoreLesionRequest $request)
+    {
         try {
             $type = $request->type;
-            if ($type === 'pdf'){
+            if ($type === 'pdf') {
                 $pdfFile = $request->file('pdfFile');
                 $pdfFile->store('pdf_lesions', 'public');
                 $filePath = Storage::putFile('pdf_lesions', $pdfFile);
@@ -123,39 +145,37 @@ class LesionController extends Controller
                     'chapter_id' => $request->chapter_id
                 ]);
 
-                return $this->success(  LesionResource::make($lesion),$lesion->title . __("messages.lesion_controller.create"));
-            }
-            else if ($type === 'video'){
-                if ($request->get('source') === 'vimeo-1'){
+                return $this->success(LesionResource::make($lesion), $lesion->title . __("messages.lesion_controller.create"));
+            } else if ($type === 'video') {
+                if ($request->get('source') === 'vimeo-1') {
                     $response = $this->client1->request($request->videoURI, array());
-                    if (intval($response['status']) === 200){
-                        $lesion = $this->createVideo($request , $response['body']);
+                    if (intval($response['status']) === 200) {
+                        $lesion = $this->createVideo($request, $response['body']);
                     }
-                }
-                else if ($request->get('source') === 'vimeo-2'){
+                } else if ($request->get('source') === 'vimeo-2') {
                     $response = $this->client2->request($request->videoURI, array());
-                    if (intval($response['status']) === 200){
-                        $lesion = $this->createVideo($request , $response['body']);
+                    if (intval($response['status']) === 200) {
+                        $lesion = $this->createVideo($request, $response['body']);
                     }
-                }
-                else if ($request->get('source') === 'vimeo-3'){
+                } else if ($request->get('source') === 'vimeo-3') {
                     $response = $this->client3->request($request->videoURI, array());
-                    if (intval($response['status']) === 200){
-                        $lesion = $this->createVideo($request , $response['body']);
+                    if (intval($response['status']) === 200) {
+                        $lesion = $this->createVideo($request, $response['body']);
                     }
-                }else if ($request->get('source') === 'youtube'){
-                    return $this->success([] , 'not handeled youtube yet');
+                } else if ($request->get('source') === 'youtube') {
+                    return $this->success([], 'not handeled youtube yet');
                 }
-                return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.create"));
-            }else{
-                return $this->error(__("messages.error.unknown_lesion_type") , 422);
+                return $this->success(LesionResource::make($lesion), __("messages.lesion_controller.create"));
+            } else {
+                return $this->error(__("messages.error.unknown_lesion_type"), 422);
             }
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse($th);
         }
     }
 
-    private function createVideo($request , $responseData) {
+    private function createVideo($request, $responseData)
+    {
         $date = [
             'description' => $responseData['description'],
             'link' => $responseData['uri'],
@@ -167,23 +187,24 @@ class LesionController extends Controller
             'source' => $request->source,
             'original_video_name' => $responseData['name']
         ];
-        if ($request->title){
-            $date = array_merge($date , ['title' => $request->title]);
-        }else{
-            $date = array_merge($date , ['title' => $responseData['name']]);
+        if ($request->title) {
+            $date = array_merge($date, ['title' => $request->title]);
+        } else {
+            $date = array_merge($date, ['title' => $responseData['name']]);
         }
         $lesion = Lesion::create($date);
 
         return $lesion;
     }
 
-    public function update(UpdateLesionRequest $request , $lesionID){
+    public function update(UpdateLesionRequest $request, $lesionID)
+    {
         try {
             $lesion = HelperFunction::getLesionByID($lesionID);
-            if (!$lesion){
+            if (!$lesion) {
                 return HelperFunction::notFoundResponce();
             }
-            if ($lesion->type === LesionType::VIDEO){
+            if ($lesion->type === LesionType::VIDEO) {
                 $source = $request->source;
                 $data = [
                     'is_visible' => $request->is_visible,
@@ -191,36 +212,32 @@ class LesionController extends Controller
                     'source' => $source,
                     'original_video_name' => $request->original_video_name
                 ];
-//                check if the new uri not the same original uri
-                if ($request->videoURI !== $lesion->link){
-//                    if the uri comming in request dont equal to original uri then we should update the video uri
-                    if ($source === 'vimeo-1'){
+                //                check if the new uri not the same original uri
+                if ($request->videoURI !== $lesion->link) {
+                    //                    if the uri comming in request dont equal to original uri then we should update the video uri
+                    if ($source === 'vimeo-1') {
                         $response = $this->client1->request($request->videoURI, array());
-                        if (intval($response['status']) === 200){
-                            $data = array_merge($data , $this->updatedVideoData($response , $request));
+                        if (intval($response['status']) === 200) {
+                            $data = array_merge($data, $this->updatedVideoData($response, $request));
                         }
-                    }
-                    else if ($source === 'vimeo-2'){
+                    } else if ($source === 'vimeo-2') {
                         $response = $this->client2->request($request->videoURI, array());
-                        if (intval($response['status']) === 200){
-                            $data = array_merge($data , $this->updatedVideoData($response, $request));
+                        if (intval($response['status']) === 200) {
+                            $data = array_merge($data, $this->updatedVideoData($response, $request));
                         }
-                    }
-                    else if ($source === 'vimeo-3'){
+                    } else if ($source === 'vimeo-3') {
                         $response = $this->client3->request($request->videoURI, array());
-                        if (intval($response['status']) === 200){
-                            $data = array_merge($data , $this->updatedVideoData($response, $request));
+                        if (intval($response['status']) === 200) {
+                            $data = array_merge($data, $this->updatedVideoData($response, $request));
                         }
-                    }else if ($source === 'youtube'){
-                        return $this->success([] , 'not handeled youtube yet');
+                    } else if ($source === 'youtube') {
+                        return $this->success([], 'not handeled youtube yet');
                     }
-                }
-                else{
+                } else {
                     $data['title'] = $request->title;
                 }
                 $lesion->update($data);
-            }
-            else {
+            } else {
                 $data = [
                     'is_visible' => $request->is_visible,
                     'is_open' => $request->is_open,
@@ -228,51 +245,53 @@ class LesionController extends Controller
                     'description' => $request->description
                 ];
 
-                if ($request->pdfFile){
+                if ($request->pdfFile) {
                     Storage::delete($lesion->link);
                     $pdfFile = $request->file('pdfFile');
                     $pdfFile->store('pdf_lesions', 'public');
                     $filePath = Storage::putFile('pdf_lesions', $pdfFile);
                     $data['link'] = $filePath;
-                    if (!$request->title){
+                    if (!$request->title) {
                         $data['title'] = $pdfFile->getClientOriginalName();
-                    }else{
+                    } else {
                         $data['title'] = $request->title;
                     }
-                }else{
+                } else {
                     $data['title'] = $request->title;
                 }
                 $lesion->update($data);
             }
-            return $this->success(LesionResource::make($lesion) , __("messages.lesion_controller.update"));
-        }catch (\Throwable $th){
+            return $this->success(LesionResource::make($lesion), __("messages.lesion_controller.update"));
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    private function updatedVideoData ($videoResponse , $request) {
+    private function updatedVideoData($videoResponse, $request)
+    {
         $responseData = $videoResponse['body'];
         $data = [
             'description' => $responseData['description'],
             'time' => intval($responseData['duration']) / 60,
             'link' => $responseData['uri'],
         ];
-        if (!$request->title){
+        if (!$request->title) {
             $data['title'] = $responseData['name'];
-        }else{
+        } else {
             $data['title'] = $request->title;
         }
         return $data;
     }
 
-    public function getPdfLesion($path){
+    public function getPdfLesion($path)
+    {
         try {
             $file = Storage::exists($path);
-            if (!$file){
+            if (!$file) {
                 return HelperFunction::notFoundResponce();
             }
             return Storage::get($path);
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }

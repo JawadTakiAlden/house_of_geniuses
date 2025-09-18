@@ -10,7 +10,8 @@ class Lesion extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function chapter(){
+    public function chapter()
+    {
         return $this->belongsTo(Chapter::class);
     }
 }

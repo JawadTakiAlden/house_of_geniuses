@@ -6,6 +6,8 @@ use App\Http\HelperFunction;
 use App\Http\Requests\WatchVideoRequest;
 use App\Http\Resources\VideoResource;
 use App\HttpResponse\HTTPResponse;
+use App\Models\AccountInrolment;
+use App\Models\Lesion;
 use Illuminate\Http\Request;
 use Vimeo\Vimeo;
 use Illuminate\Support\Facades\Log;
@@ -19,18 +21,28 @@ class VideoController extends Controller
     private Vimeo $client3;
     public function __construct()
     {
-        $this->client1 = new Vimeo(env('VIMEO_CLIENT_ID')
-            , env('VIMEO_CLIENT_SECRET'),
-            env('VIMEO_ACCESS_TOKEN'));
-        $this->client2 = new Vimeo(env('VIMEO_CLIENT_ID_TWO')
-            , env('VIMEO_CLIENT_SECRET_TWO'),
-            env('VIMEO_ACCESS_TOKEN_TWO'));
-        $this->client3 = new Vimeo(env('VIMEO_CLIENT_ID_THREE')
-            , env('VIMEO_CLIENT_SECRET_THREE'),
-            env('VIMEO_ACCESS_TOKEN_THREE'));
+        $this->client1 = new Vimeo(
+            env('VIMEO_CLIENT_ID')
+            ,
+            env('VIMEO_CLIENT_SECRET'),
+            env('VIMEO_ACCESS_TOKEN')
+        );
+        $this->client2 = new Vimeo(
+            env('VIMEO_CLIENT_ID_TWO')
+            ,
+            env('VIMEO_CLIENT_SECRET_TWO'),
+            env('VIMEO_ACCESS_TOKEN_TWO')
+        );
+        $this->client3 = new Vimeo(
+            env('VIMEO_CLIENT_ID_THREE')
+            ,
+            env('VIMEO_CLIENT_SECRET_THREE'),
+            env('VIMEO_ACCESS_TOKEN_THREE')
+        );
     }
 
-    public function getVideos () {
+    public function getVideos()
+    {
         try {
             $queryParams = [];
             if (\request('link')) {
@@ -38,69 +50,88 @@ class VideoController extends Controller
                 $link = strtok($link, '?');
                 $queryParams['query'] = $link;
             }
-            if (\request('source') === 'vimeo-1'){
-                $response = $this->client1->request('/users/216130188/videos',$queryParams);
+            if (\request('source') === 'vimeo-1') {
+                $response = $this->client1->request('/users/216130188/videos', $queryParams);
                 $responseData = $response['body'];
                 $videos = $responseData['data'];
                 return $this->success(VideoResource::collection($videos));
-            }else if (\request('source') === 'vimeo-2') {
-                $response = $this->client2->request('/users/222393454/videos',$queryParams);
+            } else if (\request('source') === 'vimeo-2') {
+                $response = $this->client2->request('/users/222393454/videos', $queryParams);
                 $responseData = $response['body'];
                 $videos = $responseData['data'];
                 return $this->success(VideoResource::collection($videos));
-            }
-            else if (\request('source') === 'vimeo-3') {
-                $response = $this->client3->request('/users/235955659/videos',$queryParams);
+            } else if (\request('source') === 'vimeo-3') {
+                $response = $this->client3->request('/users/235955659/videos', $queryParams);
                 $responseData = $response['body'];
                 $videos = $responseData['data'];
                 return $this->success(VideoResource::collection($videos));
-            }else{
-                return $this->error('you are provide unsupported platform to get videos' , 422);
+            } else {
+                return $this->error('you are provide unsupported platform to get videos', 422);
             }
 
-        }catch (\Throwable $th){
-//            return HelperFunction::ServerErrorResponse();
-            return $this->error($th->getMessage() , 500);
+        } catch (\Throwable $th) {
+            //            return HelperFunction::ServerErrorResponse();
+            return $this->error($th->getMessage(), 500);
         }
     }
 
-    public function watch(WatchVideoRequest $request){
+    public function watch(WatchVideoRequest $request)
+    {
+
+
         try {
-            if (!$request->link){
-                return $this->error(__('messages.video_controller.link_not_correct') , 422);
+
+            $user = $request->user();
+
+            if (!$request->link) {
+                return $this->error(__('messages.video_controller.link_not_correct'), 422);
             }
 
-            if ($request->source === 'vimeo-1'){
-                $response = $this->client1->request($request->link.'?fields=play');
-                if ($response['status'] == 200){
+            $lesson = Lesion::where("link", $request->link)->with('chapter.course')->first();
+
+            if (!$lesson) {
+                return $this->error(__('messages.video_controller.link_not_correct'), 422);
+            }
+
+            // check enrollment
+            $isEnrolled = AccountInrolment::where('user_id', $user->id)
+                ->where('course_id', $lesson->chapter->course_id)
+                ->exists();
+
+            if (!$isEnrolled && !$lesson->is_open) {
+                return $this->error("cant watch this video", 403);
+            }
+
+
+            if ($request->source === 'vimeo-1') {
+                $response = $this->client1->request($request->link . '?fields=play');
+                if ($response['status'] == 200) {
                     return $this->success($this->watchLinkTransformer($response));
+                } else {
+                    return $this->error($response['body']['error'], 422);
                 }
-                else{
-                    return $this->error($response['body']['error'] , 422);
-                }
-            }else if ($request->source === 'vimeo-2'){
-                $response = $this->client2->request($request->link.'?fields=play');
-                if ($response['status'] == 200){
+            } else if ($request->source === 'vimeo-2') {
+                $response = $this->client2->request($request->link . '?fields=play');
+                if ($response['status'] == 200) {
                     return $this->success($this->watchLinkTransformer($response));
+                } else {
+                    return $this->error($response['body']['error'], 422);
                 }
-                else{
-                    return $this->error($response['body']['error'] , 422);
-                }
-            }else if ($request->source === 'vimeo-3'){
-                $response = $this->client3->request($request->link.'?fields=play');
-                if ($response['status'] == 200){
+            } else if ($request->source === 'vimeo-3') {
+                $response = $this->client3->request($request->link . '?fields=play');
+                if ($response['status'] == 200) {
                     return $this->success($this->watchLinkTransformer($response));
-                }
-                else{
-                    return $this->error($response['body']['error'] , 422);
+                } else {
+                    return $this->error($response['body']['error'], 422);
                 }
             }
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    private function watchLinkTransformer($videoResponse){
+    private function watchLinkTransformer($videoResponse)
+    {
         $data = $videoResponse['body'];
         $data = $data['play'];
         $data = $data['progressive'];
@@ -108,41 +139,62 @@ class VideoController extends Controller
             'link' => $data
         ];
     }
-    private function donwloadLinkTransformer($videoResponse){
+    private function donwloadLinkTransformer($videoResponse)
+    {
         $downloadArray = $videoResponse['body'];
         return [
             'link' => $downloadArray
         ];
     }
-    public function download(WatchVideoRequest $request){
+    public function download(WatchVideoRequest $request)
+    {
         try {
-            if (!$request->link){
-                return $this->error(__('messages.video_controller.link_not_correct') , 422);
+
+            $user = $request->user();
+
+            if (!$request->link) {
+                return $this->error(__('messages.video_controller.link_not_correct'), 422);
             }
-            if ($request->source === 'vimeo-1'){
-                $response = $this->client1->request($request->link.'?fields=download');
-                if (intval($response['status']) === 200){
+
+            $lesson = Lesion::where("link", $request->link)->with('chapter.course')->first();
+
+            if (!$lesson) {
+                return $this->error(__('messages.video_controller.link_not_correct'), 422);
+            }
+
+            // check enrollment
+            $isEnrolled = AccountInrolment::where('user_id', $user->id)
+                ->where('course_id', $lesson->chapter->course_id)
+                ->exists();
+
+            if (!$isEnrolled && !$lesson->is_open) {
+                return $this->error("cant watch this video", 403);
+            }
+
+
+            if ($request->source === 'vimeo-1') {
+                $response = $this->client1->request($request->link . '?fields=download');
+                if (intval($response['status']) === 200) {
                     return $this->success($this->donwloadLinkTransformer($response));
-                }else{
-                    return $this->error($response['body']['error'] , $response['status']);
+                } else {
+                    return $this->error($response['body']['error'], $response['status']);
                 }
-            }else if ($request->source === 'vimeo-2'){
-                $response = $this->client2->request($request->link.'?fields=download');
-                if (intval($response['status']) === 200){
+            } else if ($request->source === 'vimeo-2') {
+                $response = $this->client2->request($request->link . '?fields=download');
+                if (intval($response['status']) === 200) {
                     return $this->success($this->donwloadLinkTransformer($response));
-                }else{
-                    return $this->error($response['body']['error'] , $response['status']);
+                } else {
+                    return $this->error($response['body']['error'], $response['status']);
+                }
+            } else if ($request->source === 'vimeo-3') {
+                $response = $this->client3->request($request->link . '?fields=download');
+                if (intval($response['status']) === 200) {
+                    return $this->success($this->donwloadLinkTransformer($response));
+                } else {
+                    return $this->error($response['body']['error'], $response['status']);
                 }
             }
-            else if ($request->source === 'vimeo-3'){
-                $response = $this->client3->request($request->link.'?fields=download');
-                if (intval($response['status']) === 200){
-                    return $this->success($this->donwloadLinkTransformer($response));
-                }else{
-                    return $this->error($response['body']['error'] , $response['status']);
-                }
-            }
-        }catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
