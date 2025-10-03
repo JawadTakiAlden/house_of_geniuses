@@ -339,13 +339,13 @@ class CourseController extends Controller
                 $code = Str::random(6);
             }
 
-            // $newActivationCode = ActivationCode::create([
-            //     'code' => $code,
-            //     'times_of_usage' => 0,
-            //     'type' => $type
-            // ]);
+            $newActivationCode = ActivationCode::create([
+                'code' => $code,
+                'times_of_usage' => 0,
+                'type' => $type
+            ]);
 
-            // DB::rollBack();
+            DB::rollBack();
             return [
                 "type" => $type,
                 $courses,
