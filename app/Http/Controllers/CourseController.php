@@ -334,6 +334,7 @@ class CourseController extends Controller
             if (!$user) {
                 return HelperFunction::notFoundResponce();
             }
+
             while (ActivationCode::where('code', $code)->exists()) {
                 $code = Str::random(6);
             }
