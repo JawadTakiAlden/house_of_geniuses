@@ -317,35 +317,36 @@ class CourseController extends Controller
 
     public function newInrollInCourse(NewSinginCourseRequest $request)
     {
-        // $request->validated($request->only('code'));
-        $type = $request->only("type");
-        $courses = $request->only("course_ids");
-        $userId = $request->only("user_id");
-        $code = $this->getRandomCode();
 
-        $user = User::where("id", $userId)->first();
-
-        if (!$user) {
-            return HelperFunction::notFoundResponce();
-        }
-
-        while (ActivationCode::where('code', $code)->exists()) {
-            $code = Str::random(6);
-        }
-        $newActivationCode = ActivationCode::create([
-            'code' => $code,
-            'times_of_usage' => 0,
-            'type' => $type
-        ]);
-        foreach ($courses as $course_id) {
-            CourseCanActivated::create([
-                'activation_code_id' => $newActivationCode->id,
-                'course_id' => $course_id,
-                'is_used' => true
-            ]);
-        }
 
         try {
+
+            $type = $request->only("type");
+            $courses = $request->only("course_ids");
+            $userId = $request->only("user_id");
+            $code = $this->getRandomCode();
+
+            $user = User::where("id", $userId)->first();
+
+            if (!$user) {
+                return HelperFunction::notFoundResponce();
+            }
+
+            while (ActivationCode::where('code', $code)->exists()) {
+                $code = Str::random(6);
+            }
+            $newActivationCode = ActivationCode::create([
+                'code' => $code,
+                'times_of_usage' => 0,
+                'type' => $type
+            ]);
+            foreach ($courses as $course_id) {
+                CourseCanActivated::create([
+                    'activation_code_id' => $newActivationCode->id,
+                    'course_id' => $course_id,
+                    'is_used' => true
+                ]);
+            }
 
             foreach ($courses as $course_id) {
                 $course = HelperFunction::getCourseByID($course_id);
