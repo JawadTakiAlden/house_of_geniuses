@@ -347,7 +347,7 @@ class CourseController extends Controller
 
             // DB::rollBack();
             return [
-                $type,
+                "type" => $type,
                 $courses,
                 $userId,
                 $code,
