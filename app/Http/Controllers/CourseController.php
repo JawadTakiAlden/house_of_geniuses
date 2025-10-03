@@ -337,21 +337,24 @@ class CourseController extends Controller
             while (ActivationCode::where('code', $code)->exists()) {
                 $code = Str::random(6);
             }
+
+            $newActivationCode = ActivationCode::create([
+                'code' => $code,
+                'times_of_usage' => 0,
+                'type' => $type
+            ]);
+
             DB::rollBack();
             return [
                 $type,
                 $courses,
                 $userId,
                 $code,
-                $user
+                $user,
+                $newActivationCode
             ];
 
 
-            // $newActivationCode = ActivationCode::create([
-            //     'code' => $code,
-            //     'times_of_usage' => 0,
-            //     'type' => $type
-            // ]);
             // foreach ($courses as $course_id) {
             //     CourseCanActivated::create([
             //         'activation_code_id' => $newActivationCode->id,
