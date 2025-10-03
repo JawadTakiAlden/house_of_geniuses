@@ -401,7 +401,7 @@ class CourseController extends Controller
             // return $this->success(null, __('messages.course_controller.enroll_successfully', ['course_name' => $course->name]));
         } catch (\Throwable $th) {
             DB::rollBack();
-            return HelperFunction::ServerErrorResponse($th->getMessage());
+            return HelperFunction::ServerErrorResponse($th);
         }
     }
     public function inrollInCourse(SignInCourseRequest $request, $courseID)
