@@ -323,9 +323,9 @@ class CourseController extends Controller
 
             DB::beginTransaction();
 
-            $type = $request->only("type");
-            $courses = $request->only("course_ids");
-            $userId = $request->only("user_id");
+            $type = $request->type;
+            $courses = $request->course_ids;
+            $userId = $request->user_id;
             $code = $this->getRandomCode();
 
 
