@@ -345,60 +345,42 @@ class CourseController extends Controller
                 'type' => $type
             ]);
 
-            DB::rollBack();
-            return [
-                "type" => $type,
-                $courses,
-                $userId,
-                $code,
-                $user,
-                $newActivationCode
-            ];
+            foreach ($courses as $course_id) {
+                CourseCanActivated::create([
+                    'activation_code_id' => $newActivationCode->id,
+                    'course_id' => $course_id,
+                    'is_used' => true
+                ]);
+            }
 
+            foreach ($courses as $course_id) {
+                $course = HelperFunction::getCourseByID($course_id);
 
-            // foreach ($courses as $course_id) {
-            //     CourseCanActivated::create([
-            //         'activation_code_id' => $newActivationCode->id,
-            //         'course_id' => $course_id,
-            //         'is_used' => true
-            //     ]);
-            // }
+                if (!$course) {
+                    return HelperFunction::notFoundResponce();
+                }
 
-            // foreach ($courses as $course_id) {
-            //     $course = HelperFunction::getCourseByID($course_id);
+                if (!boolval($course->is_visible)) {
+                    return $this->error(__('messages.course_controller.error.invisible_course'), 403);
+                }
 
-            //     if (!$course) {
-            //         return HelperFunction::notFoundResponce();
-            //     }
+                $existingInrole = AccountInrolment::where('user_id', $request->user()->id)
+                    ->where('course_id', $course_id)->first();
 
-            //     if (!boolval($course->is_visible)) {
-            //         return $this->error(__('messages.course_controller.error.invisible_course'), 403);
-            //     }
+                if ($existingInrole) {
+                    return $this->error(trans('messages.course_controller.error.user_already_enrolled'), 403);
+                }
 
-            //     $existingInrole = AccountInrolment::where('user_id', $request->user()->id)
-            //         ->where('course_id', $course_id)->first();
+                AccountInrolment::create([
+                    'course_id' => $course->id,
+                    'user_id' => $user->id,
+                    'activation_code_id' => $code
+                ]);
+            }
+            DB::commit();
 
-            //     if ($existingInrole) {
-            //         return $this->error(trans('messages.course_controller.error.user_already_enrolled'), 403);
-            //     }
+            return $this->success(null, __('messages.course_controller.enroll_successfully'));
 
-            //     if ($type === CodeType::SHARED_SELECTED || $type === CodeType::GIFt) {
-
-            //         AccountInrolment::create([
-            //             'user_id' => Auth::user()->id,
-            //             'activation_code_id' => $code,
-            //             'course_id' => $course->id
-            //         ]);
-
-            //     }
-
-            //     AccountInrolment::create([
-            //         'course_id' => $course->id,
-            //         'user_id' => $user->id,
-            //         'activation_code_id' => $code
-            //     ]);
-            // }
-            // return $this->success(null, __('messages.course_controller.enroll_successfully', ['course_name' => $course->name]));
         } catch (\Throwable $th) {
             DB::rollBack();
             return HelperFunction::ServerErrorResponse($th);
