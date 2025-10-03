@@ -352,7 +352,7 @@ class CourseController extends Controller
                 $userId,
                 $code,
                 $user,
-                // $newActivationCode
+                $newActivationCode
             ];
 
 
