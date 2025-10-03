@@ -321,6 +321,8 @@ class CourseController extends Controller
 
         try {
 
+            DB::beginTransaction();
+
             $type = $request->only("type");
             $courses = $request->only("course_ids");
             $userId = $request->only("user_id");
@@ -328,6 +330,14 @@ class CourseController extends Controller
 
 
             $user = User::where("id", $userId)->first();
+
+            if (!$user) {
+                return HelperFunction::notFoundResponce();
+            }
+            while (ActivationCode::where('code', $code)->exists()) {
+                $code = Str::random(6);
+            }
+            DB::rollBack();
             return [
                 $type,
                 $courses,
@@ -336,13 +346,7 @@ class CourseController extends Controller
                 $user
             ];
 
-            // if (!$user) {
-            //     return HelperFunction::notFoundResponce();
-            // }
 
-            // while (ActivationCode::where('code', $code)->exists()) {
-            //     $code = Str::random(6);
-            // }
             // $newActivationCode = ActivationCode::create([
             //     'code' => $code,
             //     'times_of_usage' => 0,
