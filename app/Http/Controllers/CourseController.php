@@ -374,7 +374,7 @@ class CourseController extends Controller
                 AccountInrolment::create([
                     'course_id' => $course->id,
                     'user_id' => $user->id,
-                    'activation_code_id' => $code
+                    'activation_code_id' => $newActivationCode->id
                 ]);
             }
             DB::commit();
