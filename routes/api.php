@@ -113,6 +113,7 @@ Route::middleware(['language'])->group(function () {
             });
 
             Route::prefix('/courses')->group(function () {
+                Route::post('/newSignInCourse', [CourseController::class, 'newInrollInCourse']);
                 Route::post('/create', [CourseController::class, 'store']); //done
                 Route::get('/all', [CourseController::class, 'getAllCourses']); //done
                 Route::get('/visible', [CourseController::class, 'visibleCourses']); //used in api | done
@@ -192,7 +193,6 @@ Route::middleware(['language'])->group(function () {
                     Route::get('/search', [CourseController::class, 'search']);
                     Route::get('/show/{course}', [CourseController::class, 'showCourseWithInfo']);
                     Route::post('/signIn/{course}', [CourseController::class, 'inrollInCourse']);
-                    Route::post('/newSignInCourse', [CourseController::class, 'newInrollInCourse']);
                 });
             });
         });
