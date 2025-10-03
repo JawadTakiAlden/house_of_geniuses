@@ -326,14 +326,15 @@ class CourseController extends Controller
             $userId = $request->only("user_id");
             $code = $this->getRandomCode();
 
+
+            $user = User::where("id", $userId)->first();
             return [
                 $type,
                 $courses,
                 $userId,
-                $code
+                $code,
+                $user
             ];
-
-            // $user = User::where("id", $userId)->first();
 
             // if (!$user) {
             //     return HelperFunction::notFoundResponce();
