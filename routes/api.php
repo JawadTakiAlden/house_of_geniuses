@@ -192,6 +192,7 @@ Route::middleware(['language'])->group(function () {
                     Route::get('/search', [CourseController::class, 'search']);
                     Route::get('/show/{course}', [CourseController::class, 'showCourseWithInfo']);
                     Route::post('/signIn/{course}', [CourseController::class, 'inrollInCourse']);
+                    Route::post('/newSignInCourse', [CourseController::class, 'newInrollInCourse']);
                 });
             });
         });

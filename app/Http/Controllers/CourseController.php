@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
+use App\Http\Requests\NewSinginCourseRequest;
 use App\Http\Requests\SignInCourseRequest;
 use App\Http\Resources\AllInrolledResource;
 use App\Http\Resources\CourseInformationResource;
@@ -20,10 +21,12 @@ use App\Models\CourseCanActivated;
 use App\Models\CourseCategory;
 use App\Models\CourseTeacher;
 use App\Models\CourseValue;
+use App\Models\User;
 use App\Types\CodeType;
 use App\Types\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -307,6 +310,83 @@ class CourseController extends Controller
         }
     }
 
+    private function getRandomCode()
+    {
+        return strtoupper(Str::random(6));
+    }
+
+    public function newInrollInCourse(NewSinginCourseRequest $request)
+    {
+        // $request->validated($request->only('code'));
+        $type = $request->only("type");
+        $courses = $request->only("course_ids");
+        $userId = $request->only("user_id");
+        $code = $this->getRandomCode();
+
+        $user = User::where("id", $userId)->first();
+
+        if (!$user) {
+            return HelperFunction::notFoundResponce();
+        }
+
+        while (ActivationCode::where('code', $code)->exists()) {
+            $code = Str::random(6);
+        }
+        $newActivationCode = ActivationCode::create([
+            'code' => $code,
+            'times_of_usage' => 0,
+            'type' => $type
+        ]);
+        foreach ($courses as $course_id) {
+            CourseCanActivated::create([
+                'activation_code_id' => $newActivationCode->id,
+                'course_id' => $course_id,
+                'is_used' => true
+            ]);
+        }
+
+        try {
+
+            foreach ($courses as $course_id) {
+                $course = HelperFunction::getCourseByID($course_id);
+
+                if (!$course) {
+                    return HelperFunction::notFoundResponce();
+                }
+
+                if (!boolval($course->is_visible)) {
+                    return $this->error(__('messages.course_controller.error.invisible_course'), 403);
+                }
+
+                $existingInrole = AccountInrolment::where('user_id', $request->user()->id)
+                    ->where('course_id', $course_id)->first();
+
+                if ($existingInrole) {
+                    return $this->error(trans('messages.course_controller.error.user_already_enrolled'), 403);
+                }
+
+                if ($type === CodeType::SHARED_SELECTED || $type === CodeType::GIFt) {
+
+                    AccountInrolment::create([
+                        'user_id' => Auth::user()->id,
+                        'activation_code_id' => $code,
+                        'course_id' => $course->id
+                    ]);
+
+                }
+
+                AccountInrolment::create([
+                    'course_id' => $course->id,
+                    'user_id' => $user->id,
+                    'activation_code_id' => $code
+                ]);
+            }
+            return $this->success(null, __('messages.course_controller.enroll_successfully', ['course_name' => $course->name]));
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return HelperFunction::ServerErrorResponse();
+        }
+    }
     public function inrollInCourse(SignInCourseRequest $request, $courseID)
     {
         $request->validated($request->only('code'));
