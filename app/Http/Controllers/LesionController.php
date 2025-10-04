@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
 use App\Http\Requests\ReOrderLesionsRequest;
+use App\Http\Requests\StoreLessonRequestV2;
 use App\Http\Resources\LesionResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Lesion;
 use App\Http\Requests\StoreLesionRequest;
 use App\Http\Requests\UpdateLesionRequest;
+use App\Services\VideoService;
 use App\Types\LesionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -19,8 +21,13 @@ class LesionController extends Controller
     use HTTPResponse;
     private Vimeo $client;
 
-    public function __construct()
+    protected VideoService $videoService;
+
+    public function __construct(VideoService $videoService)
     {
+
+        $this->videoService = $videoService;
+
         $this->client1 = new Vimeo(
             env('VIMEO_CLIENT_ID')
             ,
@@ -169,6 +176,66 @@ class LesionController extends Controller
             } else {
                 return $this->error(__("messages.error.unknown_lesion_type"), 422);
             }
+        } catch (\Throwable $th) {
+            return HelperFunction::ServerErrorResponse($th);
+        }
+    }
+
+
+    public function store_v2_video(StoreLessonRequestV2 $request)
+    {
+        try {
+            // Fetch video details from external service
+            $videoData = $this->videoService->getVideo($request->video_id);
+
+            if (!isset($videoData['success']) || $videoData['success'] === false) {
+                return $this->error(__('messages.lesion_controller.video_not_found'), 404);
+            }
+
+            // Extract information safely
+            $video = $videoData['data'] ?? $videoData; // depending on API structure
+
+            $lesion = Lesion::create([
+                'title' => $request->title ?? ($video['name'] ?? 'Untitled Video'),
+                'link' => $video['id'], // store external video id
+                'time' => $video['duration'] ?? 0,
+                'description' => $video['description'] ?? null,
+                'is_open' => $request->is_open,
+                'is_visible' => $request->is_visible,
+                'type' => 'video',
+                'chapter_id' => $request->chapter_id,
+            ]);
+
+            return $this->success(
+                LesionResource::make($lesion),
+                __("messages.lesion_controller.create")
+            );
+        } catch (\Throwable $th) {
+            return HelperFunction::ServerErrorResponse($th);
+        }
+    }
+    public function store_v2_file(StoreLessonRequestV2 $request)
+    {
+        try {
+            $pdfFile = $request->file('pdfFile');
+
+            // Save to storage
+            $filePath = $pdfFile->store('pdf_lesions', 'public');
+
+            $lesion = Lesion::create([
+                'title' => $request->title ?? $pdfFile->getClientOriginalName(),
+                'link' => $filePath,
+                'time' => 0,
+                'is_open' => $request->is_open,
+                'is_visible' => $request->is_visible,
+                'type' => 'pdf',
+                'chapter_id' => $request->chapter_id,
+            ]);
+
+            return $this->success(
+                LesionResource::make($lesion),
+                __("messages.lesion_controller.create")
+            );
         } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse($th);
         }

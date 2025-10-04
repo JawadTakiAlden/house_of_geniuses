@@ -78,6 +78,8 @@ Route::middleware(['language'])->group(function () {
                 Route::get('/all/{chapter}', [LesionController::class, 'getAll']); //not used any more
                 Route::patch('/switchVisibility/{lesion}', [LesionController::class, 'switchVisibility']); //not used
                 Route::post('/create', [LesionController::class, 'store']); // done
+                Route::post('/create-video-v2', [LesionController::class, 'store_v2_video']); // done
+                Route::post('/create-pdf-v2', [LesionController::class, 'store_v2_file']); // done
                 Route::post('/reOrderLesions', [LesionController::class, 'reOrderLesions']);
                 Route::post('/update/{lesion}', [LesionController::class, 'update']); //done
                 Route::delete('/delete/{lesion}', [LesionController::class, 'delete']); //done

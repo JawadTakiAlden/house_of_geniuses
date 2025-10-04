@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreLesionRequest extends FormRequest
+class StoreLessonRequestV2 extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +22,13 @@ class StoreLesionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'videoURI' => 'required_without:pdfFile|string|max:255',
-            'pdfFile' => 'required_without:videoURI|file|max:10240',
+            'type' => "required|string|in:pdf,video",
+            "pdfFile" => "required_if:type,pdf|file|max:10240",
+            "video_id" => "required_if:type,video|string",
             'is_visible' => 'required|boolean',
             'is_open' => 'required|boolean',
-            'type' => 'required|in:pdf,video',
             'title' => 'nullable|string|max:255',
-            'chapter_id' => ['required', Rule::exists('chapters', 'id')],
-            'source' => 'required_if:type,video|in:vimeo-1,vimeo-2,vimeo-3'
+            'chapter_id' => "required|numeric|exists:chapters,id",
         ];
     }
 }
