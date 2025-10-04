@@ -59,6 +59,8 @@ class VideoServiceController extends Controller
 
             $result = $this->videoService->uploadVideo(
                 $request->file('video'),
+                $request->folder_id,
+                $request->description,
                 $resolutions
             );
 

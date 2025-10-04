@@ -97,6 +97,7 @@ Route::middleware(['language'])->group(function () {
             //                vide
             Route::prefix('/users')->group(function () {
                 Route::get('/students', [UserController::class, 'getStudents']); // done
+                Route::get('/paginated-students', [UserController::class, 'getPaginatedStudents']); // done
                 Route::patch('/switchBlockAccount/{user}', [UserController::class, 'switchBlockState']); //done
                 Route::patch('/resetDeviceID/{user}', [UserController::class, 'resetDeviceID']);
                 Route::get('/profileOf/{user}', [UserController::class, 'getUserProfile']);
