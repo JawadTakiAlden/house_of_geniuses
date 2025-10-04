@@ -10,6 +10,11 @@ class Lesion extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+
     public function chapter()
     {
         return $this->belongsTo(Chapter::class);

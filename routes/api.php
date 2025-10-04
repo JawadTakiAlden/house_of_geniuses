@@ -8,6 +8,7 @@ use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseValueController;
 use App\Http\Controllers\ExportableFileController;
+use App\Http\Controllers\FolderController;
 use App\Http\Controllers\LesionController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotificationController;
@@ -49,6 +50,14 @@ Route::middleware(['language'])->group(function () {
                 Route::post('/create', [VideoServiceController::class, 'upload']);
                 Route::get('/', [VideoServiceController::class, 'index']);
                 Route::get('{id}', [VideoServiceController::class, 'show']);
+            });
+            Route::prefix('folders')->group(function () {
+                Route::get('/tree', [FolderController::class, 'indexTree']);
+                Route::get('/all', [FolderController::class, 'index']);
+                Route::get('/show/{folder_id}', [FolderController::class, 'show']);
+                Route::post('/create', [FolderController::class, 'create']);
+                Route::put('/update/{folder_id}', [FolderController::class, 'update']);
+                Route::delete('/delete/{folder_id}', [FolderController::class, 'delete']);
             });
             Route::prefix('/news')->group(function () {
                 Route::get('/all', [NewsController::class, 'index']);

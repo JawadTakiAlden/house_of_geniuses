@@ -23,10 +23,13 @@ class LesionController extends Controller
 
     protected VideoService $videoService;
 
-    public function __construct(VideoService $videoService)
+    public function __construct()
     {
 
-        $this->videoService = $videoService;
+        $this->videoService = new VideoService(
+            env('VIDEO_SERVICE_CLIENT_ID'),
+            env('VIDEO_SERVICE_CLIENT_SECRET')
+        );
 
         $this->client1 = new Vimeo(
             env('VIMEO_CLIENT_ID')

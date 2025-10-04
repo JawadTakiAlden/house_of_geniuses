@@ -65,9 +65,23 @@ class VideoService
     }
 
 
-    public function getFolders(string $videoId): array
+    public function getFolders(): array
     {
         $response = $this->request->get($this->apiUrl . '/api/folders');
+
+        if ($response->failed()) {
+            return [
+                'success' => false,
+                'status' => $response->status(),
+                'message' => $response->body(),
+            ];
+        }
+
+        return $response->json();
+    }
+    public function getFoldersTree(): array
+    {
+        $response = $this->request->get($this->apiUrl . '/api/foldersTree');
 
         if ($response->failed()) {
             return [
