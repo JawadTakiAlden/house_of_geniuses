@@ -170,25 +170,19 @@ class VideoService
         string $description,
         array $resolutions = ['480p', '720p', '1080p']
     ): array {
-        $response = $this->request->asMultipart()->post($this->apiUrl . '/api/videos', [
-            [
-                'name' => 'video',
-                'contents' => fopen($file->getRealPath(), 'r'),
-                'filename' => $file->getClientOriginalName()
-            ],
-            [
-                'name' => 'resolutions',
-                'contents' => json_encode($resolutions)
-            ],
-            [
-                'name' => 'folder_id',
-                'contents' => $folderId,
-            ],
-            [
-                'name' => 'description',
-                'contents' => $description,
-            ],
-        ]);
+        $fileStream = fopen($file->getRealPath(), 'r');
+        $fileSize = filesize($file->getRealPath());
+
+        $response = $this->request->withHeaders([
+            'x-description' => json_encode($description),
+            'x-folder-id' => $folderId,
+            'x-resolutions' => json_encode($resolutions),
+            'Content-Length' => $fileSize,
+        ])
+            ->attach('video', $fileStream, $file->getClientOriginalName())
+            ->post($this->apiUrl . '/api/videos');
+
+        fclose($fileStream);
 
         if ($response->failed()) {
             return [
@@ -200,4 +194,5 @@ class VideoService
 
         return $response->json();
     }
+
 }

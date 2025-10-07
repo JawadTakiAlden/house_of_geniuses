@@ -29,7 +29,9 @@ class VideoUploadRequest extends FormRequest
         ini_set('memory_limit', "256M");
 
         return [
-            "video" => "required|file|max:102400"
+            "video" => "required|file|max:102400",
+            "description" => "string|max:500",
+            "folder_id" => "required|numeric"
         ];
     }
 }
