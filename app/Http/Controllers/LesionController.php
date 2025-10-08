@@ -191,9 +191,11 @@ class LesionController extends Controller
             // Fetch video details from external service
             $videoData = $this->videoService->getVideo($request->video_id);
 
-            if (!isset($videoData['success']) || $videoData['success'] === false) {
-                return $this->error(__('messages.lesion_controller.video_not_found'), 404);
-            }
+
+            return $videoData;
+            // if (!isset($videoData['success']) || $videoData['success'] === false) {
+            //     return $this->error(__('messages.lesion_controller.video_not_found'), 404);
+            // }
 
             // Extract information safely
             $video = $videoData['data'] ?? $videoData; // depending on API structure
