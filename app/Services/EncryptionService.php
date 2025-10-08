@@ -64,11 +64,10 @@ class EncryptionService
         }
 
         return [
-            'encrypted_data' => base64_encode($ciphertext),
-            'iv' => base64_encode($iv),
-            'tag' => base64_encode($tag),
-            'encrypted_key' => base64_encode($encryptedKey),
-            'cipher' => $this->cipher,
+            'dt' => base64_encode($ciphertext),
+            'ijv' => base64_encode($iv),
+            'g' => base64_encode($tag),
+            'ny' => base64_encode($encryptedKey),
         ];
     }
 
