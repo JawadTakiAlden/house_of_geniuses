@@ -41,19 +41,17 @@ class EncryptionService
 
     public function encrypt(string $plaintext): array
     {
-        $aesKey = random_bytes(32); // AES-256 key
-        $iv = random_bytes(12); // 12 bytes for GCM nonce
-
+        $aesKey = random_bytes(32); // AES-256
+        $iv = random_bytes(12);     // 12 bytes recommended for GCM
         $tag = '';
+
         $ciphertext = openssl_encrypt(
             $plaintext,
             $this->cipher,
             $aesKey,
             OPENSSL_RAW_DATA,
             $iv,
-            $tag,
-            '',
-            16
+            $tag // Required for GCM mode
         );
 
         if ($ciphertext === false) {
@@ -74,38 +72,5 @@ class EncryptionService
         ];
     }
 
-    public function decrypt(array $payload): string
-    {
-        foreach (['encrypted_data', 'iv', 'tag', 'encrypted_key'] as $field) {
-            if (empty($payload[$field])) {
-                throw new \InvalidArgumentException("Missing $field in payload");
-            }
-        }
 
-        $ciphertext = base64_decode($payload['encrypted_data']);
-        $iv = base64_decode($payload['iv']);
-        $tag = base64_decode($payload['tag']);
-        $encryptedKey = base64_decode($payload['encrypted_key']);
-
-        $privKey = $this->loadPrivateKey();
-        if (!openssl_private_decrypt($encryptedKey, $decryptedAesKey, $privKey, OPENSSL_PKCS1_OAEP_PADDING)) {
-            throw new \RuntimeException('RSA private decrypt failed');
-        }
-
-        $plaintext = openssl_decrypt(
-            $ciphertext,
-            $this->cipher,
-            $decryptedAesKey,
-            OPENSSL_RAW_DATA,
-            $iv,
-            $tag,
-            ''
-        );
-
-        if ($plaintext === false) {
-            throw new \RuntimeException('AES decryption failed or tag mismatch');
-        }
-
-        return $plaintext;
-    }
 }
