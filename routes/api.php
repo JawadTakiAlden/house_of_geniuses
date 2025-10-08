@@ -200,6 +200,9 @@ Route::middleware(['language'])->group(function () {
                 Route::prefix('/lesions')->group(function () {
                     Route::post('/watch/{lesion}', [UserWatchController::class, 'makeNewWatch']);
                 });
+                Route::prefix('videos_service')->group(function () {
+                    Route::post('{id}', [VideoServiceController::class, 'show']);
+                });
                 Route::prefix('/courses')->group(function () {
                     Route::get('/visible/{category}', [CourseController::class, 'getVisibleCourses']);
                     Route::get('/search', [CourseController::class, 'search']);
