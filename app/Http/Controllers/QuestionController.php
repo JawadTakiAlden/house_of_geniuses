@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\HelperFunction;
 use App\Http\Requests\StoreQuestionRequest;
+use App\Http\Requests\StoreQuestionRequestV2;
 use App\Http\Requests\UpdateQuestionRequest;
 use App\Http\Resources\QuestionResource;
 use App\HttpResponse\HTTPResponse;
@@ -16,57 +17,81 @@ use Illuminate\Support\Facades\DB;
 class QuestionController extends Controller
 {
     use HTTPResponse;
-    public function getAll(){
+    public function getAll()
+    {
         try {
             $questions = Question::all();
             return $this->success(QuestionResource::collection($questions));
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function store(StoreQuestionRequest $request){
+    public function store(StoreQuestionRequest $request)
+    {
         try {
-            $question = Question::create($request->only(['title' ,'image' , 'clarification_text','clarification_image']));
-            return $this->success(QuestionResource::make($question) , __('messages.question_controller.create'));
-        }catch(\Throwable $th){
+            $question = Question::create($request->only(['title', 'image', 'clarification_text', 'clarification_image']));
+            return $this->success(QuestionResource::make($question), __('messages.question_controller.create'));
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
-    public function update(UpdateQuestionRequest $request , $questionID){
+
+    public function store_v2(StoreQuestionRequestV2 $request)
+    {
+        try {
+            $question = Question::create($request->only(['title']));
+            if ($request->choices) {
+                foreach ($request->choices as $choice) {
+                    Choice::create([
+                        "title" => $choice->title,
+                        "is_true" => $choice->is_true,
+                        "is_visible" => $choice->is_visible
+                    ]);
+                }
+            }
+            return $this->success(QuestionResource::make($question), __('messages.question_controller.create'));
+        } catch (\Throwable $th) {
+            return HelperFunction::ServerErrorResponse();
+        }
+    }
+    public function update(UpdateQuestionRequest $request, $questionID)
+    {
         try {
             $question = HelperFunction::getQuestionByID($questionID);
-            if (!$questionID){
+            if (!$questionID) {
                 return HelperFunction::notFoundResponce();
             }
-            $question->update($request->only(['title' ,'image' , 'clarification_text','clarification_image']));
-            return $this->success(QuestionResource::make($question) ,  __('messages.question_controller.update'));
-        }catch(\Throwable $th){
+            $question->update($request->only(['title', 'image', 'clarification_text', 'clarification_image']));
+            return $this->success(QuestionResource::make($question), __('messages.question_controller.update'));
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function show($questionID){
+    public function show($questionID)
+    {
         try {
             $question = HelperFunction::getQuestionByID($questionID);
-            if (!$question){
+            if (!$question) {
                 return HelperFunction::notFoundResponce();
             }
             return $this->success(QuestionResource::make($question));
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }
 
-    public function destroy($questionID){
+    public function destroy($questionID)
+    {
         try {
             $question = HelperFunction::getQuestionByID($questionID);
-            if (!$question){
+            if (!$question) {
                 return HelperFunction::notFoundResponce();
             }
             $question->delete();
-            return $this->success(QuestionResource::make($question) , __('messages.question_controller.delete'));
-        }catch(\Throwable $th){
+            return $this->success(QuestionResource::make($question), __('messages.question_controller.delete'));
+        } catch (\Throwable $th) {
             return HelperFunction::ServerErrorResponse();
         }
     }

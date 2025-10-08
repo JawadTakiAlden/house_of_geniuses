@@ -150,6 +150,7 @@ Route::middleware(['language'])->group(function () {
                 Route::get('/all', [QuestionController::class, 'getAll']); //done
                 Route::get('/show/{question}', [QuestionController::class, 'show']); //done
                 Route::post('/create', [QuestionController::class, 'store']); // done
+                Route::post('/create-v2', [QuestionController::class, 'store_v2']); // done
                 Route::post('/update/{question}', [QuestionController::class, 'update']);
                 Route::post('/newChoice/{question}', [ChoiceController::class, 'store']);//done
                 Route::prefix('/choices')->group(function () {
