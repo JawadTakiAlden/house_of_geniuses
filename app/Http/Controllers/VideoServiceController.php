@@ -41,7 +41,7 @@ class VideoServiceController extends Controller
     {
         $video = $this->videoService->getVideo($id);
         $encryptedData = $this->encryptionService->encrypt(json_encode($video));
-        return response()->json($video);
+        return response()->json($encryptedData);
     }
 
     /**
