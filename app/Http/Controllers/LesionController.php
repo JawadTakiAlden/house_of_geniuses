@@ -201,7 +201,7 @@ class LesionController extends Controller
 
             $lesion = Lesion::create([
                 'title' => $request->title ?? ($video['name'] ?? 'Untitled Video'),
-                'link' => $video['videoId'], // store external video id
+                'link' => $video['id'], // store external video id
                 'time' => $video['duration'] ?? 0,
                 'description' => $video['description'] ?? null,
                 'is_open' => $request->is_open,
