@@ -44,6 +44,7 @@ class QuestionController extends Controller
             if ($request->choices) {
                 foreach ($request->choices as $choice) {
                     Choice::create([
+                        "question_id" => $question->id,
                         "title" => $choice["title"],
                         "is_true" => $choice["is_true"],
                         "is_visible" => $choice["is_visible"]
