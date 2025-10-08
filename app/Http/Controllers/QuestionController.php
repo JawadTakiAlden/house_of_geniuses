@@ -52,7 +52,7 @@ class QuestionController extends Controller
             }
             return $this->success(QuestionResource::make($question), __('messages.question_controller.create'));
         } catch (\Throwable $th) {
-            return HelperFunction::ServerErrorResponse();
+            return HelperFunction::ServerErrorResponse($th);
         }
     }
     public function update(UpdateQuestionRequest $request, $questionID)
