@@ -46,11 +46,10 @@ class EncryptionService
 
         // 5️⃣ Return Base64-encoded encrypted data
         return [
-            'encrypted_key' => base64_encode($encryptedKey),
+            'ne' => base64_encode($encryptedKey),
             'iv' => base64_encode($iv),
-            'tag' => base64_encode($tag),
-            'data' => base64_encode($ciphertext),
-            'cipher' => $this->cipher,
+            'g' => base64_encode($tag),
+            'ta' => base64_encode($ciphertext),
         ];
     }
 }
