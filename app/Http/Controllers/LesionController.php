@@ -192,13 +192,12 @@ class LesionController extends Controller
             $videoData = $this->videoService->getVideo($request->video_id);
 
 
-            return $videoData;
             // if (!isset($videoData['success']) || $videoData['success'] === false) {
             //     return $this->error(__('messages.lesion_controller.video_not_found'), 404);
             // }
 
             // Extract information safely
-            $video = $videoData['data'] ?? $videoData; // depending on API structure
+            $video = $videoData; // depending on API structure
 
             $lesion = Lesion::create([
                 'title' => $request->title ?? ($video['name'] ?? 'Untitled Video'),
