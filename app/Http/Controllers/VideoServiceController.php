@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VideoUploadRequest;
+use App\Services\EncryptionService;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
 
 class VideoServiceController extends Controller
 {
     protected VideoService $videoService;
+    protected EncryptionService $encryptionService;
+
 
     public function __construct()
     {
@@ -16,6 +19,8 @@ class VideoServiceController extends Controller
             env('VIDEO_SERVICE_CLIENT_ID'),
             env('VIDEO_SERVICE_CLIENT_SECRET')
         );
+
+        $this->encryptionService = new EncryptionService();
     }
 
     /**
@@ -35,7 +40,8 @@ class VideoServiceController extends Controller
     public function show(string $id)
     {
         $video = $this->videoService->getVideo($id);
-        return response()->json($video);
+        $encryptedData = $this->encryptionService->encrypt(json_encode($video));
+        return response()->json($encryptedData);
     }
 
     /**

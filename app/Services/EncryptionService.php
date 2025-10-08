@@ -1,0 +1,111 @@
+<?php
+namespace App\Services;
+
+use OpenSSLAsymmetricKey;
+
+class EncryptionService
+{
+    protected string $privateKeyPath;
+    protected string $publicKeyPath;
+    protected string $cipher = 'aes-256-gcm';
+
+    public function __construct()
+    {
+        $this->privateKeyPath = base_path(env('RSA_PRIVATE_KEY_PATH'));
+        $this->publicKeyPath = base_path(env('RSA_PUBLIC_KEY_PATH'));
+    }
+
+    protected function loadPublicKey(): OpenSSLAsymmetricKey
+    {
+        $pub = file_get_contents($this->publicKeyPath);
+        if ($pub === false) {
+            throw new \RuntimeException('Public key not found');
+        }
+        $res = openssl_pkey_get_public($pub);
+        if ($res === false)
+            throw new \RuntimeException('Invalid public key');
+        return $res; // automatically freed when out of scope
+    }
+
+    protected function loadPrivateKey(): OpenSSLAsymmetricKey
+    {
+        $priv = file_get_contents($this->privateKeyPath);
+        if ($priv === false) {
+            throw new \RuntimeException('Private key not found');
+        }
+        $res = openssl_pkey_get_private($priv);
+        if ($res === false)
+            throw new \RuntimeException('Invalid private key');
+        return $res;
+    }
+
+    public function encrypt(string $plaintext): array
+    {
+        $aesKey = random_bytes(32); // AES-256 key
+        $iv = random_bytes(12); // 12 bytes for GCM nonce
+
+        $tag = '';
+        $ciphertext = openssl_encrypt(
+            $plaintext,
+            $this->cipher,
+            $aesKey,
+            OPENSSL_RAW_DATA,
+            $iv,
+            $tag,
+            '',
+            16
+        );
+
+        if ($ciphertext === false) {
+            throw new \RuntimeException('AES encryption failed');
+        }
+
+        $pubKey = $this->loadPublicKey();
+        if (!openssl_public_encrypt($aesKey, $encryptedKey, $pubKey, OPENSSL_PKCS1_OAEP_PADDING)) {
+            throw new \RuntimeException('RSA public encrypt failed');
+        }
+
+        return [
+            'encrypted_data' => base64_encode($ciphertext),
+            'iv' => base64_encode($iv),
+            'tag' => base64_encode($tag),
+            'encrypted_key' => base64_encode($encryptedKey),
+            'cipher' => $this->cipher,
+        ];
+    }
+
+    public function decrypt(array $payload): string
+    {
+        foreach (['encrypted_data', 'iv', 'tag', 'encrypted_key'] as $field) {
+            if (empty($payload[$field])) {
+                throw new \InvalidArgumentException("Missing $field in payload");
+            }
+        }
+
+        $ciphertext = base64_decode($payload['encrypted_data']);
+        $iv = base64_decode($payload['iv']);
+        $tag = base64_decode($payload['tag']);
+        $encryptedKey = base64_decode($payload['encrypted_key']);
+
+        $privKey = $this->loadPrivateKey();
+        if (!openssl_private_decrypt($encryptedKey, $decryptedAesKey, $privKey, OPENSSL_PKCS1_OAEP_PADDING)) {
+            throw new \RuntimeException('RSA private decrypt failed');
+        }
+
+        $plaintext = openssl_decrypt(
+            $ciphertext,
+            $this->cipher,
+            $decryptedAesKey,
+            OPENSSL_RAW_DATA,
+            $iv,
+            $tag,
+            ''
+        );
+
+        if ($plaintext === false) {
+            throw new \RuntimeException('AES decryption failed or tag mismatch');
+        }
+
+        return $plaintext;
+    }
+}
