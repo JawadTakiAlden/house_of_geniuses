@@ -1,49 +1,24 @@
 <?php
+
 namespace App\Services;
 
-use OpenSSLAsymmetricKey;
 
 class EncryptionService
 {
-    protected string $privateKeyPath;
-    protected string $publicKeyPath;
     protected string $cipher = 'aes-256-gcm';
 
-    public function __construct()
+    /**
+     * Encrypt a payload for a specific client using AES-GCM + RSA-OAEP
+     */
+    public function encryptDataForClient(array $data, string $clientPublicKey): array
     {
-        $this->privateKeyPath = base_path(env('RSA_PRIVATE_KEY_PATH'));
-        $this->publicKeyPath = base_path(env('RSA_PUBLIC_KEY_PATH'));
-    }
-
-    protected function loadPublicKey(): OpenSSLAsymmetricKey
-    {
-        $pub = file_get_contents($this->publicKeyPath);
-        if ($pub === false) {
-            throw new \RuntimeException('Public key not found');
-        }
-        $res = openssl_pkey_get_public($pub);
-        if ($res === false)
-            throw new \RuntimeException('Invalid public key');
-        return $res; // automatically freed when out of scope
-    }
-
-    protected function loadPrivateKey(): OpenSSLAsymmetricKey
-    {
-        $priv = file_get_contents($this->privateKeyPath);
-        if ($priv === false) {
-            throw new \RuntimeException('Private key not found');
-        }
-        $res = openssl_pkey_get_private($priv);
-        if ($res === false)
-            throw new \RuntimeException('Invalid private key');
-        return $res;
-    }
-
-    public function encrypt(string $plaintext): array
-    {
-        $aesKey = random_bytes(32); // AES-256
+        // 1️⃣ Generate AES key and IV
+        $aesKey = random_bytes(32); // AES-256 key
         $iv = random_bytes(12);     // 12 bytes recommended for GCM
         $tag = '';
+
+        // 2️⃣ Encrypt data with AES-GCM
+        $plaintext = json_encode($data);
 
         $ciphertext = openssl_encrypt(
             $plaintext,
@@ -51,25 +26,31 @@ class EncryptionService
             $aesKey,
             OPENSSL_RAW_DATA,
             $iv,
-            $tag // Required for GCM mode
+            $tag
         );
 
         if ($ciphertext === false) {
             throw new \RuntimeException('AES encryption failed');
         }
 
-        $pubKey = $this->loadPublicKey();
-        if (!openssl_public_encrypt($aesKey, $encryptedKey, $pubKey, OPENSSL_PKCS1_OAEP_PADDING)) {
-            throw new \RuntimeException('RSA public encrypt failed');
+        // 3️⃣ Load and validate the client public key
+        $pubKey = openssl_pkey_get_public($clientPublicKey);
+        if ($pubKey === false) {
+            throw new \RuntimeException('Invalid client public key');
         }
 
+        // 4️⃣ Encrypt AES key using RSA-OAEP
+        if (!openssl_public_encrypt($aesKey, $encryptedKey, $pubKey, OPENSSL_PKCS1_OAEP_PADDING)) {
+            throw new \RuntimeException('RSA public key encryption failed');
+        }
+
+        // 5️⃣ Return Base64-encoded encrypted data
         return [
-            'dt' => base64_encode($ciphertext),
-            'ijv' => base64_encode($iv),
-            'g' => base64_encode($tag),
-            'ny' => base64_encode($encryptedKey),
+            'encrypted_key' => base64_encode($encryptedKey),
+            'iv' => base64_encode($iv),
+            'tag' => base64_encode($tag),
+            'data' => base64_encode($ciphertext),
+            'cipher' => $this->cipher,
         ];
     }
-
-
 }

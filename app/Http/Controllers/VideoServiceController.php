@@ -37,10 +37,12 @@ class VideoServiceController extends Controller
      * GET /api/videos/{id}
      * Fetch single video by ID
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
+        $clientPublicKey = $request->input('public_key');
+
         $video = $this->videoService->getVideo($id);
-        $encryptedData = $this->encryptionService->encrypt(json_encode($video));
+        $encryptedData = $this->encryptionService->encryptDataForClient($video, $clientPublicKey);
         return response()->json($encryptedData);
     }
 
