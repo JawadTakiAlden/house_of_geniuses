@@ -40,8 +40,8 @@ class VideoServiceController extends Controller
     public function show(string $id)
     {
         $video = $this->videoService->getVideo($id);
-        $encryptedData = $this->encryptionService->encrypt(json_encode($video));
-        return response()->json($encryptedData);
+        // $encryptedData = $this->encryptionService->encrypt(json_encode($video));
+        return response()->json($video);
     }
 
     /**
