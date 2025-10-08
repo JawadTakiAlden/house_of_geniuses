@@ -49,7 +49,7 @@ Route::middleware(['language'])->group(function () {
             Route::prefix('videos_service')->group(function () {
                 Route::post('/create', [VideoServiceController::class, 'upload']);
                 Route::get('/', [VideoServiceController::class, 'index']);
-                Route::get('{id}', [VideoServiceController::class, 'show']);
+                Route::post('{id}', [VideoServiceController::class, 'show']);
             });
             Route::prefix('folders')->group(function () {
                 Route::get('/tree', [FolderController::class, 'indexTree']);
