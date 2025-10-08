@@ -199,6 +199,7 @@ class LesionController extends Controller
             // Extract information safely
             $video = $videoData; // depending on API structure
 
+            return $video;
 
             $lesion = Lesion::create([
                 'title' => $request->title ?? ($video['name'] ?? 'Untitled Video'),
