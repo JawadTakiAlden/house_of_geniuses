@@ -152,6 +152,7 @@ Route::middleware(['language'])->group(function () {
                 Route::post('/create', [QuestionController::class, 'store']); // done
                 Route::post('/create-v2', [QuestionController::class, 'store_v2']); // done
                 Route::post('/update/{question}', [QuestionController::class, 'update']);
+                Route::post('/update_v2/{question}', [QuestionController::class, 'update_v2']);
                 Route::post('/newChoice/{question}', [ChoiceController::class, 'store']);//done
                 Route::prefix('/choices')->group(function () {
                     Route::post('/update/{choice}', [ChoiceController::class, 'updateChoice']);

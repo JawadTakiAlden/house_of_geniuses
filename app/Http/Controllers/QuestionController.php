@@ -6,6 +6,7 @@ use App\Http\HelperFunction;
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\StoreQuestionRequestV2;
 use App\Http\Requests\UpdateQuestionRequest;
+use App\Http\Requests\UpdateQuestionRequestV2;
 use App\Http\Resources\QuestionResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Choice;
@@ -56,6 +57,42 @@ class QuestionController extends Controller
             return HelperFunction::ServerErrorResponse($th);
         }
     }
+
+    public function update_v2(UpdateQuestionRequestV2 $request, $question_id)
+    {
+        try {
+
+            $question = Question::where("id", $question_id)->first();
+            if (!$question) {
+                return HelperFunction::notFoundResponce();
+            }
+
+            $question->update($request->only(["title"]));
+
+
+            if ($request->new_choices) {
+                foreach ($request->new_choices as $choice) {
+                    Choice::create([
+                        "question_id" => $question->id,
+                        "title" => $choice["title"],
+                        "is_true" => $choice["is_true"],
+                        "is_visible" => $choice["is_visible"]
+                    ]);
+                }
+            }
+
+            if ($request->delete_choices) {
+                foreach ($request->delete_choices as $choice) {
+                    Choice::where("id", $choice)->delete();
+                }
+            }
+
+            return $this->success(QuestionResource::make($question), __('messages.question_controller.create'));
+        } catch (\Throwable $th) {
+            return HelperFunction::ServerErrorResponse($th);
+        }
+    }
+
     public function update(UpdateQuestionRequest $request, $questionID)
     {
         try {
