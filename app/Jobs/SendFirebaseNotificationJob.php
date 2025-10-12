@@ -38,6 +38,8 @@ class SendFirebaseNotificationJob implements ShouldQueue
             $firebase = (new Factory())
                 ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
 
+
+
             $messaging = $firebase->createMessaging();
 
             $notification = Notification::fromArray([
@@ -56,11 +58,7 @@ class SendFirebaseNotificationJob implements ShouldQueue
             ]);
         } catch (\Throwable $e) {
             Log::channel('firebase')->error('Firebase notification failed', [
-                'title' => $this->title,
-                'body' => $this->body,
-                'tokens' => $this->tokens,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
         }
 
