@@ -38,7 +38,7 @@ class SendFirebaseNotificationJob implements ShouldQueue
             $firebase = (new Factory())
                 ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
 
-            Log::channel('firebase')->info('Notification sent successfully', [
+            Log::channel('contentFile')->info('Notification sent successfully', [
                 'firebase_conffig' => file_get_contents(storage_path('app/firebase/firebase_config.json'))
             ]);
 

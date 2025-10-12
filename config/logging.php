@@ -62,6 +62,11 @@ return [
             'path' => storage_path('logs/firebase.log'),
             'level' => 'debug',
         ],
+        'contentFile' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/contentFile.log'),
+            'level' => 'error',
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
