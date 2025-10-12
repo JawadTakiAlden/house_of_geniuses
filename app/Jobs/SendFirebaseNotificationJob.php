@@ -38,7 +38,9 @@ class SendFirebaseNotificationJob implements ShouldQueue
             $firebase = (new Factory())
                 ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
 
-
+            Log::channel('firebase')->info('Notification sent successfully', [
+                'firebase_conffig' => file_get_contents(storage_path('app/firebase/firebase_config.json'))
+            ]);
 
             $messaging = $firebase->createMessaging();
 
@@ -51,15 +53,15 @@ class SendFirebaseNotificationJob implements ShouldQueue
 
             $messaging->sendMulticast($message, $this->tokens);
 
-            Log::channel('firebase')->info('Notification sent successfully', [
-                'title' => $this->title,
-                'body' => $this->body,
-                'tokens' => $this->tokens,
-            ]);
+            // Log::channel('firebase')->info('Notification sent successfully', [
+            //     'title' => $this->title,
+            //     'body' => $this->body,
+            //     'tokens' => $this->tokens,
+            // ]);
         } catch (\Throwable $e) {
-            Log::channel('firebase')->error('Firebase notification failed', [
-                'error' => $e->getMessage(),
-            ]);
+            // Log::channel('firebase')->error('Firebase notification failed', [
+            //     'error' => $e->getMessage(),
+            // ]);
         }
 
     }
