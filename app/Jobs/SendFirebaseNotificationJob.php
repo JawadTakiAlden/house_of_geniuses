@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
+use Illuminate\Support\Facades\Log;
 
 class SendFirebaseNotificationJob implements ShouldQueue
 {
@@ -33,20 +34,35 @@ class SendFirebaseNotificationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $firebase = (new Factory())
-            ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
+        try {
+            $firebase = (new Factory())
+                ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
 
-        $messaging = $firebase->createMessaging();
+            $messaging = $firebase->createMessaging();
 
-        $notification = Notification::fromArray([
-            'title' => $this->title,
-            'body' => $this->body,
-        ]);
+            $notification = Notification::fromArray([
+                'title' => $this->title,
+                'body' => $this->body,
+            ]);
 
-        $message = CloudMessage::new();
+            $message = CloudMessage::new()->withNotification($notification);
 
-        $message = $message->withNotification($notification);
+            $messaging->sendMulticast($message, $this->tokens);
 
-        $messaging->sendMulticast($message, $this->tokens);
+            Log::channel('firebase')->info('Notification sent successfully', [
+                'title' => $this->title,
+                'body' => $this->body,
+                'tokens' => $this->tokens,
+            ]);
+        } catch (\Throwable $e) {
+            Log::channel('firebase')->error('Firebase notification failed', [
+                'title' => $this->title,
+                'body' => $this->body,
+                'tokens' => $this->tokens,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
+
     }
 }

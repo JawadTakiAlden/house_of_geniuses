@@ -57,6 +57,11 @@ return [
             'path' => storage_path('logs/fcm_errors.log'),
             'level' => 'error',
         ],
+        'firebase' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/firebase.log'),
+            'level' => 'debug',
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
