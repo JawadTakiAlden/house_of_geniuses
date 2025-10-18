@@ -18,6 +18,7 @@ class QuizResource extends JsonResource
     {
         $pivot = $this->pivot;
         $base = [
+            'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'questions' => $request->user()->type === UserType::ADMIN ? QuestionResource::collection($this->forAdminQuestions) : QuestionResource::collection($this->forUserQuestions)
