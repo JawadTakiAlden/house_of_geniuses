@@ -22,8 +22,8 @@ class QuizResource extends JsonResource
             'description' => $this->description,
             'questions' => $request->user()->type === UserType::ADMIN ? QuestionResource::collection($this->forAdminQuestions) : QuestionResource::collection($this->forUserQuestions)
         ];
-        if ($pivot){
-            $base = array_merge($base , [
+        if ($pivot) {
+            $base = array_merge($base, [
                 'is_free' => $pivot->is_free
             ]);
         }

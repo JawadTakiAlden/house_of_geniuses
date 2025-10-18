@@ -205,6 +205,9 @@ Route::middleware(['language'])->group(function () {
                 Route::prefix('videos_service')->group(function () {
                     Route::post('{id}', [VideoServiceController::class, 'show']);
                 });
+                Route::prefix('/quizzes')->group(function () {
+                    Route::get('/show/{quiz}', [QuizController::class, 'show']); //done
+                });
                 Route::prefix('/courses')->group(function () {
                     Route::get('/visible/{category}', [CourseController::class, 'getVisibleCourses']);
                     Route::get('/search', [CourseController::class, 'search']);
