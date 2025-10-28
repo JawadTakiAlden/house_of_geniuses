@@ -22,6 +22,17 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoServiceController;
 use Illuminate\Support\Facades\Route;
 
+
+
+Route::prefix('v5')->group(function () {
+    Route::fallback(function () {
+        return response()->json([
+            'message' => 'هذا التطبيق لم يعد متاح تواصل معنا للحصول على التطبيق الجديد على الرقم 0945364375 , لتجربة استخدام افضل ةاكثر راحة'
+        ], 410);
+    });
+});
+
+
 Route::middleware(['language'])->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('/register', [AuthController::class, 'signup']);
