@@ -26,11 +26,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v5')->group(function () {
     Route::fallback(function () {
-        return response()->json([
+        return response([
             'message' => 'هذا التطبيق لم يعد متاح تواصل معنا للحصول على التطبيق الجديد على الرقم 0945364375 , لتجربة استخدام افضل ةاكثر راحة'
-        ], 410);
+        ], 422);
     });
 });
+
+
 
 
 Route::middleware(['language'])->group(function () {
